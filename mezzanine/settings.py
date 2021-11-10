@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'users',
     'mentor',
     'crispy_forms',
-    'timezone_field',
+    # 'timezone_field',
 
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -99,7 +99,7 @@ DATABASES = {
     }
 }
 DATABASES['default'] = dj_database_url.config(
-     conn_max_age=600, ssl_require=True)
+    conn_max_age=600, ssl_require=True)
 
 
 # Password validation
