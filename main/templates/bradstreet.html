@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section id="about" class="about">
+
+	<div class="container" data-aos="fade-up">
+	  <div class="row gx-0">
+
+		<div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+		  <div class="content">
+			<h3>Why Do We Use Dun & Bradstreet Business Credit Bureau?</h3>
+			
+			<p>
+				We use Dun & Bradstreet's business credit bureau as our main determining factor on your hybrid loan amount because of their special scoring algorithm that is geared toward analyzing small businesses between $10,000 - $10,000,000 in revenue. We recommend you build your Dun & Bradstreet score before applying.</p>
+			
+			<div class="text-center text-lg-start">
+			  <a href="/sendesta" class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+				<span>Apply now</span>
+				<i class="bi bi-arrow-right"></i>
+			  </a>
+			</div>
+		  </div>
+		</div>
+
+		<div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+		  <img src="{% static 'assets/img/features.png' %}" class="img-fluid" alt="">
+		</div>
+
+	  </div>
+	</div>
+
+  </section><!-- End About Section -->
+
+
+
+
+
+
+
+
+
+{% endblock content %}

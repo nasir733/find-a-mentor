@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  {% load static %}
+  <title>Sign in As A Mentor</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Accept-CH" content="DPR,Width,Viewport-Width" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"  />
+  
+  
+  
+  <link rel="stylesheet" href={% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %} >
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  
+  
+  <script src={% static 'dashboard/styles/js/app.js' %} defer></script>
+  
+</head><body class="font-sans ">
+    <div id="content">
+    
+<div>
+  
+  <main
+  class="flex flex-col items-start justify-center min-h-screen overflow-x-hidden transition-all duration-300 bg-gray-100 md:flex-row">
+
+
+  <div class="relative z-10 flex justify-center flex-1 w-full px-4 py-6 pt-12 pb-12 lg:py-32 ">
+    <div class="w-full md:max-w-md">
+
+  <div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 ">
+    <div class="py-4 space-y-1 text-center lg:pb-10 ">
+      <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Sign As A Mentor</h2>
+      <p class="text-base font-medium text-gray-500">Register As A Mentee? <a href={% url 'mentor:register' %} class="text-blue-600 hover:underline">Register here</a></p>
+    </div>
+
+    <form action="{% url 'mentor:login' %}" method="POST" class="block space-y-6">
+      {% csrf_token %}
+      <div class="space-y-2">
+        <label for="email" class="block text-sm font-semibold text-gray-500">UserName</label>
+        <input type="text" name="email" id="email" class="w-full border-gray-300 rounded-md">
+      </div>
+      <div class="space-y-2">
+        <label for="password" class="block text-sm font-semibold text-gray-500">Password</label>
+        <input type="password" name="password" id="passsword" class="w-full border-gray-300 rounded-md">
+      </div>
+      <button class="flex items-center justify-center w-full px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
+        <span>
+          Sign in
+        </span>
+      </button>
+    </form>
+    
+    <!-- <span class="block px-3 my-6 text-xs font-bold tracking-wide text-center text-gray-600 uppercase bg-white">Or</span>
+
+    <ul class="space-y-4">
+      <li>
+        <button class="flex items-center justify-center w-full px-4 py-3 space-x-2 text-sm font-semibold text-center text-gray-600 duration-300 bg-gray-100 rounded-md hover:bg-gray-200">
+          <img src={% static 'dashboard/styles/images/google-icon.svg' %} class="w-4 h-4" alt="">
+          <span>
+            Sign in with Google
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="flex items-center justify-center w-full px-4 py-3 space-x-2 text-sm font-semibold text-center text-gray-600 duration-300 bg-gray-100 rounded-md hover:bg-gray-200">
+          <img src={% static 'dashboard/styles/images/twitter-icon.svg' %} class="w-4 h-4" alt="">
+          <span>
+            Sign in with Twitter
+          </span>
+        </button>
+      </li>
+    </ul> -->
+
+    
+  </div>
+</div>
+
+
+  </div>
+  <img src="../../images/auth-bg.svg" alt="" class="absolute inset-0 object-cover w-full h-screen opacity-20">
+ </main>
+  
+</div>
+
+    
+    </div></body>
+</html>
