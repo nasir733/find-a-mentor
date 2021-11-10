@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import CustomUserManager
-# from timezone_field import TimeZoneField
+from timezone_field import TimeZoneField
 
 USER_TYPE_CHOICES = (
     ('Mentor', 'Mentor'),
@@ -22,7 +22,7 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=120, blank=True, null=True)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
-    #timezone = TimeZoneField(default='Europe/London', null=True, blank=True)
+    timezone = TimeZoneField(default='Europe/London', null=True, blank=True)
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()

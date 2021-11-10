@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'users',
     'mentor',
     'crispy_forms',
-    # 'timezone_field',
+    'timezone_field',
 
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
