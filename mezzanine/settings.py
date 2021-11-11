@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'mentor',
     'crispy_forms',
     'timezone_field',
+    'direct',
 
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -154,4 +155,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
 MEDIA_URL = "/media/"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# live
+
+# STRIPE_SECRET_KEY = "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"
+# STRIPE_PUBLISHABLE_KEY = "pk_live_51GadadExWTjX75uFNZcxdwdGeMvUQCQAnxo1xicutlZd9i90Vn19l2TqPTP607peHTp36hFC1HgcUETm1RcuD7nf00zzcHGsCP"
+# STRIPE_ENDPOINT_SECRET = "whsec_CZWBekTjZwYHeKiePoqxbLfqhXeemvHi"
+
+# test
+
+STRIPE_SECRET_KEY = "sk_test_51GadadExWTjX75uFGi8HJDnVtz1xsoPqSlVu5C1HQNK5DjdN9ANTXlxinjF9hF7UffAcRpwfOcDtXbxw4jTi8jIk00TqleQ5pg"
+STRIPE_PUBLISHABLE_KEY = "pk_test_51GadadExWTjX75uFcS3TQPfUUSt3dkT1Bh92FLcpB3gBUlTI40JU2xp1VPCzktdISjy0dtM14E6WxZP7IoSxlZK100KQEFLvyV"
+STRIPE_ENDPOINT_SECRET = "whsec_dFr4164bMwyi6hTS5KCmWzvanOGGlIVi"
+
+
+
 django_heroku.settings(locals())

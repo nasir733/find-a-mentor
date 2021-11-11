@@ -20,7 +20,7 @@
 
 </head><body class="font-sans ">
     <div id="content">
-
+{% include 'dashboard/nav.html' %}
 <div>
 
   <main class="flex flex-row min-h-screen overflow-x-hidden transition-all duration-300 bg-gray-100">
@@ -241,7 +241,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-colors duration-300 group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
-            <span class="transition-colors duration-100 group-hover:text-white">Dashboard</span>
+            <span class="transition-colors duration-100 group-hover:text-white">Mentee-Dashboard</span>
           </a>
           <a href="{% url 'dashboard:findamentor' %}" class="flex items-center px-4 py-1 space-x-2 text-sm leading-7 hover:bg-gray-900 group">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-colors duration-300 group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -267,7 +267,7 @@
             </svg>
             <span class="transition-colors duration-100 group-hover:text-white">Mentor Content</span>
           </a>
-          <a href="{% url 'dashboard:search' %}" class="flex items-center px-4 py-1 space-x-2 text-sm leading-7 hover:bg-gray-900 group">
+          <a href="{% url 'dashboard:browse' %}" class="flex items-center px-4 py-1 space-x-2 text-sm leading-7 hover:bg-gray-900 group">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-colors duration-300 group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
             </svg>
@@ -279,6 +279,12 @@
             </svg>
             <span class="transition-colors duration-100 group-hover:text-white">My Profile</span>
           </a>
+          <a href="{% url 'dashboard:settings' %}" class="flex items-center px-4 py-1 space-x-2 text-sm leading-7 hover:bg-gray-900 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-colors duration-300 group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+            </svg>
+            <span class="transition-colors duration-100 group-hover:text-white">Settings</span>
+          </a>
           <a href="{% url 'dashboard:logout' %}"  class="flex items-center px-4 py-1 space-x-2 text-sm leading-7 hover:bg-gray-900 group">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-colors duration-300 group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
@@ -289,15 +295,8 @@
       </div>
     </div>
     <!--/ large variant -->
-
-
   </div>
 </aside>
-
-
-
-
-
   </div>
   {% block content %}
  {% endblock %}

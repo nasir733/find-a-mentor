@@ -1,0 +1,51 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block content %}
+<div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 ">
+    <div class="py-4 space-y-1 text-center lg:pb-10 ">
+      <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Request {{content.title}}</h2>
+      <p class="text-base font-medium text-gray-500">{{content.coursecatergory.skill.name}}</p>
+      <p class="text-base font-medium text-gray-500">&dollar;{{content.price_per_hour}}/per hour</p>
+    </div>
+<form action="{% url 'dashboard:requestcontent' content.id %}" method="post" class="block space-y-6" >
+    {% csrf_token %}
+    <div class="space-y-2">
+      <label for="email" class="block text-sm font-semibold text-gray-500">Total Time</label>
+      <input 
+       
+        type="number" 
+        name="total_time" 
+        id="total_time"  
+        step=".1"
+        class="w-full border-gray-300 rounded-md">
+        
+    </div>
+    <div class="space-y-2">
+      <label for="start_time" class="block text-sm font-semibold text-gray-500">Start Time</label>
+      <input 
+       
+        type="datetime-local" 
+        name="start_time" 
+        id="start_time" 
+        class="w-full border-gray-300 rounded-md">
+      <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
+    </div>
+    <div class="space-y-2">
+        <label for="end_time" class="block text-sm font-semibold text-gray-500">End Time</label>
+        <input 
+         
+          type="datetime-local" 
+          name="end_time" 
+          id="end_time" 
+          class="w-full border-gray-300 rounded-md">
+        <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
+      </div>
+      
+    <button type="submit" class="flex items-center justify-center w-full px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50">
+      <span>
+        Request Content
+      </span>
+    </button>
+  </form>
+  </div>
+{% endblock %}

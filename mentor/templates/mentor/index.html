@@ -73,15 +73,15 @@
 
       <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {% for x in mentor_requests %}
-  <a href="#" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
+  <a href="" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
     <div class="px-4 pt-6 pb-8 lg:px-6">
       <div class="flex justify-between mb-4">
         <img src={% static 'dashboard/styles/images/project-icon1.png' %} class="w-12 h-12 rounded-md" alt="">
         <div>
           <span class="flex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">
-            <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs">Plan</span>
+            <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs">Total Amount</span>
             <span class="text-sm text-gray-600">
-              &dollar; {{x.time_plan.amount}}
+              &dollar; {{x.total_amount}}
             </span>
           </span>
         </div>
@@ -94,9 +94,9 @@
       {% else %}
       <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">Pending</span>
       {% endif %}
-      <div class="flex items-center mt-6 -space-x-3">
-        <img src='/media/{{x.mentee.menteeprofile.image}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
-        
+      <div class="flex items-center mt-6 -space-x-6">
+        <img src='/media/{{x.mentee.image}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
+        <span class="lex items-center px-2 py-2 space-x-1 font-semibold rounded-lg text">{{x.mentee.user.username}}</span>
       </div>
     </div>
   </a>

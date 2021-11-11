@@ -1,5 +1,7 @@
 {% extends "mentor/base.html" %}
 {% load static %}
+
+{% load crispy_forms_tags %}
 {% block content %}
   <div class="flex-1">
     <main class="px-6 py-8 mx-auto space-y-6 xl:px-12">
@@ -9,7 +11,7 @@
       <div class="relative w-24 md:w-32">
         <img src='/media/{{profile.image}}' alt="" class="w-24 h-24 rounded-md md:w-32 md:h-32">
         <div class="absolute w-4 h-4 bg-green-500 border-2 border-white rounded-full -right-2 top-16 md:top-24">&nbsp;</div>
-      </div>\
+      </div>
       <div class="flex-1">
         <div class="py-3">
           <h2 class="text-lg font-semibold text-gray-800">{{request.user.first_name}} {{request.user.last_name}}</h2>
@@ -51,48 +53,94 @@
     </div>
     <div class="flex pt-6 pb-3 space-x-3 lg:py-3">
     
-      <button class="flex px-4 py-3 text-sm font-semibold leading-4 transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
+      <a href="{% url 'mentor:settings' %}" class="flex px-4 py-3 text-sm font-semibold leading-4 transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
         <span>
           Edit profile
         </span>
-      </button>
+      </a>
     </div>
   </div>
 </div>
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div class="bg-white rounded-md shadow-sm">
-  <div class="flex items-center justify-between px-4 py-3 lg:px-6">
-    <div>
-      <h2 class="text-base font-semibold text-gray-800">Experience</h2>
-    </div>
-    <button class="flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-colors duration-300 bg-white rounded-full hover:bg-gray-100">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-      </svg>
-    </button>
-  </div>
-  <div class="px-4 pt-6 pb-8 border-t border-gray-200 lg:px-6">
-    <div class="space-y-6 divide-y divide-gray-200">
-      <!-- row -->
-      {% for x in mentor_skills %}
-      <div class="flex space-x-4">
-        <img src='/media/{{x.skill.icon}}' class="w-16 h-16 rounded-md" alt="">
-        <div class="">
-          <div>
-            <span class="text-base font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600">{{x.skill.name}}</span>
+        {% if create %}
+        <form action="{% url 'mentor:mentorpage' "create" %}" enctype="multipart/form-data" method="post" class="relative flex-1 max-w-md">
+         {% csrf_token %}
+          <br/>
+            
+       
+            <div class="form-group row">
+              <label for="title" class="col-sm-2 col-form-label">Title</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="title" placeholder="">
+              </div>
             </div>
-          <div class="-mr-20 transition-all transform -translate-x-20 md:-mr-0 md:-translate-x-0">
-            <p class="mb-4 text-sm">{{x.skill.description}}</p>
-           
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</div>
 
+            <div class="form-group row">
+              <label for="description" class="col-sm-2 col-form-label">Description</label>
+              <div class="col-sm-10">
+                <textarea style="width: 400px;" type="text" class="form-control" name="description" placeholder="..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="image" class="col-sm-2 col-form-label">Image</label>
+              <div class="col-sm-10">
+                <input type="file" class="form-control" name="image" placeholder="Image" accept="image/*"></textarea>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="video_link" class="col-sm-2 col-form-label">Video Link</label>
+              <div class="col-sm-10">
+                <input type="url" class="form-control" name="video_link" placeholder="video_link">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="price_per_hour" class="col-sm-2 col-form-label">Price Per Hour<label>
+              <div class="col-sm-10">
+                <input type="number" step="0.01" class="form-control" name="price_per_hour" placeholder="price_per_hour">
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Skills</label>
+              </div>
+              <select name="skillid" class="custom-select" id="inputGroupSelect01">
+
+                <option selected>Choose...</option>
+                {% for skill in skills %}
+                <option value="{{skill.id}}">{{skill.name}}</option>
+              
+                {% endfor %}
+              </select>
+            </div>
+            <!-- <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="is_active" id="is_active">
+              <label class="form-check-label" for="flexCheckDefault">
+                Is Active
+              </label>
+            </div> -->
+
+            <br/>
+            <button type="submit" class="flex px-4 py-3 text-sm font-semibold leading-4 transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
+              <span>
+                Create
+              </span>
+            </button>
+            
+          </form>
+        {% else %}
+        <div class="flex pt-6 pb-3 space-x-3 lg:py-3">
+    
+          <a href="{% url 'mentor:mentorpage' "create" %}" class="flex px-4 py-3 text-sm font-semibold leading-4 transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
+            <span>
+              Create Content
+            </span>
+          </a>
+        </div>
+{% endif %}
         <!-- <div class="bg-white rounded-md shadow-sm">
   <div class="flex items-center justify-between px-4 py-3 lg:px-6">
     <div>
@@ -202,39 +250,6 @@
 </div> -->
 
       </div>
-      <!-- <div class="bg-white rounded-md shadow-sm ">
-  <div class="flex items-center justify-between px-4 py-4 lg:px-6">
-    <div>
-      <h2 class="text-lg font-semibold text-gray-800">Education</h2>
-    </div>
-    <button class="flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-colors duration-300 bg-white rounded-full hover:bg-gray-100">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-      </svg>
-    </button>
-  </div>
-  <div class="px-4 pt-6 pb-8 border-t border-gray-200 lg:px-6">
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-     
-      <div class="flex space-x-4">
-        <img src={% static 'dashboard/styles/images/project-icon2.png' %} class="w-16 h-16 rounded-md" alt="">
-        <div class="">
-          <span class="text-base font-semibold text-gray-800">Rijksuniversiteit Groningen</span>
-          <span class="block mb-1 font-semibold tracking-wide text-gray-500 uppercase text-xxs">Master technology and operations management</span>
-          <span class="block text-xs font-medium text-gray-400">Jan 2020 - May 2021</span>
-        </div>
-      </div>
-      <div class="flex space-x-4">
-        <img src={% static 'dashboard/styles/images/project-icon3.png' %} class="w-16 h-16 rounded-md" alt="">
-        <div class="">
-          <span class="text-base font-semibold text-gray-800">Hanzehogeschool Groningen</span>
-          <span class="block mb-1 font-semibold tracking-wide text-gray-500 uppercase text-xxs">Communication Media Design</span>
-          <span class="block text-xs font-medium text-gray-400">March 1996 - April 2001</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
 
     </main>
   </div>

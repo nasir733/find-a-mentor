@@ -16,5 +16,9 @@ urlpatterns = [
     path('mymentors/', views.mymentors, name='mymentors'),
     path('joinmeeting/', views.joinmeeting, name='joinmeeting'),
     path('mentorcontent/', views.mentorcontent, name='mycontent'),
-
+    path('browse/',views.browsecontent, name='browse'),
+    path('settings/', views.settings, name='settings'),
+    path('content/<int:id>/',views.singlecontent, name='content'),
+    path('addreview/<int:content_id>/',views.addreview, name='addreview'),
+    path('requestcontent/<int:content_id>/',views.requestcontent, name='requestcontent'),
 ]

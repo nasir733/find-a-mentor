@@ -5,14 +5,15 @@
     
     <main class="px-6 py-8 mx-auto space-y-6 xl:px-12">
       <div class="relative px-4 py-4 overflow-hidden bg-white rounded-md shadow-sm lg:py-6">
+    
+
   <div>
+
     <img src='{% static 'dashboard/styles/images/background-abstract1.png' %}' alt="" class="absolute inset-0 object-cover w-full h-full">
+    
+  
   </div>
-  <button class="absolute z-30 flex items-center justify-center w-8 h-8 p-1 text-blue-400 transition-all duration-300 scale-100 bg-white rounded-full hover:scale-105 top-4 right-4 hover:bg-gray-50">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-    </svg>
-  </button>
+ 
   <div class="relative z-20 flex flex-col items-center justify-between">
     <div class="relative w-24 md:w-32">
       <img src='/media/{{user.menteeprofile.image}}' alt="" class="w-24 h-24 border-4 rounded-full border-whtie md:w-32 md:h-32">
@@ -23,6 +24,10 @@
         <div class="py-3 text-center">
           <h2 class="text-lg font-semibold text-gray-800">{{user.first_name}} {{user.last_name}}</h2>
           <span class="block font-semibold tracking-wide text-gray-600 uppercase transition-colors duration-300 text-xxs">{{user.email}}</span>
+          
+          <br/>
+          <a href="{% url 'dashboard:settings' %}" class="px-3 py-2 bg-blue-100 rounded-md">Update Profile</a>
+            
         </div>
        
       </div>

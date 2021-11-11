@@ -1,0 +1,89 @@
+{% extends "mentor/base.html" %}
+{% load static %}
+{% block content %}
+  <div class="flex-1">
+    <main class="px-6 py-8 mx-auto space-y-6 xl:px-12">
+      <div class="bg-white rounded-md shadow-sm ">
+  <div class="flex items-center justify-between px-4 py-4 border-b border-gray-200 lg:px-6">
+    <div>
+      <h2 class="text-base font-semibold text-gray-800">Mentee Requests</h2>
+      
+    </div>
+    <div class="relative" x-data="{ open: false }" @click.away="open = false">
+        <button class="inline-flex space-x-3 text-gray-600 duration-300 scale-100 h hover:text-blue-600"  @click="open = !open">
+         
+          <div class="text-left">
+            <span class="text-sm font-semibold border-gray-200   text-gray-800 transition-colors duration-300 hover:text-blue-600">Filter</span>
+          </div>
+        </button>
+  
+     
+        <ul class="absolute z-20 w-40 py-1 mt-2 text-sm font-semibold text-gray-700 transition-all origin-top-right bg-white rounded shadow -right-2 lg:w-64" 
+          x-transition:enter="ease-out duration-50 scale-75"
+          x-transition:enter-start="opacity-0 transform -translate-y-2 scale-75"
+          x-transition:enter-end="opacity-100 transform translate-y-0 scale-100"
+          x-transition:leave="transition ease-in duration-100"
+          x-transition:leave-end="opacity-0 transform -translate-y-2"
+          x-show="open">
+          <li><a href="{% url 'mentor:menteerequests' "all" %}" class="block px-3 py-3 transition-colors duration-300 hover:bg-gray-100 hover:text-blue-600">All</a></li>
+          <li><a href="{% url 'mentor:menteerequests' "pending" %}" class="block px-3 py-3 transition-colors duration-300 hover:bg-gray-100 hover:text-blue-600">Pending</a></li>
+          <li><a href="{% url 'mentor:menteerequests' "accepted" %}" class="block px-3 py-3 transition-colors duration-300 hover:bg-gray-100 hover:text-blue-600">Accepted</a></li>
+          <li><a href="{% url 'mentor:menteerequests' "declined" %}" class="block px-3 py-3 transition-colors duration-300 hover:bg-gray-100 hover:text-blue-600">Declined</a></li>
+        
+        </ul>
+      </div>
+  </div>
+  <!-- <div class="flex items-center justify-between space-x-4">
+  <form action="" class="relative flex-1">
+    <input type="text" placeholder="Search Clipped Content..." class="block w-full py-3 pl-12 placeholder-gray-400 transition-colors duration-300 border-0 border-b border-gray-200 border-transparen peer focus:border-b-blue-600 focus:border-transparent ring-transparent focus:ring-transparent focus:ring-opacity-80 focus:bg-gray-50 ">
+    <button class="absolute flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-all duration-300 bg-transparent rounded-full left-3 top-2 hover:bg-gray-100 peer-focus:text-blue-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </button>
+  </form>
+</div> -->
+
+  <div class="px-4 divide-y divide-gray-200 lg:px-6">
+      {% for x in mentee_requests %}
+    <div class="flex items-center justify-between py-3">
+      <div class="flex space-x-4">
+        <img src='/media/{{x.content.image}}' class="w-16 h-16 rounded-md" alt="">
+        <div class="">
+          <span class="text-base font-semibold text-gray-800">{{x.mentee.user.username}} requested {{x.content.title}}</span>
+          <span class="block mb-1 font-semibold tracking-wide text-gray-500 uppercase text-xxs">{{x.total_time}} hours - for &dollar;{{x.total_amount}}</span>
+          <span class="block mb-3 text-xs font-medium text-gray-400">Requested on {{x.created_at}}</span>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+      {% if x.accepted == True %}
+<a href="{% url 'mentor:menteerequests' "accepted" %}" class="px-3 py-2 bg-green-400 rounded-md">Accepted</a>
+        
+    {% elif x.declined == True %}
+    <a href="{% url 'mentor:menteerequests' "declined" %}" class="px-3 py-2 bg-red-400 rounded-md">Declined</a>
+        
+      {% else %}
+      
+        <a href="{% url 'mentor:acceptrequest' x.id %}"  class="flex px-4 py-3 space-x-2 text-sm font-semibold leading-4 text-gray-500 transition-colors duration-300 border border-green-300 rounded-md hover:bg-green-100 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+          </svg>
+          <span class="hidden md:inline">Accept</span>
+        </a>
+        <a href="{% url 'mentor:declinerequest' x.id %}"  class="flex px-4 py-3 space-x-2 text-sm font-semibold leading-4 text-gray-500 transition-colors duration-300 border border-red-300 rounded-md hover:bg-red-100 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+            </svg>
+            <span class="hidden md:inline">Decline</span>
+        </a>
+     
+        {% endif %} </div>
+    </div>
+    {%  endfor %}
+   
+  </div>
+</div>
+
+    </main>
+  </div>
+{% endblock %}

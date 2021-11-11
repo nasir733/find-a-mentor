@@ -9,7 +9,6 @@
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Mentors</span>
       <div class="flex items-center justify-center mx-auto mt-2 space-x-2">
         <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">{{total_mentors}}</h2>
-        
       </div>
     </div>
 
@@ -32,7 +31,7 @@
     <div class="pr-4 text-center">
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Savings</span>
       <div class="flex items-center justify-center mt-2 space-x-2 ">
-        <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">&dollar;{{request.user.mentorprofile.total_money_spent}}</h2>
+        <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">{%if request.user.mentorprofile.total_money_spent %}&dollar;{{request.user.mentorprofile.total_money_spent}}{%else%}&dollar; 0{% endif %}</h2>
         
       </div>
     </div>
@@ -41,19 +40,19 @@
   </div>
 </div>
 
-
-
-   <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
+<div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {% for x in mentor_requests %}
-  <a href="#" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
+  <a href="{% url 'dashboard:content' x.content.id %}" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
     <div class="px-4 pt-6 pb-8 lg:px-6">
       <div class="flex justify-between mb-4">
         <img src={% static 'dashboard/styles/images/project-icon1.png' %} class="w-12 h-12 rounded-md" alt="">
         <div>
           <span class="flex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">
-            <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs">Plan</span>
+            <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs">Total Amount</span>
             <span class="text-sm text-gray-600">
-              &dollar; {{x.time_plan.amount}}
+           
+                &dollar; {{x.total_amount}}
+            
             </span>
           </span>
         </div>
@@ -66,10 +65,12 @@
       {% else %}
       <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">Pending</span>
       {% endif %}
-      <div class="flex items-center mt-6 -space-x-3">
-        <img src='/media/{{x.mentee.menteeprofile.image}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
-        
-      </div>
+      
+        <div class="flex items-center mt-6 -space-x-3">
+          <img src='/media/{{x.mentor.image}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
+          
+        </div>
+ 
     </div>
   </a>
 {% endfor %}

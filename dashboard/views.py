@@ -10,7 +10,7 @@ from django.views.generic import TemplateView
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from users.forms import CustomUpdateUserForm, CustomUserCreationForm
+from users.forms import CustomUpdateUserForm, CustomUserCreationForm, MenteeProfileUpdateForm
 from users.models import *
 from django.db.models import Q
 
@@ -18,10 +18,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class ProfileView(View):
-    def get(self, request):
-        profile = request.user
-        return render(request, 'dashboard/profile.html', {"profile": profile})
+
 
 
 @login_required(login_url='/dashboard/login/')
@@ -31,18 +28,20 @@ def menteedashboard(request):
     else:
         context = {}
         total_mentors = MentorMenteeRelations.objects.filter(
-            mentee=request.user).count()
+            mentee=request.user.menteeprofile).count()
         total_sessions = MentorRequest.objects.filter(
-            mentee=request.user, accepted=True).count()
+            mentee=request.user.menteeprofile, accepted=True).count()
         context['total_mentors'] = total_mentors
         context['total_sessions'] = total_sessions
-        mentor_requests = MentorRequest.objects.filter(mentee=request.user)
+
+
+        mentor_requests = MentorRequest.objects.filter(mentee=request.user.menteeprofile)
         context['mentor_requests'] = mentor_requests
 
         return render(request, 'dashboard/index.html', context=context)
 
 
-@login_required
+@login_required(login_url='/dashboard/login/')
 def Logout(request):
     logout(request)
     print('the user is logged out')
@@ -99,7 +98,9 @@ def menteeregister(request):
 
         user = authenticate(
             username=username, password=password)
-
+        mentee_profile = MenteeProfile(user=user)
+        mentee_profile.save()
+        login(request, user)
         print(user)
         # auth_login(request, user)
         messages.success(request, 'Account succesfully created')
@@ -107,16 +108,16 @@ def menteeregister(request):
     return render(request, 'dashboard/signup-sidebar.html', {'mentee': False})
 
 
-@login_required
+@login_required(login_url='/dashboard/login/')
 def profile(request):
     context = {}
     context['user'] = request.user
     reviews = Review.objects.filter(user=request.user)
     context['reviews'] = reviews
     total_sessions = MentorRequest.objects.filter(
-        mentee=request.user, accepted=True).count()
+        mentee=request.user.menteeprofile, accepted=True).count()
     total_mentees = MentorMenteeRelations.objects.filter(
-        mentee=request.user).count()
+        mentee=request.user.menteeprofile).count()
 
     print(total_sessions)
     context['total_sessions'] = total_sessions
@@ -125,7 +126,7 @@ def profile(request):
     return render(request, 'dashboard/profile.html')
 
 
-@login_required
+@login_required(login_url='/dashboard/login/')
 def findamentor(request):
     context = {}
     mentors = MentorProfile.objects.all()
@@ -140,34 +141,112 @@ def findamentor(request):
     return render(request, 'dashboard/findamentor.html', context=context)
 
 
-@login_required
+@login_required(login_url='/dashboard/login/')
 def mymentors(request):
-    my_mentors = MentorMenteeRelations.objects.filter(mentee=request.user)
+    my_mentors = MentorMenteeRelations.objects.filter(mentee=request.user.menteeprofile)
     context = {}
     context['my_mentors'] = my_mentors
-    if request.method == 'POST':
-        search_text = request.POST.get('search_text')
-        print(search_text)
-        my_mentors = MentorMenteeRelations.objects.filter(Q(mentor__first_name__icontains=search_text) | Q(
-            mentor__last_name__icontains=search_text) | Q(mentor__email__icontains=search_text) | Q(mentor__username__icontains=search_text), mentee=request.user)
-        context['my_mentors'] = my_mentors
-        return render(request, 'dashboard/mymentors.html', context=context)
     return render(request, 'dashboard/mymentors.html', context=context)
 
 
-@login_required
+@login_required(login_url='/dashboard/login/')
 def joinmeeting(request):
     return render(request, 'dashboard/mentor-page.html')
 
 
-@login_required
+@login_required(login_url='/dashboard/login/')
 def mentorcontent(request):
     context = {}
-    mentor_content = MentorRequest.objects.filter(mentee=request.user)
+    mentor_content = MentorRequest.objects.filter(mentee=request.user.menteeprofile,accepted=True)
     context['mentor_content'] = mentor_content
     return render(request, 'dashboard/mentorcontent.html', context=context)
 
 
-@login_required
+@login_required(login_url='/dashboard/login/')
 def search(request):
     return render(request, 'dashboard/search.html')
+
+
+@login_required(login_url='/dashboard/login/')
+def browsecontent(request):
+    context = {}
+    contents = Content.objects.filter(is_active=True)
+    context['contents'] = contents
+    if request.user.user_type == 'Mentor':
+        return redirect('mentor:browse')
+    else:
+        return render(request, 'dashboard/browsecontent.html', context=context)
+
+
+@login_required(login_url='/dashboard/login/')
+def settings(request):
+    context = {}
+    menteeprofile = request.user.menteeprofile
+    userform = CustomUpdateUserForm(instance=request.user)
+    menteeform = MenteeProfileUpdateForm(instance=menteeprofile)
+    context['userform'] = userform
+    context['menteeform'] = menteeform
+    if request.method =="POST":
+        userform = CustomUpdateUserForm(request.POST, instance=request.user)
+        menteeform = MenteeProfileUpdateForm(request.POST, request.FILES, instance=request.user.menteeprofile)
+        if userform.is_valid() and menteeform.is_valid():
+            userform.save()
+            menteeform.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('dashboard:settings')
+        else:
+            messages.error(request, 'Profile update failed')
+            return redirect('dashboard:settings')
+    return render(request, 'dashboard/settings.html', context=context)
+
+
+@login_required(login_url='/dashboard/login/')
+def singlecontent(request, id):
+    context = {}
+    content = Content.objects.get(id=id)
+    context['content'] = content
+    reviews = Review.objects.filter(content=content)
+    context['reviews'] = reviews
+    if request.user.user_type == "Mentee":
+        if MentorRequest.objects.filter(mentee=request.user.menteeprofile, content=content).exists():
+            menterrequest = MentorRequest.objects.get(mentee=request.user.menteeprofile, content=content)
+
+            context['mentor_request'] = menterrequest
+        return render(request, 'dashboard/single-content.html', context=context)
+    else:
+        return redirect('mentor:content',id=id)
+    
+
+@login_required(login_url='/dashboard/login/')
+def addreview(request, content_id):
+    
+    content = Content.objects.get(id=content_id)
+    if request.method == "POST":
+        message = request.POST.get('message')
+        review = Review(content=content, user=request.user, message=message)
+        review.save()
+        messages.success(request, 'Review added successfully')
+        return redirect('dashboard:content', id=content_id)
+
+
+@login_required(login_url='/dashboard/login/')
+def requestcontent(request, content_id):
+    context={}
+    content = Content.objects.get(id=content_id)
+    price_per_hour = content.price_per_hour
+    if request.user.user_type == "Mentee":
+        if request.method == "POST":
+            total_time = request.POST.get('total_time')
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+            total_amount = price_per_hour * int(total_time)
+            menter_request = MentorRequest(mentee=request.user.menteeprofile, content=content, mentor=content.user,accepted=False,total_time=total_time, total_amount=total_amount, start_time=start_time, end_time=end_time)
+            menter_request.save()
+            MentorMenteeRelations.objects.get_or_create(mentor=content.user, mentee=request.user.menteeprofile)
+            
+            return redirect('dashboard:content', id=content_id)
+        elif request.method == "GET":
+            context['content'] = content
+            return render(request, 'dashboard/requestcontent.html', context=context)
+    else:
+        return redirect('/')
