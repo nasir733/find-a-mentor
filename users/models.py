@@ -39,7 +39,7 @@ class MentorProfile(models.Model):
     birth_date = models.DateField(blank=True, null=True)
     meeting_did = models.IntegerField(blank=True, null=True)
     image = models.ImageField(
-        upload_to='profile_pics/mentor', blank=True, null=True)
+        upload_to='profile_pics/mentor', blank=True, null=True, default='default.png')
     reviews_count = models.IntegerField(blank=True, null=True)
     messages_received = models.IntegerField(blank=True, null=True)
     instagram_url = models.URLField(blank=True, null=True)
@@ -63,7 +63,7 @@ class MenteeProfile(models.Model):
 
     birth_date = models.DateField(blank=True, null=True)
     image = models.ImageField(
-        upload_to='profile_pics/mentee', blank=True, null=True)
+        upload_to='profile_pics/mentee', blank=True, null=True,default='default.png')
     total_money_spent = models.CharField(
         max_length=120, blank=True, null=True, default=0)
     total_hours_learned = models.CharField(
