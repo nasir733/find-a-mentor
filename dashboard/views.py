@@ -242,7 +242,11 @@ def requestcontent(request, content_id):
             total_amount = price_per_hour * int(total_time)
             menter_request = MentorRequest(mentee=request.user.menteeprofile, content=content, mentor=content.user,accepted=False,total_time=total_time, total_amount=total_amount, start_time=start_time, end_time=end_time)
             menter_request.save()
-            MentorMenteeRelations.objects.get_or_create(mentor=content.user, mentee=request.user.menteeprofile)
+            if MentorMenteeRelations.objects.filter(mentor=content.user, mentee=request.user.menteeprofile).exists():
+                print("ok")
+            else:  
+               relation=MentorMenteeRelations(mentor=content.user, mentee=request.user.menteeprofile)
+               relation.save()
             
             return redirect('dashboard:content', id=content_id)
         elif request.method == "GET":
