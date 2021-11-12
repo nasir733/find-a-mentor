@@ -209,7 +209,7 @@ def singlecontent(request, id):
     context['reviews'] = reviews
     if request.user.user_type == "Mentee":
         if MentorRequest.objects.filter(mentee=request.user.menteeprofile, content=content).exists():
-            menterrequest = MentorRequest.objects.get(mentee=request.user.menteeprofile, content=content)
+            menterrequest = MentorRequest.objects.filter(mentee=request.user.menteeprofile, content=content).first()
 
             context['mentor_request'] = menterrequest
         return render(request, 'dashboard/single-content.html', context=context)
