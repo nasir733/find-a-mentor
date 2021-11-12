@@ -158,9 +158,9 @@ class MenteeInterest(models.Model):
 
 
 class MentorMenteeRelations(models.Model):
-    mentor = models.OneToOneField(
+    mentor = models.ForeignKey(
         MentorProfile, on_delete=models.CASCADE, related_name='mentor_relation', null=True, blank=True)
-    mentee = models.OneToOneField(
+    mentee = models.ForeignKey(
         MenteeProfile, on_delete=models.CASCADE, related_name='mentee_relation', null=True, blank=True)
     amount = models.DecimalField(
         max_digits=999, decimal_places=2, null=True, blank=True,default=0)
