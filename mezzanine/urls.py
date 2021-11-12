@@ -9,4 +9,6 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('mentor/', include('mentor.urls')),
     path('direct/',include('direct.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

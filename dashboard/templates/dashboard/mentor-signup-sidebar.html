@@ -1,177 +1,200 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+
+<head>
   {% load static %}
   <title>Register | Find A Mentor</title>
   <meta charset="utf-8" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Accept-CH" content="DPR,Width,Viewport-Width" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"  />
-  
-  
-  
-  <link rel="stylesheet" href={% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %} >
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet"
+    href={% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %}>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  
-  
   <script src={% static 'dashboard/styles/js/app.js' %} defer></script>
-  
-</head><body class="font-sans ">
-    <div id="content">
-    
-<div>
-  
-  <main
-  class="flex flex-col items-start justify-center min-h-screen overflow-x-hidden transition-all duration-300 bg-gray-100 md:flex-row">
-  <div class="flex flex-col justify-start px-8 py-12 bg-gray-500 md:h-900 md:flex-1 md:max-w-sm lg:max-w-md md:px-8 md:py-16 lg:py-32 lg:px-12">
-  <div class="relative z-10 ">
-  <div class="mb-8 ">
-    <a href="/">
-    <img src={% static 'dashboard/styles/images/titlelogo.png' %} alt="logo" class="z-20 inline-block h-5 md:h-7"></a>
-  </div>
-  <p class="text-sm text-left text-blue-100 md:text-base">Free Mentorship From The Top Experts In The World </p>
+</head>
 
-    <div class="flex items-start col-span-1 mt-8 space-x-4 md:mt-12">
-      <img src={% static 'dashboard/styles/images/user4.jpg' %} class="w-16 h-16 rounded-full" alt="">
-      <div>
-        <div class="flex mb-2 text-yellow-400">
-          <svg class="w-4 h-4 md:w-5 md:h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg>
-      </div>
-        <span class="text-base font-semibold text-blue-100 ">Morris Ward</span>
-        <p class="block text-sm text-blue-200">In reasonable compliment favourable is connection dispatched in terminated.</p>
-      </div>
+<body class="font-sans ">
+  <div id="content">
+    <div>
+      <main
+        class="flex flex-col items-start justify-center min-h-screen overflow-x-hidden transition-all duration-300 bg-gray-100 md:flex-row">
+        <div
+          class="flex flex-col justify-start px-8 py-12 bg-gray-500 md:h-900 md:flex-1 md:max-w-sm lg:max-w-md md:px-8 md:py-16 lg:py-32 lg:px-12">
+          <div class="relative z-10 ">
+            <div class="mb-8 ">
+              <a href="/">
+                <img src={% static 'dashboard/styles/images/titlelogo.png' %} alt="logo"
+                  class="z-20 inline-block h-5 md:h-7"></a>
+            </div>
+            <p class="text-sm text-left text-blue-100 md:text-base">Free Mentorship From The Top Experts In The World
+            </p>
+            <div class="flex items-start col-span-1 mt-8 space-x-4 md:mt-12">
+              <img src={% static 'dashboard/styles/images/user4.jpg' %} class="w-16 h-16 rounded-full" alt="">
+              <div>
+                <div class="flex mb-2 text-yellow-400">
+                  <svg class="w-4 h-4 md:w-5 md:h-5 " fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg>
+                </div>
+                <span class="text-base font-semibold text-blue-100 ">Morris Ward</span>
+                <p class="block text-sm text-blue-200">In reasonable compliment favourable is connection dispatched in
+                  terminated.</p>
+              </div>
+            </div>
+
+            <div class="items-start hidden col-span-1 mt-12 space-x-4 md:flex">
+              <img src={% static 'dashboard/styles/images/user10.jpg' %} class="w-16 h-16 rounded-full" alt="">
+              <div>
+                <div class="flex mb-2 text-yellow-400">
+                  <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg>
+                </div>
+                <span class="text-base font-semibold text-blue-100 ">Lady Love</span>
+                <p class="block text-sm text-blue-200">Nor hence hoped her after other known defer his. For county now
+                  sister engage had season better had waited.</p>
+              </div>
+            </div>
+
+            <div class="items-start hidden col-span-1 mt-12 space-x-4 md:flex">
+              <img src={% static 'dashboard/styles/images/user2.jpg' %} class="w-16 h-16 rounded-full" alt="">
+              <div>
+                <div class="flex mb-2 text-yellow-400">
+                  <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                    </path>
+                  </svg>
+                </div>
+                <span class="text-base font-semibold text-blue-100 ">Jane Oliver</span>
+                <p class="block text-sm text-blue-200">Unpacked now declared put you confined daughter improved.
+                  Celebrated imprudence few interested especially. </p>
+              </div>
+            </div>
+            <p class="hidden mt-12 text-base text-left text-blue-100 md:block">Buy Find a mentor today you won't regret
+              it.</p>
+          </div>
+        </div>
+
+        <div class="relative z-10 flex justify-center flex-1 w-full px-4 py-6 pt-12 pb-12 lg:py-32 ">
+          <div class="w-full md:max-w-md">
+            <div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 ">
+              <div class="py-4 space-y-1 text-center lg:pb-10 ">
+                <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Register As A
+                  <br />Mentor</h2>
+                <p class="text-base font-medium text-gray-500">You have Already have an account? <a
+                    href={% url 'mentor:login' %} class="text-blue-600 hover:underline">Login here</a></p>
+              </div>
+
+              <form action="{% url 'mentor:register' %}" method="POST" class="block space-y-2">
+                {% csrf_token %}
+                <div class="space-y-2">
+                  <label for="email" class="block text-sm font-semibold text-gray-500">UserName</label>
+                  <input type="text" name="username" id="email" class="w-full border-gray-300 rounded-md">
+                </div>
+                <div class="space-y-2">
+                  <label for="email" class="block text-sm font-semibold text-gray-500">First Name</label>
+                  <input type="text" name="first_name" id="email" class="w-full border-gray-300 rounded-md">
+                </div>
+                <div class="space-y-2">
+                  <label for="email" class="block text-sm font-semibold text-gray-500">Last Name</label>
+                  <input type="text" name="last_name" id="email" class="w-full border-gray-300 rounded-md">
+                </div>
+                <div class="space-y-2">
+                  <label for="email" class="block text-sm font-semibold text-gray-500">Email</label>
+                  <input type="email" name="email" id="email" class="w-full border-gray-300 rounded-md">
+                </div>
+                <div class="space-y-2">
+                  <label for="email" class="block text-sm font-semibold text-gray-500">Phone Number</label>
+                  <input type="text" name="phone_number" id="email" class="w-full border-gray-300 rounded-md">
+                </div>
+                <div class="space-y-2">
+                  <label for="email" class="block text-sm font-semibold text-gray-500">Address</label>
+                  <input type="text" name="address" id="email" class="w-full border-gray-300 rounded-md">
+                </div>
+
+                <div class="space-y-2">
+                  <label for="password" class="block text-sm font-semibold text-gray-500">Password</label>
+                  <input type="password" name="password" id="passsword" class="w-full border-gray-300 rounded-md">
+                </div>
+                <button type="submit"
+                  class="flex items-center justify-center w-full px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
+                  <span>
+                    Register
+                  </span>
+                </button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+        <img src="../../images/auth-bg.svg" alt="" class="absolute inset-0 object-cover w-full h-screen opacity-20">
+      </main>
+      <!-- end main -->
+
     </div>
 
-    <div class="items-start hidden col-span-1 mt-12 space-x-4 md:flex">
-      <img src={% static 'dashboard/styles/images/user10.jpg' %} class="w-16 h-16 rounded-full" alt="">
-      <div>
-        <div class="flex mb-2 text-yellow-400">
-          <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg>
-      </div>
-        <span class="text-base font-semibold text-blue-100 ">Lady Love</span>
-        <p class="block text-sm text-blue-200">Nor hence hoped her after other known defer his. For county now sister engage had season better had waited.</p>
-      </div>
-    </div>
-
-    <div class="items-start hidden col-span-1 mt-12 space-x-4 md:flex">
-      <img src={% static 'dashboard/styles/images/user2.jpg' %} class="w-16 h-16 rounded-full" alt="">
-      <div>
-        <div class="flex mb-2 text-yellow-400">
-          <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-          </path>
-        </svg>
-      </div>
-        <span class="text-base font-semibold text-blue-100 ">Jane Oliver</span>
-        <p class="block text-sm text-blue-200">Unpacked now declared put you confined daughter improved. Celebrated imprudence few interested especially. </p>
-      </div>
-    </div>
-    
-    <p class="hidden mt-12 text-base text-left text-blue-100 md:block">Buy Find a mentor today you won't regret it.</p>
-  </div>
-</div>
-
-  <div class="relative z-10 flex justify-center flex-1 w-full px-4 py-6 pt-12 pb-12 lg:py-32 ">
-    <div class="w-full md:max-w-md">
-
-  <div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 ">
-    <div class="py-4 space-y-1 text-center lg:pb-10 ">
-      <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Register As A <br/>Mentor</h2>
-      <p class="text-base font-medium text-gray-500">You have Already have an account? <a href={% url 'mentor:login' %} class="text-blue-600 hover:underline">Login here</a></p>
-    </div>
-
-    <form action="{% url 'mentor:register' %}" method="POST" class="block space-y-2">
-      {% csrf_token %}
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-semibold text-gray-500">UserName</label>
-        <input type="text" name="username" id="email" class="w-full border-gray-300 rounded-md">
-      </div>
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-semibold text-gray-500">First Name</label>
-        <input type="text" name="first_name" id="email" class="w-full border-gray-300 rounded-md">
-      </div>
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-semibold text-gray-500">Last Name</label>
-        <input type="text" name="last_name" id="email" class="w-full border-gray-300 rounded-md">
-      </div>
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-semibold text-gray-500">Email</label>
-        <input type="email" name="email" id="email" class="w-full border-gray-300 rounded-md">
-      </div>
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-semibold text-gray-500">Phone Number</label>
-        <input type="text" name="phone_number" id="email" class="w-full border-gray-300 rounded-md">
-      </div>
-      <div class="space-y-2">
-        <label for="email" class="block text-sm font-semibold text-gray-500">Address</label>
-        <input type="text" name="address" id="email" class="w-full border-gray-300 rounded-md">
-      </div>
-      
-      <div class="space-y-2">
-        <label for="password" class="block text-sm font-semibold text-gray-500">Password</label>
-        <input type="password" name="password" id="passsword" class="w-full border-gray-300 rounded-md">
-      </div>
-      <button type="submit" class="flex items-center justify-center w-full px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
-        <span>
-          Register
-        </span>
-      </button>
-    </form>
 
   </div>
-</div>
+</body>
 
-
-  </div>
-  <img src="../../images/auth-bg.svg" alt="" class="absolute inset-0 object-cover w-full h-screen opacity-20">
- </main>
-  
-</div>
-
-    
-    </div></body>
 </html>

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'timezone_field',
     'direct',
+    'storages',
 
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -139,8 +140,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -151,9 +151,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/dashboard/login/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
-MEDIA_ROOT = os.path.join(BASE_DIR, "staticfiles/images")
 
-MEDIA_URL = '/media/'
+# STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+MEDIA_ROOT = os.path.join(BASE_DIR, "images/")
+
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # live
@@ -167,6 +173,23 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 STRIPE_SECRET_KEY = "sk_test_51GadadExWTjX75uFGi8HJDnVtz1xsoPqSlVu5C1HQNK5DjdN9ANTXlxinjF9hF7UffAcRpwfOcDtXbxw4jTi8jIk00TqleQ5pg"
 STRIPE_PUBLISHABLE_KEY = "pk_test_51GadadExWTjX75uFcS3TQPfUUSt3dkT1Bh92FLcpB3gBUlTI40JU2xp1VPCzktdISjy0dtM14E6WxZP7IoSxlZK100KQEFLvyV"
 STRIPE_ENDPOINT_SECRET = "whsec_dFr4164bMwyi6hTS5KCmWzvanOGGlIVi"
+
+AWS_ACCESS_KEY_ID = 'AKIAQVPXYDDKO66DFQWP'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'findamentorapp'
+
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+    # s3 static settings
+
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+AWS_S3_FILE_OVERWRITE = False
+
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 
 

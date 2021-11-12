@@ -16,7 +16,7 @@
 
   <div class="relative z-20 flex flex-col items-center justify-between -mb-12 -translate-y-12 md:-mb-24 md:-translate-y-24">
     <div class="relative w-24 md:w-32">
-      <img src="/media/{{mentorprofile.image}}" alt="" class="w-24 h-24 border-4 rounded-full border-whtie md:w-32 md:h-32">
+      <img src="{{mentorprofile.image.url}}" alt="" class="w-24 h-24 border-4 rounded-full border-whtie md:w-32 md:h-32">
       <div class="absolute w-4 h-4 bg-green-500 border-2 border-white rounded-full right-2 top-16 md:top-24">&nbsp;</div>
     </div>
   
@@ -84,7 +84,7 @@
     <a href="{% url 'mentor:content' x.id %}" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
       <div class="px-4 pt-6 pb-8 lg:px-6">
         <div class="flex justify-between mb-4">
-          <img src="/media/{{x.image}}" class="w-12 h-12 rounded-md" alt="">
+          <img src="{{x.image.url}" class="w-12 h-12 rounded-md" alt="">
           <div>
             <span class="flex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">
               <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs">Per Hour</span>

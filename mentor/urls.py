@@ -2,9 +2,12 @@ from django.urls import path
 from . import views
 app_name = 'mentor'
 urlpatterns = [
-    path('', views.home, name='home'),
+    
     path('login/', views.login, name='login'),
     path('register/', views.mentorregister, name='register'),
+    
+    path('', views.home, name='home'),
+    path('browse/',views.browsecontent, name='browse'),
     path('profile/', views.profile, name='profile'),
     path('clippedcontent/', views.clippedcontent, name='clippedcontent'),
     path('search/', views.search, name='search'),
@@ -13,7 +16,6 @@ urlpatterns = [
     path('mycontent/', views.mycontent, name='mycontent'),
     path('mentorpage/', views.mentorpage, name='mentorpage'),
     path('mentorpage/<str:task>/', views.mentorpage, name='mentorpage'),
-    path('browse/',views.browsecontent, name='browse'),
     path('settings/', views.settings, name='settings'),
     path('content/<int:id>/',views.singlecontent, name='content'),
     path('public/<str:username>/', views.publicprofile, name='public'),

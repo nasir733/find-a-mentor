@@ -12,7 +12,7 @@
 
     <!-- author -->
     <a href="{% url 'mentor:public' content.user.user.username %}" class="flex items-center col-span-1 space-x-3">
-      <img src="/media/{{content.user.image}}" class="w-12 h-12 rounded-full" alt="">
+      <img src="{{content.user.image.url}}" class="w-12 h-12 rounded-full" alt="">
       <div class="space-y-1" style="margin-right: 5rem;">
         <span class="text-base font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600">{{content.user.user.first_name}} {{content.user.user.last_name}}</span>
         <div class="flex items-center space-x-1">
@@ -46,7 +46,7 @@
     
     
     <a href="#" class="relative block overflow-hidden rounded-lg group ">
-      <img src="/media/{{content.image}}" alt="" class="object-cover w-full h-100">
+      <img src="{{content.image.url}}" alt="" class="object-cover w-full h-100">
       <div class="absolute inset-0 flex items-center justify-center transition-all duration-300 bg-gray-700 bg-opacity-0 group-hover:bg-opacity-60">
         <div class="inline-flex px-3 py-2 space-x-2 text-gray-100 duration-500 scale-50 bg-black bg-opacity-50 rounded-md opacity-0 group-hover:opacity-100 group-hover:scale-100">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,8 +76,8 @@
 
     <!-- leave comment -->
     {% if mentor_request.accepted %}
-    <div class="flex items-center col-span-1 pt-3 space-x-3">
-      <img src="/media/{{request.user.menteeprofile.image}}" class="w-12 h-12 rounded-full" alt="">
+    <div class="flex items-center col-span-1 pt-3 space-x-3 px-4">
+      <img src="{{request.user.menteeprofile.image.url}}" class="w-12 h-12 rounded-full" alt="">
       <div class="flex-1">
         <form action="{%  url 'dashboard:addreview' content.id  %}" method="post">
           {% csrf_token %}
@@ -89,7 +89,7 @@
     <!--/ leave comment -->
 
   
-    <div class="pt-4">
+    <div class="pt-4 px-4">
       <span class="block font-semibold tracking-wide text-gray-500 uppercase text-xxs">
         Comments
       </span>
@@ -98,7 +98,7 @@
         <!-- comment -->
         {% for x in reviews %}
         <div class="flex items-start col-span-1 pt-3 space-x-3">
-          <img src="/media/{{x.user.menteeprofile.image}}" class="w-12 h-12 rounded-full" alt="">
+          <img src="{{x.user.menteeprofile.image.url}}" class="w-12 h-12 rounded-full" alt="">
           <div class="flex-1">
             <div class="px-4 py-4 bg-gray-100 rounded-md lg:px-6 lg:pb-6">
               <div class="flex items-end justify-between pb-3">
@@ -133,9 +133,6 @@
 </article>
      </div>
    </div>
- 
-
-
   </div>
 </div>
 
