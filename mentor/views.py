@@ -306,3 +306,7 @@ def declinerequest(request,request_id):
     mentee_request.declined = True
     mentee_request.save()
     return redirect('mentor:menteerequests',view="pending")
+
+def sample(request):
+    context = {}
+    return render(request, 'mentor/sample.html', context=context)
