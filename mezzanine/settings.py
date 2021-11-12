@@ -151,9 +151,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/dashboard/login/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
-MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+MEDIA_ROOT = os.path.join(BASE_DIR, "staticfiles/images")
 
-MEDIA_URL = "/media/"
+MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # live
