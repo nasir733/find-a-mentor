@@ -24,7 +24,7 @@
     {% for x in mentor_content %}
     <div class="flex items-center justify-between py-3">
       
-      <div class="flex space-x-4"><a href="{% url 'dashboard:content' x.id %}">
+      <div class="flex space-x-4"><a href="{% url 'dashboard:content' x.content.id %}">
         <img src='/media/{{x.content.image}}' class="w-16 h-16 rounded-md" alt="">
         <div class="">
           <span class="text-base font-semibold text-gray-800">{{x.content.title}}</span>
