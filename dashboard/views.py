@@ -157,7 +157,7 @@ def joinmeeting(request):
 @login_required(login_url='/dashboard/login/')
 def mentorcontent(request):
     context = {}
-    mentor_content = MentorRequest.objects.filter(mentee=request.user.menteeprofile,accepted=True)
+    mentor_content = Content.objects.filter(mentor=request.user.mentorprofile, approved=True)
     context['mentor_content'] = mentor_content
     return render(request, 'dashboard/mentorcontent.html', context=context)
 
