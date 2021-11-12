@@ -100,7 +100,6 @@ def mentorregister(request):
         # create mentor profile  
         prof = MentorProfile(user=user)
         prof.save()
-        login(request, user)
 
         auth_login(request, user)
         messages.success(request, 'Account succesfully created')
