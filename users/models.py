@@ -204,7 +204,7 @@ class MentorRequestTime(models.Model):
     to_date = models.DateField(blank=True, null=True)
     from_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
     to_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
-    total_hours = models.DecimalField(max_digits=999, decimal_places=2, blank=True, null=True,default=0)
+    total_hours = models.DecimalField(max_digits=99, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
