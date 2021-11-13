@@ -49,11 +49,36 @@ INSTALLED_APPS = [
     'timezone_field',
     'direct',
     'storages',
-
+     'corsheaders',
+     'rest_framework',
+     'notifications',
+]
+CORS_ALLOW_ORIGIN = '*'
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MIDDLEWARE = [
+
+     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -152,7 +177,7 @@ LOGIN_URL = '/dashboard/login/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-# STATIC_URL = '/static/'
+# STATIC_URL = '/static/'a
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
@@ -161,7 +186,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "images/")
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
+DJANGO_NOTIFICATIONS_CONFIG = {
+      'USE_JSONFIELD': True,
+}
 # live
 
 # STRIPE_SECRET_KEY = "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"
@@ -189,8 +216,6 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-
 
 
 django_heroku.settings(locals())

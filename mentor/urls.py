@@ -22,4 +22,6 @@ urlpatterns = [
     path('menteerequests/<str:view>/', views.menteerequests, name='menteerequests'),
     path('acceptrequest/<int:request_id>/',views.acceptrequest,name='acceptrequest'),
     path('declinerequest/<int:request_id>/',views.declinerequest,name='declinerequest'),
+    path('addworkinghours/',views.addworkinghours,name="addworkinghours"),
+    path('addworkinghours/<int:id>/',views.deleteworkinghours,name="deleteworkinghours"),
 ]

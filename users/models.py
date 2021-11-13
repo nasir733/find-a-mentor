@@ -8,6 +8,16 @@ USER_TYPE_CHOICES = (
     ('Mentor', 'Mentor'),
     ('Mentee', 'Mentee'),
 )
+WEEKDAYS = [
+  ("Monday", "Monday"),
+  ("Tuesday","Tuesday"),
+  ("Wednesday","Wednesday"),
+  ("Thursday","Thursday"),
+  ("Friday","Friday"),
+  ("Saturday", "Saturday"),
+  ("Sunday","Sunday"),
+]
+
 
 
 class CustomUser(AbstractUser):
@@ -24,6 +34,7 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name = models.CharField(max_length=120, blank=True, null=True)
     timezone = TimeZoneField(default='Europe/London', null=True, blank=True)
+    is_new_message = models.BooleanField(default=False)
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
@@ -52,7 +63,7 @@ class MentorProfile(models.Model):
     total_money_earned = models.CharField(
         max_length=120, blank=True, null=True,default=0)
     total_hours_teached = models.CharField(
-        max_length=120, blank=True, null=True)
+        max_length=120, blank=True, null=True,default=0)
 
     def __str__(self):
         return self.user.username
@@ -175,17 +186,42 @@ class MentorRequest(models.Model):
     content = models.ForeignKey(Content, on_delete=models.CASCADE)
     accepted = models.BooleanField(default=False)
     declined = models.BooleanField(default=False)
-    total_time = models.CharField(max_length=120, blank=True, null=True)
     time_plan = models.ForeignKey(
         MentorPaymentPlans, on_delete=models.CASCADE, blank=True, null=True)
-    start_time = models.DateTimeField(blank=True, null=True)
-    end_time = models.DateTimeField(blank=True, null=True)
     total_amount = models.DecimalField(max_digits=999, decimal_places=2, blank=True, null=True,default=0)
 
     def __str__(self):
         return "{} requested {} content from {}".format(self.mentee.user.username, self.content.title, self.mentor.user.username)
 
+class MentorRequestTime(models.Model):
+    request = models.ForeignKey(
+        MentorRequest, on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
+    weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
+    from_hour = models.TimeField(blank=True, null=True)
+    to_hour = models.TimeField(blank=True, null=True)
+    from_date = models.DateField(blank=True, null=True)
+    to_date = models.DateField(blank=True, null=True)
+    from_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
+    to_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
+    total_hours = models.DecimalField(max_digits=99999, decimal_places=2, blank=True, null=True,default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+class MentorAvailability(models.Model):
+    mentor = models.ForeignKey(
+        MentorProfile, on_delete=models.CASCADE, related_name='mentor_availablity')
+    weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
+    from_hour = models.TimeField(null=True, blank=True)
+    to_hour = models.TimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ('weekday',)
+        unique_together = ('mentor','weekday', 'from_hour', 'to_hour')
+
+    def __unicode__(self):
+        return u'%s: %s - %s' % (self.get_weekday_display(),
+                                 self.from_hour, self.to_hour)
 
 
 

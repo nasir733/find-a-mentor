@@ -60,10 +60,12 @@
       <h2 class="text-lg font-semibold text-gray-800">{{x.content.title}}</h2>
       <span class="block font-semibold tracking-wide text-gray-400 uppercase transition-colors duration-300 text-xxs">Requested at {{x.content.created_at}}</span>
       <br/>
-      {% if x.accepted %}
-      <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">Accepted</span>
-      {% else %}
-      <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">Pending</span>
+      {% if x.accepted == True %}
+      <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-green-100 rounded-lg text">Accepted</span>
+      {% elif x.accepted == False  %}
+      <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-yellow-100 rounded-lg text">Pending</span>
+      {% elif x.declined == True %}
+      <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-red-100 rounded-lg text">Deleted</span>
       {% endif %}
       
         <div class="flex items-center mt-6 -space-x-3">

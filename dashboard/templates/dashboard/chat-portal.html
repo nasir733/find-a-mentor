@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+{% load static  %}
+  <title>Find A Mentor</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Accept-CH" content="DPR,Width,Viewport-Width" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"  />
+
+
+
+  <link rel="stylesheet" href={% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %} >
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+
+
+  <script src={% static 'dashboard/styles/js/app.js' %} defer></script>
+
+  
+</head><body class="font-sans ">
+    <div id="content">
+      {% if request.user.user_type == "Mentee" %}
+    {% include 'dashboard/nav.html' %}
+    {% elif request.user.user_type == "Mentor" %}
+    {% include 'mentor/nav.html' %}
+    {% endif %}
+<div>
+  
+  <div x-data="{isOpen:false}" class="" @click.away="isOpen = false">
+  <button class="absolute z-10 flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-colors duration-300 bg-white rounded-full md:hidden left-4 top-4 hover:bg-gray-100" @click="isOpen = !isOpen">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+  <aside 
+    class="absolute z-20 flex flex-row transition-all duration-300 shadow-lg md:relative md:shadow-none "  
+    :class="isOpen ? 'translate-x-0 mr-0' : '-translate-x-80 -mr-80 md:translate-x-0 md:mr-0'" 
+  >
+    
+    
+  {% block direct %}
+{% endblock %}
+  </aside>
+  
+</div>
+
+
+
+
+</div>
+
+    
+    </div></body>
+</html>
+
+
+
+<!-- 
+    <script>
+
+      $(document).ready(function(){
+      
+      setInterval(function(){
+        console.log("hello");
+    
+          $.ajax({
+              type: 'GET',
+              url : "/direct/userrooms/",
+              // headers: {
+              //   "X-CSRFToken": csrftoken,}
+    
+    
+              // },
+              success: function(response){
+                  console.log(response);
+                  $("#singleroomdisplay").empty();
+                  for (var key in response.rooms)
+                  {
+                      var temp=""
+                      
+                      $("#singleroomdisplay").append(temp);
+                  }
+              },
+              error: function(response){
+                  console(response);
+              }
+          });
+      },2000);
+      })
+      </script>    -->

@@ -22,4 +22,5 @@ urlpatterns = [
     path('content/<int:id>/',views.singlecontent, name='content'),
     path('addreview/<int:content_id>/',views.addreview, name='addreview'),
     path('requestcontent/<int:content_id>/',views.requestcontent, name='requestcontent'),
+    path('checkworkhours/<int:content_id>/',views.checkworkhours, name='checkworkhours'),
 ]

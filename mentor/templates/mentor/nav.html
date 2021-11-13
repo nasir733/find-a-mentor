@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load notifications_tags %} 
  <style>
     
 
@@ -70,11 +70,15 @@
 
   
     </style>
+    <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
 <div>
    
     <div class="flex justify-end h-16 px-6 py-3 bg-white border-b border-gray-200 lg:justify-between ">
         <div class="items-center flex-1 hidden mx-auto space-x-2 text-sm sm:flex">
-            <a href="#" class="px-3 py-2 bg-gray-100 rounded-md">Dashboard</a>
+            <a href="{% url 'mentor:home' %}" class="px-3 py-2 bg-gray-100 rounded-md">Dashboard</a>
             <a href="{% url 'mentor:browse' %}" class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">Browse</a>
             <a href="#" class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">Answers</a> 
             <div class="dropdown px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600 .text-sm">
@@ -152,8 +156,40 @@
     </div>
   
     <div class="flex items-center space-x-3">
-     
-      </button>
+      <div class="relative" x-data="{ open: false }" @click.away="open = false">
+        <button   @click="open = !open" class="relative inline-flex items-center justify-center w-10 h-10 text-gray-400 transition-all duration-300 scale-100 bg-transparent rounded-full hover:scale-105 hover:text-blue-600 hover:-rotate-12">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" >
+            {% live_notify_badge %}</path>
+          </svg>
+          <span class="absolute w-2 h-2 bg-red-500 rounded-full top-2 right-3">&nbsp;</span>
+        </button>
+
+
+        <ul
+          class="dropdown-menu absolute z-20 w-40 py-1 mt-2 text-sm font-semibold text-gray-700 transition-all origin-top-right bg-white rounded shadow -right-2 lg:w-64"
+          x-transition:enter="ease-out duration-50 scale-75"
+          x-transition:enter-start="opacity-0 transform -translate-y-2 scale-75"
+          x-transition:enter-end="opacity-100 transform translate-y-0 scale-100"
+          x-transition:leave="transition ease-in duration-100"
+          x-transition:leave-end="opacity-0 transform -translate-y-2" x-show="open"
+          
+          
+          aria-labelledby="dropdownMenu2">
+          {% for notification in  user.notifications.unread %}
+          <li><a href="{% url 'notifications:mark_as_read' notification.slug %}?next={{notification.data.url}}" 
+              class="block px-3 py-3 transition-colors duration-300 hover:bg-gray-100 hover:text-blue-600">{{ notification.actor }} - {{ notification.description }}</a>
+            <div class="dropdown-divider"></div>
+            
+            </li>
+              {% endfor %}
+
+          
+        </ul>
+        {% live_notify_list list_class="dropdown-menu" %}
+
+      </div>
       <div class="relative" x-data="{ open: false }" @click.away="open = false">
         <button class="inline-flex space-x-3 text-gray-600 duration-300 scale-100 h hover:text-blue-600"  @click="open = !open">
           <img src="{{request.user.mentorprofile.image.url}}" alt="" class="w-10 h-10 rounded-full">

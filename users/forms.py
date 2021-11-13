@@ -49,5 +49,4 @@ class CreateContentForm(forms.ModelForm):
     class Meta:
         model = Content
         fields ='__all__'
-        
-        
+

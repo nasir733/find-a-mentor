@@ -1,0 +1,26 @@
+{% extends "mentor/base.html" %}
+{% load static %}
+{% block content %}
+<div class="flex items-center justify-center w-100 h-100 p-1 text-gray-400 transition-colors">
+   
+    
+    <form method="post">
+        {% csrf_token %}
+        <select id="cars" name="cars">
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+            <option value="7">Sunday</option>
+          </select>
+        <input type="time" name="startTime" value="16:00"/>
+        End Time:
+          <input type="time" name="endTime" value="21:00"/>
+        Location:
+        <button type="submit"  class="px-3 py-2 bg-gray-100 rounded-md">Dashboard</>
+    </form>
+</div>
+
+{% endblock  %}

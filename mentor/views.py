@@ -178,6 +178,8 @@ def mentorpage(request,task="view"):
     context['profile'] = profile
     mentor_skills = MentorSkill.objects.filter(mentor=profile)
     context['mentor_skills'] = mentor_skills
+    mentor_working_hours = MentorAvailability.objects.filter(mentor=request.user.mentorprofile)
+    context['mentor_working_hours'] = mentor_working_hours
     if task == "create":
         context['create'] = True
         context['skills'] = Skill.objects.all()
@@ -310,3 +312,32 @@ def declinerequest(request,request_id):
 def sample(request):
     context = {}
     return render(request, 'mentor/sample.html', context=context)
+
+
+@login_required(login_url='/mentor/login/')
+def addworkinghours(request):
+    context = {}
+    
+    if request.method == 'POST':
+        weekday = request.POST.get('weekday')
+        from_hour = request.POST.get('from_hour')
+        to_hour = request.POST.get('to_hour')
+        mentorworkinghours = MentorAvailability(weekday=weekday,from_hour=from_hour,to_hour=to_hour,mentor=request.user.mentorprofile)
+        mentorworkinghours.save()
+        return redirect('mentor:mentorpage')
+    elif request.method == 'DELETE':
+        id = request.GET.get('id')
+        mentorworkinghours = MentorAvailability.objects.get(id=id)
+        mentorworkinghours.delete()
+        return redirect('mentor:mentorpage')
+    else:
+        return redirect('mentor:mentorpage')
+
+@login_required(login_url='/mentor/login/')
+def deleteworkinghours(request,id):
+    if request.method == 'POST':
+        mentorworkinghours = MentorAvailability.objects.get(id=id)
+        if request.user.user_type == 'Mentor' and request.user.mentorprofile.id == mentorworkinghours.mentor.id:
+            mentorworkinghours.delete()
+            return redirect('mentor:mentorpage')
+        return redirect('dashboard:home')

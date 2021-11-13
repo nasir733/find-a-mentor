@@ -40,4 +40,5 @@ admin.site.register(Skill)
 admin.site.register(MentorPaymentPlans)
 admin.site.register(StripeCustomer)
 admin.site.register(MentorMenteeRelations)
-
+admin.site.register(MentorAvailability)
+admin.site.register(MentorRequestTime)

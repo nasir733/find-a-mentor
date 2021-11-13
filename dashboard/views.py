@@ -1,3 +1,4 @@
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate
 from django.contrib.auth import login, authenticate
@@ -13,7 +14,10 @@ from django.contrib.auth.decorators import login_required
 from users.forms import CustomUpdateUserForm, CustomUserCreationForm, MenteeProfileUpdateForm
 from users.models import *
 from django.db.models import Q
+from datetime import datetime
+import pandas as pd
 
+from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -230,27 +234,96 @@ def addreview(request, content_id):
 
 
 @login_required(login_url='/dashboard/login/')
+@csrf_exempt
 def requestcontent(request, content_id):
     context={}
     content = Content.objects.get(id=content_id)
     price_per_hour = content.price_per_hour
-    if request.user.user_type == "Mentee":
-        if request.method == "POST":
-            total_time = request.POST.get('total_time')
-            start_time = request.POST.get('start_time')
-            end_time = request.POST.get('end_time')
-            total_amount = price_per_hour * int(total_time)
-            menter_request = MentorRequest(mentee=request.user.menteeprofile, content=content, mentor=content.user,accepted=False,total_time=total_time, total_amount=total_amount, start_time=start_time, end_time=end_time)
-            menter_request.save()
-            if MentorMenteeRelations.objects.filter(mentor=content.user, mentee=request.user.menteeprofile).exists():
-                print("ok")
-            else:  
-               relation=MentorMenteeRelations(mentor=content.user, mentee=request.user.menteeprofile)
-               relation.save()
-            
+    mentor = content.user
+    date=[]
+    mentor_request_time = MentorRequestTime.objects.filter(Q(request__mentor=mentor)&Q(request__accepted=True))
+    for i in mentor_request_time:
+        date.append(i.date)
+    mentor_availablity = MentorAvailability.objects.filter(mentor=mentor)
+    mentor_availablity_weekday = []
+
+    for i in mentor_availablity:
+        if not(i.weekday == 'Monday'):
+            week_id=1
+        elif not(i.weekday == 'Tuesday'):
+            week_id=2
+        elif not(i.weekday == 'Wednesday'):
+            week_id=3
+        elif not(i.weekday == 'Thursday'):
+            week_id=4
+        elif not(i.weekday == 'Friday'):
+            week_id=5
+        elif not(i.weekday == 'Saturday'):
+            week_id=6
+        elif not(i.weekday == 'Sunday'):
+            week_id=0
+        mentor_availablity_weekday.append(week_id)
+  
+    context['mentor_availablity_weekday'] = mentor_availablity_weekday
+    
+    if request.method == "POST":
+        if request.user.user_type == "Mentee":
+            date = request.POST.get('date')
+            from_hour = request.POST.get('from_hour')
+            to_hour = request.POST.get('to_hour')
+           
+            temp = pd.Timestamp(date)
+            week = temp.day_name()
+            print(request.POST.get('mentor_id'))
+            first_time = datetime.strptime(from_hour, '%H:%M')
+            second_time = datetime.strptime(to_hour, '%H:%M')
+            total_time = second_time - first_time
+            total_amount = price_per_hour * total_time.seconds/3600
+            print(total_amount)
+            print(date)
+            print(to_hour)
+            print(from_hour)
+            # print(first_time)
+            # print(second_time)
+            print(total_time)
+            mentee_request = MentorRequest(mentee=request.user.menteeprofile,mentor=mentor,total_amount=total_amount,content=content)
+            mentee_request.save()
+            mentor_request_time = MentorRequestTime(request=mentee_request,date=date,from_hour=from_hour,to_hour=to_hour,weekday=week)
+            mentor_request_time.save()
             return redirect('dashboard:content', id=content_id)
-        elif request.method == "GET":
+            # return redirect('dashboard:content', id=content_id)
+    elif request.method == "GET":
             context['content'] = content
             return render(request, 'dashboard/requestcontent.html', context=context)
     else:
         return redirect('/')
+
+
+@login_required(login_url='/dashboard/login/')
+@csrf_exempt
+def checkworkhours(request, content_id):
+   print("ok")
+   content = Content.objects.get(id=content_id)
+   mentor = content.user
+   if request.method == "POST":
+        weekday = request.POST.get('weekday')
+        print(request.POST.get('weekday'))
+        weekday = int(weekday)
+        if weekday == 1:
+            week="Monday"
+        elif weekday == 2:
+            week="Tuesday"
+        elif weekday == 3:
+            week="Wednesday"
+        elif weekday == 4:
+            week="Thursday"
+        elif weekday == 5:
+            week="Friday"
+        elif weekday == 6:
+            week="Saturday"
+        elif weekday == 0:
+            week="Sunday"
+        mentor_availablity = MentorAvailability.objects.filter(mentor=mentor, weekday=week)
+        return JsonResponse({"mentor_availablity":list(mentor_availablity.values()),"week":week})
+        
+        

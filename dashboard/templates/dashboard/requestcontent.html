@@ -1,7 +1,9 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
 {% block content %}
-<div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 ">
+
+
+<div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 " style="width:100%">
     <div class="py-4 space-y-1 text-center lg:pb-10 ">
       <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Request {{content.title}}</h2>
       <p class="text-base font-medium text-gray-500">{{content.coursecatergory.skill.name}}</p>
@@ -9,43 +11,132 @@
     </div>
 <form action="{% url 'dashboard:requestcontent' content.id %}" method="post" class="block space-y-6" >
     {% csrf_token %}
+    
     <div class="space-y-2">
-      <label for="email" class="block text-sm font-semibold text-gray-500">Total Time</label>
+      <label for="start_time" class="block text-sm font-semibold text-gray-500">Your Date</label>
       <input 
        
-        type="number" 
-        name="total_time" 
-        id="total_time"  
-        step=".1"
-        class="w-full border-gray-300 rounded-md">
-        
-    </div>
-    <div class="space-y-2">
-      <label for="start_time" class="block text-sm font-semibold text-gray-500">Start Time</label>
-      <input 
-       
-        type="datetime-local" 
-        name="start_time" 
-        id="start_time" 
-        class="w-full border-gray-300 rounded-md">
+        type="date"
+        id ="date1"
+        class="w-full border-gray-300 rounded-md"
+      />
       <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
     </div>
-    <div class="space-y-2">
-        <label for="end_time" class="block text-sm font-semibold text-gray-500">End Time</label>
+    <div class="flex justify-center px-4 py-4 space-x-1" id="availablehours">
+     
+      <!-- <button type="submit" class="flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50">
+        <span>
+          Request Content
+        </span>
+      </button> -->
+      
+    </div>
+    <div id="timemessage"></div>
+    <div id="timefields">
+      
+      <!-- <div class="space-y-2">
+        <label for="start_time" class="block text-sm font-semibold text-gray-500">Start Time</label>
         <input 
          
-          type="datetime-local" 
-          name="end_time" 
-          id="end_time" 
-          class="w-full border-gray-300 rounded-md">
+          type="date"
+          id ="date1"
+          class="w-full border-gray-300 rounded-md"
+        />
         <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
-      </div>
-      
-    <button type="submit" class="flex items-center justify-center w-full px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50">
-      <span>
-        Request Content
-      </span>
-    </button>
+      </div> -->
+    </div>
+    
+    
   </form>
   </div>
+
+
+
+  <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+  <script>
+    const picker = document.getElementById('date1');
+  
+picker.addEventListener('input', function(e){
+  var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
+  var content_id = "{{content.id}}"
+  var day = new Date(this.value).getUTCDay();
+  if(mentor_availablity_weekday.includes(day)){
+    
+    e.preventDefault();
+    this.value = '';
+  }
+  $.ajax({
+        type:"POST",
+        url: `/dashboard/checkworkhours/${content_id}/`,
+        data: {
+          'weekday': day
+        },
+        dataType: 'json',
+        success: function (response) {
+          let final = ""
+          let final1 = ""
+          let final2 = ""
+          if (response.mentor_availablity.length == 0) {
+
+            final = "Mentor Not available on "+response.week+""
+          }
+          else {
+            
+              for (var key in response.mentor_availablity)
+              {
+                console.log(response.mentor_availablity[key])
+                  final="<button type='button' onclick='requestmentor()' class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>"+response.mentor_availablity[key].from_hour+" To "+response.mentor_availablity[key].to_hour+" </span></button>" 
+                  
+              }
+            
+             let final1 = "<div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>Start Time</label><input type='time' id ='from_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>Start Time</label><input type='time' id ='to_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div>"
+              let final2=" <center><h1>Mentor only Free In Theese Times</h1></center>"
+             $("#timefields").html(final1)
+            $("#timemessage").html(final2)
+            }
+            $("#availablehours").html(final)
+            
+        },
+        error: function(response){
+              console(response);
+          }
+      });
+});
+  </script>
+  <script>
+    function requestmentor(week) {
+      console.log(week)
+      var content_id = "{{content.id}}"
+    
+      var from_hour = document.getElementById("from_hour").value;
+      var to_hour = document.getElementById("to_hour").value;
+      var date1 = document.getElementById("date1").value;
+      console.log(week)
+      $.ajax({
+        type:"POST",
+        url: `/dashboard/requestcontent/${content_id}/`,
+        data: {
+          'weekday': week,
+          'from_hour': from_hour,
+          'to_hour': to_hour,
+          'date': date1,
+          'mentor_id': content_id,
+        },
+        dataType: 'json',
+        success: function (response) {
+          console.log(response)
+          if (response.status == "success") {
+            alert("Request sent successfully")
+          }
+          else {
+            alert("Request not sent")
+          }
+        },
+        error: function(response){
+              console(response);
+          }
+      });
+    }
+  </script>
 {% endblock %}
