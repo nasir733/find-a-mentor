@@ -108,11 +108,11 @@ class Content(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     price_per_hour = models.DecimalField(
-        max_digits=7, decimal_places=2, blank=True, null=True,default=0)
+        max_digits=6, decimal_places=2, blank=True, null=True,default=0)
 
 
 class MentorPaymentPlans(models.Model):
-    amount = models.DecimalField(max_digits=7, decimal_places=2,default=0)
+    amount = models.DecimalField(max_digits=6, decimal_places=2,default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     content = models.ForeignKey(Content, on_delete=models.CASCADE,null=True, blank=True)
@@ -174,7 +174,7 @@ class MentorMenteeRelations(models.Model):
     mentee = models.ForeignKey(
         MenteeProfile, on_delete=models.CASCADE, related_name='mentee_relation', null=True, blank=True)
     amount = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True,default=0)
+        max_digits=6, decimal_places=2, null=True, blank=True,default=0)
 
 
 class MentorRequest(models.Model):
@@ -188,7 +188,7 @@ class MentorRequest(models.Model):
     declined = models.BooleanField(default=False)
     time_plan = models.ForeignKey(
         MentorPaymentPlans, on_delete=models.CASCADE, blank=True, null=True)
-    total_amount = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True,default=0)
+    total_amount = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True,default=0)
 
     def __str__(self):
         return "{} requested {} content from {}".format(self.mentee.user.username, self.content.title, self.mentor.user.username)
@@ -204,7 +204,7 @@ class MentorRequestTime(models.Model):
     to_date = models.DateField(blank=True, null=True)
     from_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
     to_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
-    total_hours = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+    total_hours = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
