@@ -46,9 +46,9 @@ def Directs(request, username):
 			
 			room_name = user.username+'_'+active_direct
 			room = Room.objects.create(name=room_name,mentee=user, mentor=User.objects.get(username=active_direct),menter_username=active_direct,mentee_username=user.username)
-			url = "/direct/room/{}".format(room.mentor.username)
+			url = "/direct/room/{}".format(room.mentee.username)
 			notify.send(user, recipient=room.mentor, verb='Message', description="{} started new conversation".format(user.username),url=url)
-			print("hellooooo")
+			
 		context = {
 			'active_direct':active_direct,
 			
@@ -87,7 +87,7 @@ def SendDirect(request,room_id):
 	if request.method == 'POST':
 		body = request.POST.get('text')
 		if from_user.user_type == "Mentor" :
-			url = "/direct/room/{}".format(room.mentee.username)
+			url = "/direct/room/{}".format(room.mentor.username)
 			message = Message(user=from_user, text=body,room=room,user_name=from_user.username)
 			message.save()
 			notify.send(from_user, recipient=room.mentee, verb='Message', description=body,url=url)
@@ -96,7 +96,7 @@ def SendDirect(request,room_id):
 			room.save()
 			return redirect('directs:room',room.mentee.username)
 		elif from_user.user_type == "Mentee":
-			url = "/direct/room/{}".format(room.mentor.username)
+			url = "/direct/room/{}".format(room.mentee.username)
 			message = Message(user=from_user, text=body,room=room,user_name=from_user.username)
 			message.save()
 			notify.send(from_user, recipient=room.mentor, verb='Message', description=body,url=url)
