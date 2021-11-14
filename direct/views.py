@@ -31,6 +31,8 @@ def Directs(request, username):
 		else:
 			room_name = user.username+'_'+active_direct
 			room = Room.objects.create(name=room_name,mentor=user, mentee=User.objects.get(username=active_direct))
+			
+			
 		context = {
 			'active_direct':active_direct,
 			
@@ -41,9 +43,11 @@ def Directs(request, username):
 		if Room.objects.filter(mentee=user,mentor__username=active_direct).exists():
 			room = Room.objects.get(mentee=user,mentor__username=active_direct)
 		else:
+			
 			room_name = user.username+'_'+active_direct
 			room = Room.objects.create(name=room_name,mentee=user, mentor=User.objects.get(username=active_direct),menter_username=active_direct,mentee_username=user.username)
-			notify.send(user, recipient=room.mentor, verb='Message', description="{} started new conversation".format(user.username))
+			url = "/direct/room/{}".format(room.mentor.username)
+			notify.send(user, recipient=room.mentor, verb='Message', description="{} started new conversation".format(user.username),url=url)
 			print("hellooooo")
 		context = {
 			'active_direct':active_direct,
