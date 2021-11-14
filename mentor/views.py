@@ -178,8 +178,11 @@ def mentorpage(request,task="view"):
     context['profile'] = profile
     mentor_skills = MentorSkill.objects.filter(mentor=profile)
     context['mentor_skills'] = mentor_skills
-    mentor_working_hours = MentorAvailability.objects.filter(mentor=request.user.mentorprofile)
-    context['mentor_working_hours'] = mentor_working_hours
+    if MentorAvailability.objects.filter(mentor=request.user.mentorprofile).exists():
+        mentor_working_hours = MentorAvailability.objects.filter(mentor=request.user.mentorprofile)
+        context['mentor_working_hours'] = mentor_working_hours
+    else:
+        context['mentor_working_hours'] = None
     if task == "create":
         context['create'] = True
         context['skills'] = Skill.objects.all()
