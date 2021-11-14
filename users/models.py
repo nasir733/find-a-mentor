@@ -219,9 +219,8 @@ class MentorAvailability(models.Model):
         ordering = ('weekday',)
         unique_together = ('mentor','weekday', 'from_hour', 'to_hour')
 
-    def __unicode__(self):
-        return u'%s: %s - %s' % (self.get_weekday_display(),
-                                 self.from_hour, self.to_hour)
+    def __str__(self):
+        return "{} is available on {}".format(self.mentor.user.username, self.weekday)
 
 
 
