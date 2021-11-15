@@ -20,6 +20,7 @@
         type="date"
         id ="date1"
         class="w-full border-gray-300 rounded-md"
+        required
       />
       <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
     </div><div id="timemessage"></div>
@@ -77,6 +78,7 @@ picker.addEventListener('input', function(e){
   var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
   var content_id = "{{content.id}}"
   var day = new Date(this.value).getUTCDay();
+  console.log(day);
   if(mentor_availablity_weekday.includes(day)){
     
     e.preventDefault();
