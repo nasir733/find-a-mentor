@@ -78,9 +78,9 @@ picker.addEventListener('input', function(e){
   var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
   var content_id = "{{content.id}}"
   var day = new Date(this.value).getUTCDay();
-  console.log(day);
+  var date1 = document.getElementById("date1").value;
   if(mentor_availablity_weekday.includes(day)){
-    
+    console.log("day : ",day);
     e.preventDefault();
     this.value = '';
   }
@@ -103,6 +103,8 @@ picker.addEventListener('input', function(e){
             
               for (var key in response.mentor_availablity)
               {
+                console.log("day : ",date1);
+
                 console.log(response.mentor_availablity[key])
                   final="<button type='button'  class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-gray-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>"+checktime(response.mentor_availablity[key].from_hour)+" To "+checktime(response.mentor_availablity[key].to_hour)+" </span></button>" 
                   
