@@ -2,7 +2,9 @@
 {% load static %}
 {% block content %}
 
-
+<style>
+  input::-webkit-calendar-picker-indicator { display: none }
+</style>
 <div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 " style="width:100%">
     <div class="py-4 space-y-1 text-center lg:pb-10 ">
       <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Request {{content.title}} Content</h2>
