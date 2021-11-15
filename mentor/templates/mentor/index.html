@@ -4,7 +4,7 @@
 <div class="flex-1">
     <main class="px-6 py-5 mx-auto space-y-4 md:py-8 md:space-y-6 xl:px-12">
       <div class="bg-white rounded-md shadow-sm">
-  <div class="grid grid-cols-2 gap-6 pt-6 pb-6 md:pt-6 md:pb-8 md:gap-6 lg:pt-8 lg:pb-10 md:grid-cols-4 lg:px-6">
+  <div class="grid grid-cols-2 gap-6 pt-6 pb-6 md:pt-6 md:pb-8 md:gap-6 lg:pt-8 lg:pb-10 md:grid-cols-3 lg:px-6">
     <div class="pr-4 text-center border-gray-200 md:border-r-2">
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Mentees</span>
       <div class="flex items-center justify-center mx-auto mt-2 space-x-2">
@@ -39,31 +39,17 @@
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Sessions</span>
       <div class="flex items-center justify-center mt-2 space-x-2 ">
         <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">{{total_sessions}}</h2>
-        <!-- <span class="flex items-center justify-between px-2 py-1 font-semibold tracking-wide text-red-600 bg-red-100 rounded-lg text-xxs">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-          </svg>
-          <span>
-            19%
-          </span>
-        </span> -->
+     
       </div>
     </div>
-
+<!-- 
     <div class="pr-4 text-center">
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Money Made</span>
       <div class="flex items-center justify-center mt-2 space-x-2 ">
         <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">&dollar;{{request.user.mentorprofile.total_money_earned}}</h2>
-        <!-- <span class="flex items-center justify-between px-2 py-1 font-semibold tracking-wide text-green-600 bg-green-100 rounded-lg text-xxs">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-          </svg>
-          <span>
-            33%
-          </span>
-        </span> -->
+      
       </div>
-    </div>
+    </div> -->
 
 
   </div>
@@ -73,27 +59,34 @@
 
       <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {% for x in mentor_requests %}
-  <a href="" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
+  <a href="{% url 'mentor:content' x.content.id %}" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
     <div class="px-4 pt-6 pb-8 lg:px-6">
       <div class="flex justify-between mb-4">
-        <img src={% static 'dashboard/styles/images/project-icon1.png' %} class="w-12 h-12 rounded-md" alt="">
+        <img src="{{x.content.image.url}}" class="w-12 h-12 rounded-md" alt="">
         <div>
           <span class="flex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">
-            <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs">Total Amount</span>
-            <span class="text-sm text-gray-600">
-              &dollar; {{x.total_amount}}
+            <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs"> </span>
+            {% if x.accepted %}
+            <span class="text-sm text-green-600">
+              Accepted
             </span>
+            {% elif x.declined == "True" %}
+            <span class="text-sm text-red-600">
+              Pending
+            </span>
+            {% else %}
+            <span class="text-sm text-gray-600">
+              Pending
+            </span>
+            {% endif %}
           </span>
         </div>
       </div>
       <h2 class="text-lg font-semibold text-gray-800">{{x.content.title}}</h2>
       <span class="block font-semibold tracking-wide text-gray-400 uppercase transition-colors duration-300 text-xxs">Requested at {{x.content.created_at}}</span>
       <br/>
-      {% if x.accepted %}
-      <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">Accepted</span>
-      {% else %}
-      <span class="lex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">Pending</span>
-      {% endif %}
+    
+      
       <div class="flex items-center mt-6 -space-x-6">
         <img src='{{x.mentee.image.url}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
         <span class="lex items-center px-2 py-2 space-x-1 font-semibold rounded-lg text">{{x.mentee.user.username}}</span>

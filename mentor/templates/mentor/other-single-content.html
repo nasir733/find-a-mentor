@@ -1,4 +1,4 @@
-{% extends "dashboard/base.html" %}
+{% extends "mentor/base.html" %}
 
 {% load static %}
 {% block content %}
@@ -14,31 +14,31 @@
     <a href="{% url 'mentor:public' content.user.user.username %}" class="flex items-center col-span-1 space-x-3">
       <img src="{{content.user.image.url}}" class="w-12 h-12 rounded-full" alt="">
       <div class="space-y-1" style="margin-right: 5rem;">
-        <span class="text-base font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600">{{content.user.user.first_name}} {{content.user.user.last_name}}</span>
+        <span class="text-base font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600">{{content.user.user.username}}</span>
         <div class="flex items-center space-x-1">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span class="block font-semibold tracking-wide text-gray-500 uppercase text-xxs">
-            {{content.user.user.username}}
+            {{content.updated_at}}
           </span>
         </div>
         
       </div>
       
-    </a> <br/>
+    </a> 
     <!-- {% if mentor_request.accepted == True %}
-    
+    <br/>
     <a  class="px-3 py-2 bg-green-500 rounded-md " style="" >Booked</a>
       {% elif mentor_request.accepted == False %}
      <br/>
       <a  class="px-3 py-2 bg-yellow-500 rounded-md " style="" >Pending</a>
       {% else %}
       <br/>
+   <a href="{% url 'dashboard:requestcontent' content.id %}" class="px-3 py-2 bg-blue-500 rounded-md " style="" >Request</a>
     {% endif %}  -->
     <!--/ author -->
     
-   <a href="{% url 'dashboard:requestcontent' content.id %}" class="px-3 py-2 bg-blue-500 rounded-md " style="" >Request</a>
     <!-- post -->
     <h1 class="text-lg" style="font-size: 2rem;">{{content.title}}</h1>
     <!-- <h1 class="" style="font-size: 1rem;">&dollar;{{content.price_per_hour}}/per hour</h1> -->
@@ -65,7 +65,9 @@
      
       </div>
       <span class="text-xs font-semibold text-gray-500">
-        {{content.created_at}}
+        {% for x in content.content_tags.all %}
+        {{x.name}}
+        {% endfor %}
         
       </span>
     </div>

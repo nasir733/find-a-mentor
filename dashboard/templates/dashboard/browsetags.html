@@ -1,0 +1,42 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block content %}
+<div>
+    <div class="flex items-center justify-center px-8 py-10 bg-gray-100">
+        <div class="flex-1 max-w-screen-xl">
+            <div class="bg-white rounded-md shadow-sm ">
+        <div class="px-4 py-4 lg:px-6">
+          <div class="flex items-center justify-between space-x-4">
+        <form action="" class="relative flex-1 max-w-md">
+          <input type="text" placeholder="Search Tags..." class="block w-full pl-10 mt-1 placeholder-gray-400 border-0 border-b border-gray-200 peer focus:border-blue-600 focus:ring focus:ring-white focus:ring-opacity-80 ">
+          <button class="absolute left-0 flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-all duration-300 bg-transparent rounded-full top-2 hover:bg-gray-100 peer-focus:text-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </form>
+        <div class="flex space-x-2 md:space-x-3"> 
+      <!--     
+          <button class="flex px-4 py-3 space-x-2 text-sm font-semibold leading-4 text-gray-500 transition-colors duration-300 border border-gray-300 rounded-md hover:bg-gray-100 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            <span class="hidden md:inline">Filter</span>
+          </button> -->
+        </div>
+      </div>
+      
+        </div>
+
+
+        
+        </div>
+        <br/>
+        {% for x in tags %}
+        <a href="{% url 'dashboard:tagcontent'  category=x.catergory.name  tag=x.name  %}" class="px-4 py-4 text-sm text-blue-500">#{{x.name}}</a>
+        {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

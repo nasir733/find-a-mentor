@@ -30,11 +30,21 @@
   </div>
   <div class="overflow-x-auto">
     <div class="inline-block min-w-full overflow-hidden align-middle">
+      <div class="min-w-full">
+        {% for x in  catergory %}
+            <a href="{% url 'mentor:catergorycontent'  x.name  %}" class="px-4 py-4 text-xs text-blue-500">{{x.name}}</a>
+        {% endfor %}
+        {% for x in  tags %}
+            <a href="{% url 'mentor:tagcontent'  category=x.catergory.name  tag=x.name  %}" class="px-4 py-4 text-xs text-blue-500">#{{x.name}}</a>
+        {% endfor %}
+         <a href="{% url 'mentor:browsetags' %}" class="px-4 py-4 text-xs text-blue-500">More Tags..</a>
+      </div>
+
       <table class="min-w-full ">
         <thead class="text-xs font-semibold tracking-widest text-gray-500 uppercase border-t border-b border-gray-100 bg-gray-50">
           <td class="px-4 py-4">Content</td>
-          <td class="px-4 py-4">Hour Charge</td>
-          <td class="px-4 py-4">Catergory</td>
+          <!-- <td class="px-4 py-4">Hour Charge</td> -->
+     
           
           <td class="px-4 py-4">Mentor</td>
           <td class="px-4 py-4">&nbsp;</td>
@@ -44,7 +54,7 @@
         {% for content in contents %}
           <tr>
             
-            <td class="px-4 py-4"><a href="{% url 'dashboard:content' content.id %}">
+            <td class="px-4 py-4"><a href="{% url 'mentor:content' content.id %}">
               <div class="flex space-x-4 w-max">
                 <img src="{{content.image.url}}" class="w-10 h-10 rounded-md" alt="">
                 <div class="flex-1">
@@ -53,15 +63,14 @@
                 </div>
               </div></a>
             </td>
-            <td class="px-4 py-4 text-sm">&dollar;{{content.price_per_hour}}</td>
-            <td class="px-4 py-4 text-sm">{{content.user.first_name}} {{content.user.last_name}} </td>
+            <!-- <td class="px-4 py-4 text-sm">&dollar;{{content.price_per_hour}}</td> -->
             <td class="px-4 py-4">
               <div class="flex items-center -space-x-3 w-max">
+                <a href="{% url 'mentor:public' content.user.user.username %}">
                 <img src="{{content.user.image.url}}" class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
-                 </div>
+                </a> </div>
             </td>
-            <!-- <td class="px-4 py-4 text-sm"><a href="#" class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">Request</a></td> -->
-          </tr>
+           </tr>
          {% endfor %}
         </tbody>
       </table>

@@ -87,56 +87,28 @@
               <div id="container" >
                 <nav>
                     <ul>
-                        <li><a href="#">Categories</a>
+                      <li><a href="#">Categories</a>
                         <!-- First Tier Drop Down -->
                         <ul>
-                          <li><a href="#">Business</a>
+                          {% for x in request.session.catergory %}
+                          <li><a href="{% url 'mentor:catergorycontent' category=x.name %}">{{x.name}}</a>
                             <!-- Second Tier Drop Down -->
-                              <ul>
-                                  <li><a href="#">Career Advice</a></li>
-                                  <li><a href="#">Branding</a></li>
-                                  <li><a href="#">Financing Consulting</a>
-                                      <!-- Third Tier Drop Down -->
-                                      
-                                  </li>
-                              </ul>
+                            
+                          </li>
+                          {% endfor %}
+                          <!-- <li><a href="#">Product Design</a>
+                           
+                              <li><a href="#">HTML/CSS</a></li>
+                              <li><a href="#">jQuery</a></li>
+                              <li><a href="#">Other</a>
+                                
+      
                               </li>
-                          <li><a href="#">Sales and Marketing</a>
-                            <!-- Second Tier Drop Down -->
-                              <ul>
-                                  <li><a href="#"></a></li>
-                                  <li><a href="#">jQuery</a></li>
-                                  <li><a href="#">Other</a>
-                                      <!-- Third Tier Drop Down -->
-                                      
-                                  </li>
-                              </ul>
-                              </li>
-                          <li><a href="#">Product Design</a>
-                            <!-- Second Tier Drop Down -->
-                              <ul>
-                                  <li><a href="#">HTML/CSS</a></li>
-                                  <li><a href="#">jQuery</a></li>
-                                  <li><a href="#">Other</a>
-                                      <!-- Third Tier Drop Down -->
-                                      
-                                  </li>
-                              </ul>
-                              </li>
-                          <li><a href="#">Tutorials</a>
-                            <!-- Second Tier Drop Down -->
-                              <ul>
-                                  <li><a href="#">HTML/CSS</a></li>
-                                  <li><a href="#">jQuery</a></li>
-                                  <li><a href="#">Other</a>
-                                      <!-- Third Tier Drop Down -->
-                                      
-                                  </li>
-                              </ul>
-                              </li>
-
+                            </ul>
+                          </li> -->
+                         
                         </ul>
-                        </li>
+                      </li>
                       
             </div>
             </div>

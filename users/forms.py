@@ -25,7 +25,7 @@ class CustomUpdateUserForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['username','first_name','last_name','email','phone_number','address','country','city','timezone']
+        fields = ['username','email','phone_number','address','country','city','timezone']
 
 
 class MentorProfileUpdateForm(forms.ModelForm):
@@ -48,5 +48,5 @@ class MenteeProfileUpdateForm(forms.ModelForm):
 class CreateContentForm(forms.ModelForm):
     class Meta:
         model = Content
-        fields ='__all__'
+        fields =['title','description','image','video_link']
 

@@ -18,7 +18,7 @@ class CustomUserAdmin(UserAdmin):
                 'fields': ('username', 'password', 'email', 'user_type',)
             }),
             (('Personal'), {
-                'fields': ('first_name', 'last_name', 'phone_number', 'address', 'country', 'city', 'timezone',)
+                'fields': ('phone_number', 'address', 'country', 'city', 'timezone',)
             }),
             (('Permissions'), {
                 'fields': ('is_active', 'is_staff', 'is_superuser')

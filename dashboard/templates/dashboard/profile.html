@@ -259,69 +259,33 @@
     <div class="bg-white rounded-md shadow-sm ">
       <div class="flex items-center justify-between px-4 py-3 lg:px-6">
         <div>
-          <h2 class="text-base font-semibold text-gray-800">Recommendations</h2>
+          <h2 class="text-base font-semibold text-gray-800">Favourite Topics</h2>
         </div>
-        <button
-          class="flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-colors duration-300 bg-white rounded-full hover:bg-gray-100">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-          </svg>
-        </button>
+        
       </div>
+      {% for x in request.user.menteeprofile.menteeinterest.interest.all %}
+        <a href="{% url 'dashboard:tagcontent'  category=x.catergory.name  tag=x.name  %}" class="px-4 py-4 text-xs text-blue-500">#{{x.name}}</a>
+        
+        {% endfor %}
       <div class="px-4 pt-6 pb-8 border-t border-gray-200 lg:px-6">
         <div class="space-y-6 divide-y divide-gray-200">
           <!-- row -->
-          {% for x in reviews %}
-          <div class="grid grid-cols-1 lg:gap-8 lg:grid-cols-3">
-            <a href="#" class="flex items-start col-span-1 space-x-4">
-              <img src='{{x.user.menteeprofile.image.url}}' class="w-16 h-16 rounded-full" alt="">
-              <div>
-                <span
-                  class="text-base font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600">{{x.user.username}}</span>
-                <p class="block text-sm text-gray-500">{{x.user.first_name}} {{x.user.last_name}}</p>
-              </div>
-            </a>
-            <div class="col-span-2">
-
-              <div class="flex mb-2 text-yellow-400">
-
-
-                <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                  </path>
-                </svg>
-
-                <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                  </path>
-                </svg>
-
-                <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                  </path>
-                </svg>
-
-                <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                  </path>
-                </svg>
-
-                <svg class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                  </path>
-                </svg>
-              </div>
-
-              <p class="text-sm">{{x.message}}</p>
-            </div>
-          </div>
-          {% endfor %}
+          
+        <form action="{% url 'dashboard:addfavouritetags' %}" method="post">
+            {% csrf_token %}
+            
+              
+              <select name="catergoryid" class="custom-select" id="inputGroupSelect01" required>
+      
+                <option selected value="">Catergory</option>
+                {% for x in request.session.catergory %}
+                <option value="{{x.id}}">{{x.name}}</option>
+              
+                {% endfor %}
+              </select>
+     
+          <input name="tag" type="text" class="w-full px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md" placeholder="Add Favourite Tags">
+        </form>
         </div>
       </div>
     </div>

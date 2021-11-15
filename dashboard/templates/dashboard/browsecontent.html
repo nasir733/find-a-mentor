@@ -30,11 +30,20 @@
   </div>
   <div class="overflow-x-auto">
     <div class="inline-block min-w-full overflow-hidden align-middle">
+      <div class="min-w-full">
+        {% for x in  catergory %}
+            <a href="{% url 'dashboard:catergorycontent'  x.name  %}" class="px-4 py-4 text-xs text-blue-500">{{x.name}}</a>
+        {% endfor %}
+        {% for x in  tags %}
+            <a href="{% url 'dashboard:tagcontent'  category=x.catergory.name  tag=x.name  %}" class="px-4 py-4 text-xs text-blue-500">#{{x.name}}</a>
+        {% endfor %}
+         <a href="{% url 'dashboard:browsetags' %}" class="px-4 py-4 text-xs text-blue-500">More Tags..</a>
+      </div>
+
       <table class="min-w-full ">
         <thead class="text-xs font-semibold tracking-widest text-gray-500 uppercase border-t border-b border-gray-100 bg-gray-50">
           <td class="px-4 py-4">Content</td>
-          <td class="px-4 py-4">Hour Charge</td>
-          <td class="px-4 py-4">Catergory</td>
+          <!-- <td class="px-4 py-4">Hour Charge</td> -->
           
           <td class="px-4 py-4">Mentor</td>
           <td class="px-4 py-4">&nbsp;</td>
@@ -53,8 +62,7 @@
                 </div>
               </div></a>
             </td>
-            <td class="px-4 py-4 text-sm">&dollar;{{content.price_per_hour}}</td>
-            <td class="px-4 py-4 text-sm">{{content.coursecatergory.skill.catergory.name}}</td>
+            <!-- <td class="px-4 py-4 text-sm">&dollar;{{content.price_per_hour}}</td> -->
             <td class="px-4 py-4">
               <div class="flex items-center -space-x-3 w-max">
                 <a href="{% url 'mentor:public' content.user.user.username %}">

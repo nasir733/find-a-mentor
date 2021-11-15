@@ -31,8 +31,6 @@ class CustomUser(AbstractUser):
     address = models.CharField(max_length=120, blank=True, null=True)
     country = models.CharField(max_length=120, blank=True, null=True)
     city = models.CharField(max_length=120, blank=True, null=True)
-    first_name = models.CharField(max_length=120, blank=True, null=True)
-    last_name = models.CharField(max_length=120, blank=True, null=True)
     timezone = TimeZoneField(default='Europe/London', null=True, blank=True)
     is_new_message = models.BooleanField(default=False)
     REQUIRED_FIELDS = []
@@ -53,13 +51,13 @@ class MentorProfile(models.Model):
         upload_to='profile_pics/mentor', blank=True, null=True, default='default.png')
     reviews_count = models.IntegerField(blank=True, null=True)
     messages_received = models.IntegerField(blank=True, null=True)
-    instagram_url = models.URLField(blank=True, null=True)
-    facebook_url = models.URLField(blank=True, null=True)
-    twitter_url = models.URLField(blank=True, null=True)
-    linkedin_url = models.URLField(blank=True, null=True)
-    github_url = models.URLField(blank=True, null=True)
-    website_url = models.URLField(blank=True, null=True)
-    youtube_url = models.URLField(blank=True, null=True)
+    instagram_url = models.URLField(blank=True, null=True,default="#")
+    facebook_url = models.URLField(blank=True, null=True,default="#")
+    twitter_url = models.URLField(blank=True, null=True,default="#")
+    linkedin_url = models.URLField(blank=True, null=True,default="#")
+    github_url = models.URLField(blank=True, null=True,default="#")
+    website_url = models.URLField(blank=True, null=True,default="#")
+    youtube_url = models.URLField(blank=True, null=True,default="#")
     total_money_earned = models.CharField(
         max_length=120, blank=True, null=True,default=0)
     total_hours_teached = models.CharField(
@@ -97,7 +95,7 @@ class Skill(models.Model):
     description = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return "{} - {}".format(self.catergory.name, self.name)
 class Content(models.Model):
     user = models.ForeignKey(MentorProfile, on_delete=models.CASCADE,null=True,blank=True)
     title = models.CharField(max_length=120, blank=True, null=True)
@@ -109,6 +107,9 @@ class Content(models.Model):
     is_active = models.BooleanField(default=True)
     price_per_hour = models.DecimalField(
         max_digits=6, decimal_places=2, blank=True, null=True,default=0)
+    content_tags = models.ManyToManyField(Skill, blank=True,null=True)
+    def __str__(self):
+        return "{} - {}".format(self.title, self.user.user.username)
 
 
 class MentorPaymentPlans(models.Model):
@@ -126,6 +127,9 @@ class Review(models.Model):
     rating = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return "{} added review for {}".format(self.user.username, self.content.title)
 
 class CourseCatergory(models.Model):
     content = models.OneToOneField(
@@ -149,23 +153,23 @@ class StripeCustomer(models.Model):
 
 
 class MentorSkill(models.Model):
-    mentor = models.ForeignKey(
+    mentor = models.OneToOneField(
         MentorProfile, on_delete=models.CASCADE)
-    skill = models.ForeignKey(
-        Skill, on_delete=models.CASCADE)
+    skill = models.ManyToManyField(
+        Skill, blank=True, null=True)
 
     def __str__(self):
-        return "{} has {} skill".format(self.mentor.username, self.skill.name)
+        return self.mentor.user.username
 
 
 class MenteeInterest(models.Model):
     mentee = models.OneToOneField(
         MenteeProfile, on_delete=models.CASCADE)
     interest = models.ManyToManyField(
-        Catergory)
+        Skill, blank=True, null=True)
 
     def __str__(self):
-        return "{} has {} skill".format(self.mentee.username, self.skill.name)
+        return self.mentee.user.username
 
 
 class MentorMenteeRelations(models.Model):
@@ -175,6 +179,9 @@ class MentorMenteeRelations(models.Model):
         MenteeProfile, on_delete=models.CASCADE, related_name='mentee_relation', null=True, blank=True)
     amount = models.DecimalField(
         max_digits=6, decimal_places=2, null=True, blank=True,default=0)
+
+    def __str__(self):
+        return "{} has {} mentee : {}".format(self.mentor.user.username, self.mentee.user.username,self.amount)
 
 
 class MentorRequest(models.Model):
@@ -207,6 +214,9 @@ class MentorRequestTime(models.Model):
     total_hours = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "{} requested {} content {}".format(self.request.mentee.user.username, self.request.content.title, self.date)
 
 class MentorAvailability(models.Model):
     mentor = models.ForeignKey(

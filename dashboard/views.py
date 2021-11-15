@@ -15,8 +15,10 @@ from users.forms import CustomUpdateUserForm, CustomUserCreationForm, MenteeProf
 from users.models import *
 from django.db.models import Q
 from datetime import datetime
+import pprint
 import pandas as pd
-
+import decimal
+from django.core import serializers
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -28,6 +30,7 @@ User = get_user_model()
 @login_required(login_url='/dashboard/login/')
 def menteedashboard(request):
     if request.user.user_type == "Mentor":
+        
         return redirect('mentor:home')
     else:
         context = {}
@@ -37,7 +40,10 @@ def menteedashboard(request):
             mentee=request.user.menteeprofile, accepted=True).count()
         context['total_mentors'] = total_mentors
         context['total_sessions'] = total_sessions
-
+        data = Catergory.objects.all()
+        request.session['catergory'] = list(data.values())
+        
+        print(data)
 
         mentor_requests = MentorRequest.objects.filter(mentee=request.user.menteeprofile)
         context['mentor_requests'] = mentor_requests
@@ -90,20 +96,19 @@ def menteeregister(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        phone_number = request.POST.get('phone_number')
-        address = request.POST.get('address')
+        
         password = request.POST.get('password')
 
         print(password, 'password =============')
-        user_created = User.objects.create_user(username=username, email=email, password=password, user_type="Mentee", first_name=first_name, last_name=last_name, phone_number=phone_number, address=address
+        user_created = User.objects.create_user(username=username, email=email, password=password, user_type="Mentee"
                                                 )
 
         user = authenticate(
             username=username, password=password)
         mentee_profile = MenteeProfile(user=user)
         mentee_profile.save()
+        mentee_interest = MenteeInterest(mentee=mentee_profile)
+        mentee_interest.save()
         login(request, user)
         print(user)
         # auth_login(request, user)
@@ -127,6 +132,7 @@ def profile(request):
     context['total_sessions'] = total_sessions
     context['profile'] = request.user
     context['total_mentees'] = total_mentees
+    
     return render(request, 'dashboard/profile.html')
 
 
@@ -161,8 +167,13 @@ def joinmeeting(request):
 @login_required(login_url='/dashboard/login/')
 def mentorcontent(request):
     context = {}
-    mentor_content = MentorRequest.objects.filter(mentee=request.user.menteeprofile)
-    context['mentor_content'] = mentor_content
+    pending = MentorRequest.objects.filter(Q(accepted=False)&Q(declined=False),mentee=request.user.menteeprofile)
+    booked = MentorRequest.objects.filter(accepted=True,mentee=request.user.menteeprofile)
+    declined = MentorRequest.objects.filter(declined=True,mentee=request.user.menteeprofile)
+    context['pending'] = pending
+    context['booked'] = booked
+    context['declined'] = declined
+
     return render(request, 'dashboard/mentorcontent.html', context=context)
 
 
@@ -175,13 +186,50 @@ def search(request):
 def browsecontent(request):
     context = {}
     contents = Content.objects.filter(is_active=True)
+    catergory = Catergory.objects.all()[0:4]
+    context['catergory'] = catergory
     context['contents'] = contents
     if request.user.user_type == 'Mentor':
         return redirect('mentor:browse')
     else:
         return render(request, 'dashboard/browsecontent.html', context=context)
 
+@login_required(login_url='/dashboard/login/')
+def catergorycontent(request,category):
+    context = {}
+    
+    contents = Content.objects.filter(content_tags__catergory__name__icontains=category).distinct()
+    print(contents)
+    context['contents'] = contents
+    tags = Skill.objects.filter(catergory__name=category)[0:4]
+    context['tags'] = tags
+    print(context['tags'])
+    if request.user.user_type == 'Mentor':
+        return redirect('mentor:browse')
+    else:
+        return render(request, 'dashboard/browsecontent.html', context=context)
 
+@login_required(login_url='/dashboard/login/')
+def tagcontent(request,category,tag):
+    context = {}
+    print(tag)
+    contents = Content.objects.filter(content_tags__name=tag).distinct()
+    print(contents)
+    tags = Skill.objects.filter(catergory__name=category)[0:4]
+    context['tags'] = tags
+    context['contents'] = contents
+    if request.user.user_type == 'Mentor':
+        return redirect('mentor:browse')
+    else:
+        return render(request, 'dashboard/browsecontent.html', context=context)
+
+@login_required(login_url='/dashboard/login/')
+def browsetags(request):
+    context = {}
+    tags = Skill.objects.all()
+    context['tags'] = tags
+    return render(request, 'dashboard/browsetags.html', context=context)
+    
 @login_required(login_url='/dashboard/login/')
 def settings(request):
     context = {}
@@ -235,10 +283,10 @@ def addreview(request, content_id):
 
 @login_required(login_url='/dashboard/login/')
 @csrf_exempt
-def requestcontent(request, content_id):
+def  requestcontent(request, content_id):
     context={}
     content = Content.objects.get(id=content_id)
-    price_per_hour = content.price_per_hour
+    #price_per_hour = content.price_per_hour
     mentor = content.user
     date=[]
     mentor_request_time = MentorRequestTime.objects.filter(Q(request__mentor=mentor)&Q(request__accepted=True))
@@ -277,20 +325,14 @@ def requestcontent(request, content_id):
             print(request.POST.get('mentor_id'))
             first_time = datetime.strptime(from_hour, '%H:%M')
             second_time = datetime.strptime(to_hour, '%H:%M')
-            total_time = second_time - first_time
-            total_amount = price_per_hour * total_time.seconds/3600
-            print(total_amount)
-            print(date)
-            print(to_hour)
-            print(from_hour)
-            # print(first_time)
-            # print(second_time)
-            print(total_time)
-            mentee_request = MentorRequest(mentee=request.user.menteeprofile,mentor=mentor,total_amount=total_amount,content=content)
+            total_time = decimal.Decimal(((second_time - first_time).seconds)/3600)
+            #total_amount = price_per_hour*total_time
+            mentee_request = MentorRequest(mentee=request.user.menteeprofile,mentor=mentor,content=content)
             mentee_request.save()
-            mentor_request_time = MentorRequestTime(request=mentee_request,date=date,from_hour=from_hour,to_hour=to_hour,weekday=week)
+            mentor_request_time = MentorRequestTime(request=mentee_request,date=date,from_hour=from_hour,to_hour=to_hour,weekday=week,total_hours=total_time)
             mentor_request_time.save()
-            return redirect('dashboard:content', id=content_id)
+
+            return JsonResponse({'status':'success'})
             # return redirect('dashboard:content', id=content_id)
     elif request.method == "GET":
             context['content'] = content
@@ -324,6 +366,45 @@ def checkworkhours(request, content_id):
         elif weekday == 0:
             week="Sunday"
         mentor_availablity = MentorAvailability.objects.filter(mentor=mentor, weekday=week)
-        return JsonResponse({"mentor_availablity":list(mentor_availablity.values()),"week":week})
+        availablity_mentor = list(mentor_availablity.values())
+        print(availablity_mentor)
+        return JsonResponse({"mentor_availablity":availablity_mentor,"week":week})
         
-        
+
+
+@login_required(login_url='/dashboard/login/')
+def addfavouritetags(request):
+
+    if request.method == "POST":
+        if request.user.user_type == "Mentee":
+            mentee_interests= MenteeInterest.objects.get(mentee=request.user.menteeprofile)
+            tag = request.POST.get('tag').lower()
+            catergoryid =int( request.POST.get('catergoryid'))
+            catergory = Catergory.objects.get(id=catergoryid)
+            if mentee_interests.interest.filter(Q(name=tag),Q(catergory=catergory)).exists():
+                return redirect('dashboard:profile')
+            else:
+                if Skill.objects.filter(Q(name=tag)&Q(catergory=catergory)).exists():
+                    skill = Skill.objects.get(name=tag,catergory=catergory)
+                else:    
+                    skill = Skill(catergory=catergory,name=tag)
+                    skill.save()
+                mentee_interests.interest.add(skill)
+                mentee_interests.save()
+                return redirect('dashboard:profile')
+        elif request.user.user_type == "Mentor":
+            mentor_skills= MentorSkill.objects.get(mentor=request.user.mentorprofile)
+            tag = request.POST.get('tag').lower()
+            catergoryid =int( request.POST.get('catergoryid'))
+            catergory = Catergory.objects.get(id=catergoryid)
+            if mentor_skills.skill.filter(Q(name=tag),Q(catergory=catergory)).exists():
+                return redirect('mentor:profile')
+            else:
+                if Skill.objects.filter(Q(name=tag)&Q(catergory=catergory)).exists():
+                    skill = Skill.objects.get(name=tag,catergory=catergory)
+                else:    
+                    skill = Skill(catergory=catergory,name=tag)
+                    skill.save()
+                mentor_skills.skill.add(skill)
+                mentor_skills.save()
+                return redirect('mentor:profile')

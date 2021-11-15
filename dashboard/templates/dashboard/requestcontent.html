@@ -5,9 +5,9 @@
 
 <div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 " style="width:100%">
     <div class="py-4 space-y-1 text-center lg:pb-10 ">
-      <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Request {{content.title}}</h2>
+      <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Request {{content.title}} Content</h2>
       <p class="text-base font-medium text-gray-500">{{content.coursecatergory.skill.name}}</p>
-      <p class="text-base font-medium text-gray-500">&dollar;{{content.price_per_hour}}/per hour</p>
+      <!-- <p class="text-base font-medium text-gray-500">&dollar;{{content.price_per_hour}}/per hour</p> -->
     </div>
 <form action="{% url 'dashboard:requestcontent' content.id %}" method="post" class="block space-y-6" >
     {% csrf_token %}
@@ -21,7 +21,7 @@
         class="w-full border-gray-300 rounded-md"
       />
       <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
-    </div>
+    </div><div id="timemessage"></div>
     <div class="flex justify-center px-4 py-4 space-x-1" id="availablehours">
      
       <!-- <button type="submit" class="flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50">
@@ -31,7 +31,7 @@
       </button> -->
       
     </div>
-    <div id="timemessage"></div>
+    
     <div id="timefields">
       
       <!-- <div class="space-y-2">
@@ -56,6 +56,21 @@
 
   <script>
     const picker = document.getElementById('date1');
+    function checktime(time){
+      var date =new Date (new Date().toDateString() + ' ' + time);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      console.log(strTime);
+      return strTime;
+      
+     
+    }
+
   
 picker.addEventListener('input', function(e){
   var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
@@ -86,12 +101,12 @@ picker.addEventListener('input', function(e){
               for (var key in response.mentor_availablity)
               {
                 console.log(response.mentor_availablity[key])
-                  final="<button type='button' onclick='requestmentor()' class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>"+response.mentor_availablity[key].from_hour+" To "+response.mentor_availablity[key].to_hour+" </span></button>" 
+                  final="<button type='button'  class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-gray-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>"+checktime(response.mentor_availablity[key].from_hour)+" To "+checktime(response.mentor_availablity[key].to_hour)+" </span></button>" 
                   
               }
             
-             let final1 = "<div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>Start Time</label><input type='time' id ='from_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>Start Time</label><input type='time' id ='to_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div>"
-              let final2=" <center><h1>Mentor only Free In Theese Times</h1></center>"
+             let final1 = "<div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>Start Time</label><input type='time' id ='from_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>End Time</label><input type='time' id ='to_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><button type='button' onclick='requestmentor()' class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>Request Content</span></button>"
+              let final2=" <center><h1>Mentor is only Free During In Theese Times</h1></center>"
              $("#timefields").html(final1)
             $("#timemessage").html(final2)
             }
@@ -127,7 +142,7 @@ picker.addEventListener('input', function(e){
         success: function (response) {
           console.log(response)
           if (response.status == "success") {
-            alert("Request sent successfully")
+            window.location = `/dashboard/content/${content_id}`;
           }
           else {
             alert("Request not sent")

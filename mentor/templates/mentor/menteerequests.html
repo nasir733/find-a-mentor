@@ -48,29 +48,29 @@
       {% for x in mentee_requests %}
     <div class="flex items-center justify-between py-3">
       <div class="flex space-x-4">
-        <img src='{{x.content.image.url}}' class="w-16 h-16 rounded-md" alt="">
+        <img src='{{x.request.content.image.url}}' class="w-16 h-16 rounded-md" alt="">
         <div class="">
-          <span class="text-base font-semibold text-gray-800">{{x.mentee.user.username}} requested {{x.content.title}}</span>
-          <span class="block mb-1 font-semibold tracking-wide text-gray-500 uppercase text-xxs">{{x.total_time}} hours - for &dollar;{{x.total_amount}}</span>
+          <span class="text-base font-semibold text-gray-800">{{x.request.mentee.user.username}} requested {{x.request.content.title}}</span>
+          <span class="block mb-1 font-semibold tracking-wide text-gray-500 uppercase text-xxs">{{x.from_hour}} To {{x.to_hour}} ON {{x.date}}</span>
           <span class="block mb-3 text-xs font-medium text-gray-400">Requested on {{x.created_at}}</span>
         </div>
       </div>
       <div class="flex items-center space-x-2">
-      {% if x.accepted == True %}
+      {% if x.request.accepted == True %}
 <a href="{% url 'mentor:menteerequests' "accepted" %}" class="px-3 py-2 bg-green-400 rounded-md">Accepted</a>
         
-    {% elif x.declined == True %}
+    {% elif x.request.declined == True %}
     <a href="{% url 'mentor:menteerequests' "declined" %}" class="px-3 py-2 bg-red-400 rounded-md">Declined</a>
         
       {% else %}
       
-        <a href="{% url 'mentor:acceptrequest' x.id %}"  class="flex px-4 py-3 space-x-2 text-sm font-semibold leading-4 text-gray-500 transition-colors duration-300 border border-green-300 rounded-md hover:bg-green-100 hover:text-gray-700">
+        <a href="{% url 'mentor:acceptrequest' x.request.id %}"  class="flex px-4 py-3 space-x-2 text-sm font-semibold leading-4 text-gray-500 transition-colors duration-300 border border-green-300 rounded-md hover:bg-green-100 hover:text-gray-700">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
           </svg>
           <span class="hidden md:inline">Accept</span>
         </a>
-        <a href="{% url 'mentor:declinerequest' x.id %}"  class="flex px-4 py-3 space-x-2 text-sm font-semibold leading-4 text-gray-500 transition-colors duration-300 border border-red-300 rounded-md hover:bg-red-100 hover:text-gray-700">
+        <a href="{% url 'mentor:declinerequest' x.request.id %}"  class="flex px-4 py-3 space-x-2 text-sm font-semibold leading-4 text-gray-500 transition-colors duration-300 border border-red-300 rounded-md hover:bg-red-100 hover:text-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
             </svg>

@@ -26,10 +26,10 @@
     {% for x in my_mentees %}
     <div class="flex items-center justify-between py-3">
       <div class="flex space-x-4">
-        <img src='{{x.mentee.image.url}}' class="w-16 h-16 rounded-md" alt="">
+        <img src='{{x.mentee.image.url}}' class="w-16 h-16 rounded-full" alt="">
         <div class="">
-          <span class="text-base font-semibold text-gray-800">{{x.mentee.user.first_name}} {{x.mentee.user.last_name}}</span>
-          <span class="block mb-1 font-semibold tracking-wide text-gray-500 uppercase text-xxs">{{x.mentee.user.country}}</span>
+          <span class="text-base font-semibold text-gray-800">{{x.mentee.user.username}}</span>
+          <span class="block mb-1 font-semibold tracking-wide text-gray-500  text-xxs">{{x.mentee.user.email}}</span>
           <span class="block mb-3 text-xs font-medium text-gray-400">Totally {{x.mentee.menteeprofile.total_hours_learned}} hours learned</span>
          
         </div>

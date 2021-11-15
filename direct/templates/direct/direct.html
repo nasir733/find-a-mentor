@@ -149,12 +149,12 @@
       $.ajax({
           type: 'GET',
           url : "/direct/messages/{{room.id}}/",
-          beforeSend : ()=>{
-            $("#preloader").show();
-          },
-          complete : ()=>{
-            $("#preloader").hide();
-          },
+          // beforeSend : ()=>{
+          //   $("#preloader").show();
+          // },
+          // complete : ()=>{
+          //   $("#preloader").hide();
+          // },
           success: function(response){
 
               let final = ""

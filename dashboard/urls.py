@@ -12,6 +12,9 @@ urlpatterns = [
     
     path('', views.menteedashboard, name='home'),
     path('browse/',views.browsecontent, name='browse'),
+    path('browse/<str:category>/',views.catergorycontent, name='catergorycontent'),
+    path('browse/<str:category>/<str:tag>/',views.tagcontent, name='tagcontent'),
+    path('browsetags/',views.browsetags,name='browsetags'),
     path('profile/', views.profile, name='profile'),
     path('mymentors/', views.mymentors, name='mymentors'),
     path('settings/', views.settings, name='settings'),
@@ -23,4 +26,5 @@ urlpatterns = [
     path('addreview/<int:content_id>/',views.addreview, name='addreview'),
     path('requestcontent/<int:content_id>/',views.requestcontent, name='requestcontent'),
     path('checkworkhours/<int:content_id>/',views.checkworkhours, name='checkworkhours'),
+    path('addfavouritetags/',views.addfavouritetags, name='addfavouritetags'),
 ]

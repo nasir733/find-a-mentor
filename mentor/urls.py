@@ -8,6 +8,9 @@ urlpatterns = [
     
     path('', views.home, name='home'),
     path('browse/',views.browsecontent, name='browse'),
+    path('browse/<str:category>/',views.catergorycontent, name='catergorycontent'),
+    path('browse/<str:category>/<str:tag>/',views.tagcontent, name='tagcontent'),
+    path('browsetags/',views.browsetags,name='browsetags'),
     path('profile/', views.profile, name='profile'),
     path('clippedcontent/', views.clippedcontent, name='clippedcontent'),
     path('search/', views.search, name='search'),
@@ -24,4 +27,11 @@ urlpatterns = [
     path('declinerequest/<int:request_id>/',views.declinerequest,name='declinerequest'),
     path('addworkinghours/',views.addworkinghours,name="addworkinghours"),
     path('addworkinghours/<int:id>/',views.deleteworkinghours,name="deleteworkinghours"),
+    path('content/<int:id>/addtags',views.addtagcontent, name='addtag'),
+    path('content/<int:id>/update',views.singlecontentupdate, name='contentupdate'),
+
+    path('findmentees/',views.findmentees,name='findmentees'),
+    path('findmentees/<str:category>/',views.catergorymentee, name='catergorymentee'),
+    path('findmentees/<str:category>/<str:tag>/',views.tagmentee, name='tagmentee'),
+    path('browsementeetags/',views.browsementeetags,name='browsementeetags'),
 ]
