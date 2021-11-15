@@ -443,7 +443,7 @@ def findmentees(request):
     mentees = MenteeProfile.objects.all()
     context = {}
     context['mentees'] = mentees
-    catergory = Catergory.objects.all()[0:4]
+    catergory = Catergory.objects.all()
     context['catergory'] = catergory
     if request.method == 'POST':
         search_text = request.POST.get('search_text')
