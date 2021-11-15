@@ -186,7 +186,7 @@ def search(request):
 def browsecontent(request):
     context = {}
     contents = Content.objects.filter(is_active=True)
-    catergory = Catergory.objects.all()[0:4]
+    catergory = Catergory.objects.all()
     context['catergory'] = catergory
     context['contents'] = contents
     if request.user.user_type == 'Mentor':

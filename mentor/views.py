@@ -232,7 +232,7 @@ def browsecontent(request):
     context = {}
     contents = Content.objects.filter(is_active=True)
     context['contents'] = contents
-    catergory = Catergory.objects.all()[0:4]
+    catergory = Catergory.objects.all()
     context['catergory'] = catergory
     if request.user.user_type == 'Mentor':
         return render(request, 'mentor/browsecontent.html', context=context)
