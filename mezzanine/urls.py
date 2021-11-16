@@ -12,6 +12,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('mentor/', include('mentor.urls')),
     path('direct/',include('direct.urls')),
+    path('videotesting/',include('chat.urls')),
     url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ] 
 

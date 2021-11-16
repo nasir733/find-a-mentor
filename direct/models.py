@@ -15,6 +15,8 @@ class Room(models.Model):
 	is_new_message = models.BooleanField(default=True)
 	menter_username = models.CharField(max_length=255,null=True,blank=True)
 	mentee_username = models.CharField(max_length=255,null=True,blank=True)
+
+	
 	def __str__(self):
 		return self.name
 
