@@ -18,11 +18,11 @@ import datetime
 from notifications.signals import notify
 from users.models import *
 
-pusher_client = Pusher(app_id=os.environ.get('PUSHER_APP_ID'),
-                       key=os.environ.get('PUSHER_KEY'),
-                       secret=os.environ.get('PUSHER_SECRET'),
+pusher_client = Pusher(app_id="1298426",
+                       key="06d07740f1d6ef655ab5",
+                       secret="012e76edc7d240411c11",
                        ssl=True,
-                       cluster=os.environ.get('PUSHER_CLUSTER')
+                       cluster="us2"
                        )
 
 
@@ -117,8 +117,8 @@ def pusher_auth(request):
 
 
 def generate_agora_token(request):
-    appID = os.environ.get('AGORA_APP_ID')
-    appCertificate = os.environ.get('AGORA_APP_CERTIFICATE')
+    appID = "1ce75471ef8d47a98b262376e207dfee"
+    appCertificate = "5fb2b24175d143dc92d159b2d9681461"
     channelName = json.loads(request.body.decode(
         'utf-8'))['channelName']
     userAccount = request.user.username
