@@ -63,30 +63,33 @@
 </div>
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div class="bg-white rounded-md shadow-sm ">
+          <div class="px-4 py-4 lg:px-6">
+    <div class="mx-auto my-10 p-10 max-w-lg">
         {% if create %}
         <form action="{% url 'mentor:mentorpage' "create" %}" enctype="multipart/form-data" method="post" class="relative flex-1 max-w-md">
          {% csrf_token %}
           <br/>
             
        
-            <div class="form-group row">
-              <label for="title" class="col-sm-2 col-form-label">Title</label>
+              <div class="mb-6">
+              <label for="title" class="text-gray-700 font-medium">Title</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" name="title" placeholder="">
+                <input type="text" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full" name="title" placeholder="">
               </div>
             </div>
 
-            <div class="form-group row">
-              <label for="description" class="col-sm-2 col-form-label">Description</label>
+              <div class="mb-6">
+              <label for="description" class="text-gray-700 font-medium">Description</label>
               <div class="col-sm-10">
-                <textarea style="width: 400px;" type="text" class="form-control" name="description" placeholder="..."></textarea>
+                <textarea style="width: 400px;" type="text" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full" name="description" placeholder="..."></textarea>
               </div>
             </div>
 
-            <div class="form-group row">
-              <label for="image" class="col-sm-2 col-form-label">Image</label>
+              <div class="mb-6">
+              <label for="image" class="text-gray-700 font-medium">Image</label>
               <div class="col-sm-10">
-                <input type="file" class="form-control" name="image" placeholder="Image" accept="image/*"></textarea>
+                <input type="file" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full" name="image" placeholder="Image" accept="image/*"></textarea>
               </div>
             </div>
 
@@ -141,116 +144,11 @@
           </a>
         </div>
      
-{% endif %}
+        {% endif %}
 
 
-        <!-- <div class="bg-white rounded-md shadow-sm">
-  <div class="flex items-center justify-between px-4 py-3 lg:px-6">
-    <div>
-      <h2 class="text-base font-semibold text-gray-800">Activities</h2>
     </div>
-    <button class="flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-colors duration-300 bg-white rounded-full hover:bg-gray-100">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-      </svg>
-    </button>
-  </div>
-  <div class="px-4 pt-6 pb-8 border-t border-gray-200 lg:px-6">
-
-    <ul class="relative overflow-hidden">
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          13:48
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 border-2 border-white rounded-full bg-blue-50">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Published a <a href="#" class="font-semibold text-blue-600 hover:underline">post</a> about building themes with Tailwind CSS.</p>
-      </li>
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          15:11
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 bg-gray-200 border-2 border-white rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Liked <a href="#" class="font-semibold text-blue-600 hover:underline">13 photos</a> about building landing pages.</p>
-      </li>
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          15:41
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 bg-gray-200 border-2 border-white rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Liked <a href="#" class="font-semibold text-blue-600 hover:underline">22 photos</a> about Cats and dogs.</p>
-      </li>
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          07:52
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 bg-gray-200 border-2 border-white rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Cecil is now friend with <a href="#" class="font-semibold text-blue-600 hover:underline">DJ Jean</a>.</p>
-      </li>
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          07:51
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 bg-gray-200 border-2 border-white rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Cecil is now friend with <a href="#" class="font-semibold text-blue-600 hover:underline">Marco Polo</a>.</p>
-      </li>
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          04:13
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 bg-gray-200 border-2 border-white rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Uploaded a photo in the <a href="#" class="font-semibold text-blue-600 hover:underline">Tailwind CSS</a> group.</p>
-      </li>
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          13:48
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 bg-gray-200 border-2 border-white rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Published a <a href="#" class="font-semibold text-blue-600 hover:underline">post</a> about creating online courses.</p>
-      </li>
-      <li class="flex items-center py-4 space-x-3 before:border-gray-200 before:border before:absolute before:h-full before:left-[63px]">
-        <span class="block text-sm font-medium text-gray-400 w-9">
-          22:35
-        </span>
-        <span class="relative z-20 flex items-center justify-center w-8 h-8 bg-gray-200 border-2 border-white rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-          </svg>
-        </span>
-        <p class="flex-1 text-sm">Published a <a href="#" class="font-semibold text-blue-600 hover:underline">post</a> about creating responsive menus.</p>
-      </li>
-    </ul>
-
-  </div>
-</div> -->
+          </div>
 
       </div>
 
