@@ -14,24 +14,35 @@
     {% csrf_token %}
     
     <div class="space-y-2">
-      <label for="start_time" class="block text-sm font-semibold text-gray-500">Your Date</label>
+      <label for="date1" class="block text-sm font-semibold text-gray-500">Your Date</label>
       <input 
        
         type="date"
         id ="date1"
         class="w-full border-gray-300 rounded-md"
-        required
+        
       />
       <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
     </div><div id="timemessage"></div>
     <div class="flex justify-center px-4 py-4 space-x-1" id="availablehours">
-     
-      <!-- <button type="submit" class="flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50">
-        <span>
-          Request Content
-        </span>
-      </button> -->
+      <!-- <select name='availablityid' class='custom-select' id='availablityid'>
+        <option value=''>Select Available Hours</option>
+   
+    </select> -->
+    <div id="timefields">
       
+      <!-- <div class="space-y-2">
+        <label for="start_time" class="block text-sm font-semibold text-gray-500">Start Time</label>
+        <input 
+         
+          type="date"
+          id ="date1"
+          class="w-full border-gray-300 rounded-md"
+        />
+        <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
+      </div> -->
+    </div>
+    
     </div>
     
     <div id="timefields">
@@ -72,17 +83,35 @@
       
      
     }
+    $(function(){
+    var dtToday = new Date();
+    
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    
+    var maxDate = year + '-' + month + '-' + day;
 
+    // or instead:
+    // var maxDate = dtToday.toISOString().substr(0, 10);
+
+    $('#date1').attr('min', maxDate);
+});
   
 picker.addEventListener('input', function(e){
   var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
   var content_id = "{{content.id}}"
-  var day = new Date(this.value).getUTCDay();
+
   var date1 = document.getElementById("date1").value;
+  var day = new Date(this.value).getUTCDay();
   if(mentor_availablity_weekday.includes(day)){
     console.log("day : ",day);
     e.preventDefault();
-    this.value = '';
+    
   }
   $.ajax({
         type:"POST",
@@ -96,26 +125,30 @@ picker.addEventListener('input', function(e){
           let final1 = ""
           let final2 = ""
           if (response.mentor_availablity.length == 0) {
+            message = "Mentor Not available on "+response.week+""
 
-            final = "Mentor Not available on "+response.week+""
+            $("#availablehours").html(message);
           }
           else {
-            
+              $("#availablehours").html("<select name='availablityid' class='custom-select' id='availablityid'><option value=''>Select Your Time from Available Hours</option></select>");
               for (var key in response.mentor_availablity)
               {
                 console.log("day : ",date1);
 
                 console.log(response.mentor_availablity[key])
-                  final="<button type='button'  class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-gray-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>"+checktime(response.mentor_availablity[key].from_hour)+" To "+checktime(response.mentor_availablity[key].to_hour)+" </span></button>" 
+                  //final="<button type='button'  class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-gray-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>"+checktime(response.mentor_availablity[key].from_hour)+" To "+checktime(response.mentor_availablity[key].to_hour)+" </span></button>" 
+                  final ="<option value="+response.mentor_availablity[key].id+">"+checktime(response.mentor_availablity[key].from_hour)+" To "+checktime(response.mentor_availablity[key].to_hour)+" </option>"
+                  $("#availablityid").append(final)
                   
               }
-            
-             let final1 = "<div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>Start Time</label><input type='time' id ='from_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>End Time</label><input type='time' id ='to_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><button type='button' onclick='requestmentor()' class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>Request Content</span></button>"
-              let final2=" <center><h1>Mentor is only Free During In Theese Times</h1></center>"
+                
+            //  let final1 = "<div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>Start Time</label><input type='time' id ='from_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><div class='space-y-2'><label for='start_time' class='block text-sm font-semibold text-gray-500'>End Time</label><input type='time' id ='to_hour' class='w-full border-gray-300 rounded-md'/><span x-show='errorPasswordRepeat' class='block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs' x-text='errorPasswordRepeat'>&nbsp;</span></div><button type='button' onclick='requestmentor()' class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>Request Content</span></button>"
+            let final1 ="<button type='button' onclick='requestmentor()' class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-blue-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>Request Content</span></button>"
+            let final2=" <center><h1>Mentor is only Free During In Theese Times</h1></center>"
              $("#timefields").html(final1)
             $("#timemessage").html(final2)
             }
-            $("#availablehours").html(final)
+           
             
         },
         error: function(response){
@@ -126,20 +159,16 @@ picker.addEventListener('input', function(e){
   </script>
   <script>
     function requestmentor(week) {
-      console.log(week)
       var content_id = "{{content.id}}"
-    
-      var from_hour = document.getElementById("from_hour").value;
-      var to_hour = document.getElementById("to_hour").value;
       var date1 = document.getElementById("date1").value;
-      console.log(week)
+      var availablityid = document.getElementById("availablityid").value;
+      console.log(availablityid)
+      console.log(date1)
       $.ajax({
         type:"POST",
         url: `/dashboard/requestcontent/${content_id}/`,
         data: {
-          'weekday': week,
-          'from_hour': from_hour,
-          'to_hour': to_hour,
+          'availablityid': availablityid,
           'date': date1,
           'mentor_id': content_id,
         },

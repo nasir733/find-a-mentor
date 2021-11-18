@@ -10,14 +10,14 @@ from django.views.generic import TemplateView
 from django.db.models import Q
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from meeting.models import Meeting
 from users.forms import  CreateContentForm, CustomUpdateUserForm, MentorProfileUpdateForm
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 
 
 from django.contrib.auth import get_user_model
-
+from notifications.signals import notify
 from users.models import *
 User = get_user_model()
 
@@ -142,11 +142,6 @@ def mymentees(request):
         context['my_mentees'] = my_mentees
         return render(request, 'mentor/mymentees.html', context=context)
     return render(request, 'mentor/mymentees.html', context=context)
-
-
-@login_required(login_url='/mentor/login/')
-def startmeeting(request):
-    return render(request, 'mentor/mentor-page.html')
 
 
 @login_required(login_url='/mentor/login/')
@@ -387,17 +382,16 @@ def menteerequests(request,view="all"):
 
 @login_required(login_url='/mentor/login/')
 def acceptrequest(request,request_id):
+    context={}
+    
     mentee_request = MentorRequest.objects.get(id=request_id)
-    mentee_request.accepted = True
-    mentee_request.save()
-    if MentorMenteeRelations.objects.filter(mentor=request.user.mentorprofile,mentee=mentee_request.mentee).exists():
-        mentormentee = MentorMenteeRelations.objects.get(mentor=request.user.mentorprofile,mentee=mentee_request.mentee)
-        mentormentee.amount=mentormentee.amount+mentee_request.total_amount
-        mentormentee.save()
-    else:
-        relation = MentorMenteeRelations.objects.create(mentor=request.user.mentorprofile,mentee=mentee_request.mentee,amount= mentee_request.total_amount)
-        relation.save()
-    return redirect('mentor:menteerequests',view="accpeted")
+    context['mrequest']= mentee_request
+    context['content'] = mentee_request.content
+    context['mentorrequesttime'] = mentee_request.mentorrequesttime
+    context['mentor_availibility'] = mentee_request.mentorrequesttime.mentor_availibility
+    print(mentee_request.mentorrequesttime.mentor_availibility.from_hour)
+    
+    return render(request, 'meeting/mentoraccept.html', context=context)
 
 
 @login_required(login_url='/mentor/login/')
@@ -490,3 +484,22 @@ def browsementeetags(request):
     tags = Skill.objects.all()
     context['tags'] = tags
     return render(request, 'mentor/browsementeetags.html', context=context)
+
+
+@login_required(login_url='/mentor/login/')
+def startmeeting(request):
+    context = {}
+    mentor = request.user.mentorprofile
+    meeting_schedule = Meeting.objects.filter(mentor=mentor,completed=False)
+    context['meeting_schedule'] = meeting_schedule
+    
+    return render(request, 'mentor/startmeeting.html', context=context)
+
+
+@login_required(login_url='/mentor/login/')
+def completedsessions(request):
+    context={}
+    booked = Meeting.objects.filter(mentor=request.user.mentorprofile,completed=True)
+    print(booked)
+    context['booked'] = booked
+    return render(request, 'mentor/completedsessions.html',context=context)

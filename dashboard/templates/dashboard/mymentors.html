@@ -19,12 +19,12 @@
       <div class="flex flex-col items-start justify-between lg:flex-row">
         <div class="flex space-x-6 lg:space-x-8">
           <div class="relative w-24 md:w-32">
-            <img src="{{x.mentor.image.url}}" alt="" class="w-24 h-24 rounded-md md:w-32 md:h-32">
+            <img src="{{x.mentor.image.url}}" alt="" class="w-24 h-24 rounded-full md:w-32 md:h-32">
             <div class="absolute w-4 h-4 bg-green-500 border-2 border-white rounded-full -right-2 top-16 md:top-24">&nbsp;</div>
           </div>
           <div class="flex-1">
             <div class="py-3">
-              <h2 class="text-lg font-semibold text-gray-800">{{x.mentor.user.first_name}} {{x.mentor.user.last_name}}</h2>
+              <h2 class="text-lg font-semibold text-gray-800">{{x.mentor.user.username}}</h2>
               <span class="block font-semibold tracking-wide text-gray-400 uppercase transition-colors duration-300 text-xxs">{{x.mentor.email}}</span>
             </div>
             <ul class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">

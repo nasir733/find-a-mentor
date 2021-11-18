@@ -27,4 +27,5 @@ urlpatterns = [
     path('requestcontent/<int:content_id>/',views.requestcontent, name='requestcontent'),
     path('checkworkhours/<int:content_id>/',views.checkworkhours, name='checkworkhours'),
     path('addfavouritetags/',views.addfavouritetags, name='addfavouritetags'),
+    path('completedsessions/',views.completedsessions, name='completedsessions'),
 ]

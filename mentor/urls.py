@@ -15,7 +15,7 @@ urlpatterns = [
     path('clippedcontent/', views.clippedcontent, name='clippedcontent'),
     path('search/', views.search, name='search'),
     path('mymentees/', views.mymentees, name='mymentees'),
-    path('startmeeting/', views.startmeeting, name='joinmeeting'),
+    path('startmeeting/', views.startmeeting, name='startmeeting'),
     path('mycontent/', views.mycontent, name='mycontent'),
     path('mentorpage/', views.mentorpage, name='mentorpage'),
     path('mentorpage/<str:task>/', views.mentorpage, name='mentorpage'),
@@ -34,4 +34,6 @@ urlpatterns = [
     path('findmentees/<str:category>/',views.catergorymentee, name='catergorymentee'),
     path('findmentees/<str:category>/<str:tag>/',views.tagmentee, name='tagmentee'),
     path('browsementeetags/',views.browsementeetags,name='browsementeetags'),
+    path('completedsessions/',views.completedsessions, name='completedsessions'),
+
 ]

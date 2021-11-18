@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from meeting.models import Meeting
 from users.forms import CustomUpdateUserForm, CustomUserCreationForm, MenteeProfileUpdateForm
 from users.models import *
 from django.db.models import Q
@@ -21,6 +22,8 @@ import decimal
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import get_user_model
+from notifications.signals import notify
+
 User = get_user_model()
 
 
@@ -44,9 +47,10 @@ def menteedashboard(request):
         request.session['catergory'] = list(data.values())
         
         print(data)
-
-        mentor_requests = MentorRequest.objects.filter(mentee=request.user.menteeprofile)
-        context['mentor_requests'] = mentor_requests
+        random_catergory = Catergory.objects.order_by('?')[0]
+        print(random_catergory.name)
+        interested_contents = Content.objects.order_by('?')[:3]
+        context['interested_contents'] =interested_contents
 
         return render(request, 'dashboard/index.html', context=context)
 
@@ -161,7 +165,11 @@ def mymentors(request):
 
 @login_required(login_url='/dashboard/login/')
 def joinmeeting(request):
-    return render(request, 'dashboard/mentor-page.html')
+    context={}
+    booked = Meeting.objects.filter(mentee=request.user.menteeprofile,completed=False)
+    print(booked)
+    context['booked'] = booked
+    return render(request, 'dashboard/joinmeeting.html',context=context)
 
 
 @login_required(login_url='/dashboard/login/')
@@ -277,6 +285,9 @@ def addreview(request, content_id):
         message = request.POST.get('message')
         review = Review(content=content, user=request.user, message=message)
         review.save()
+        url = "/mentor/content/{}".format(review.content.id)
+        notify.send(review.user, recipient=content.user.user, verb='Review Added', description=review.message,url=url)
+			
         messages.success(request, 'Review added successfully')
         return redirect('dashboard:content', id=content_id)
 
@@ -311,29 +322,27 @@ def  requestcontent(request, content_id):
         elif not(i.weekday == 'Sunday'):
             week_id=0
         mentor_availablity_weekday.append(week_id)
-  
+    context['mentor_availablity'] = mentor_availablity
     context['mentor_availablity_weekday'] = mentor_availablity_weekday
     
     if request.method == "POST":
         if request.user.user_type == "Mentee":
             date = request.POST.get('date')
-            from_hour = request.POST.get('from_hour')
-            to_hour = request.POST.get('to_hour')
-           
+            availablityid = request.POST.get('availablityid')
+            
+            mentor_selected_availablity = MentorAvailability.objects.get(id=int(availablityid))
+            
             temp = pd.Timestamp(date)
             week = temp.day_name()
-            print(request.POST.get('mentor_id'))
-            first_time = datetime.strptime(from_hour, '%H:%M')
-            second_time = datetime.strptime(to_hour, '%H:%M')
-            total_time = decimal.Decimal(((second_time - first_time).seconds)/3600)
-            #total_amount = price_per_hour*total_time
             mentee_request = MentorRequest(mentee=request.user.menteeprofile,mentor=mentor,content=content)
             mentee_request.save()
-            mentor_request_time = MentorRequestTime(request=mentee_request,date=date,from_hour=from_hour,to_hour=to_hour,weekday=week,total_hours=total_time)
+            mentor_request_time = MentorRequestTime(request=mentee_request,date=date,weekday=week,mentor_availibility=mentor_selected_availablity)
             mentor_request_time.save()
-
+            url = "/mentor/acceptrequest/{}".format(mentee_request.id)
+            message= "{} requested {} on {}".format(request.user.username,content.title,date)
+            notify.send(request.user, recipient=mentor.user, verb='Content Requested', description=message,url=url)
+			
             return JsonResponse({'status':'success'})
-            # return redirect('dashboard:content', id=content_id)
     elif request.method == "GET":
             context['content'] = content
             return render(request, 'dashboard/requestcontent.html', context=context)
@@ -367,7 +376,7 @@ def checkworkhours(request, content_id):
             week="Sunday"
         mentor_availablity = MentorAvailability.objects.filter(mentor=mentor, weekday=week)
         availablity_mentor = list(mentor_availablity.values())
-        print(availablity_mentor)
+        
         return JsonResponse({"mentor_availablity":availablity_mentor,"week":week})
         
 
@@ -408,3 +417,11 @@ def addfavouritetags(request):
                 mentor_skills.skill.add(skill)
                 mentor_skills.save()
                 return redirect('mentor:profile')
+
+@login_required(login_url='/dashboard/login/')
+def completedsessions(request):
+    context={}
+    booked = Meeting.objects.filter(mentee=request.user.menteeprofile,completed=True)
+    print(booked)
+    context['booked'] = booked
+    return render(request, 'dashboard/completedsessions.html',context=context)

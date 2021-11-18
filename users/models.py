@@ -201,17 +201,11 @@ class MentorRequest(models.Model):
         return "{} requested {} content from {}".format(self.mentee.user.username, self.content.title, self.mentor.user.username)
 
 class MentorRequestTime(models.Model):
-    request = models.ForeignKey(
+    request = models.OneToOneField(
         MentorRequest, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
     weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
-    from_hour = models.TimeField(blank=True, null=True)
-    to_hour = models.TimeField(blank=True, null=True)
-    from_date = models.DateField(blank=True, null=True)
-    to_date = models.DateField(blank=True, null=True)
-    from_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
-    to_weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
-    total_hours = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    mentor_availibility = models.ForeignKey('MentorAvailability', on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -39,40 +39,32 @@
 
   </div>
 </div>
-
+<h1 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">Browse Contents <a href="{% url 'dashboard:browse' %}">....</a></h1>
 <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
-  {% for x in mentor_requests %}
-  <a href="{% url 'dashboard:content' x.content.id %}" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
+ 
+  {% for x in interested_contents %}
+  <a href="{% url 'dashboard:content' x.id %}" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
     <div class="px-4 pt-6 pb-8 lg:px-6">
       <div class="flex justify-between mb-4">
-        <img src="{{x.content.image.url}}" class="w-12 h-12 rounded-md" alt="">
+        <img src="{{x.image.url}}" class="w-12 h-12 rounded-md" alt="">
         <div>
           <span class="flex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">
             <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs"> </span>
-            {% if x.accepted %}
+           
             <span class="text-sm text-green-600">
-              Accepted
+              {{x.user.user.username}}
             </span>
-            {% elif x.declined == "True" %}
-            <span class="text-sm text-red-600">
-              Pending
-            </span>
-            {% else %}
-            <span class="text-sm text-gray-600">
-              Pending
-            </span>
-            {% endif %}
           </span>
         </div>
       </div>
-      <h2 class="text-lg font-semibold text-gray-800">{{x.content.title}}</h2>
-      <span class="block font-semibold tracking-wide text-gray-400 uppercase transition-colors duration-300 text-xxs">Requested at {{x.content.created_at}}</span>
+      <h2 class="text-lg font-semibold text-gray-800">{{x.title}}</h2>
+      <span class="block font-semibold tracking-wide text-gray-400 uppercase transition-colors duration-300 text-xxs">Last Update : {{x.updated_at}}</span>
       <br/>
     
       
       <div class="flex items-center mt-6 -space-x-6">
-        <img src='{{x.mentee.image.url}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
-        <span class="lex items-center px-2 py-2 space-x-1 font-semibold rounded-lg text">{{x.mentee.user.username}}</span>
+        <img src='{{x.user.image.url}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
+        <span class="lex items-center px-2 py-2 space-x-1 font-semibold rounded-lg text">{{x.user.user.username}}</span>
       </div>
     </div>
   </a>

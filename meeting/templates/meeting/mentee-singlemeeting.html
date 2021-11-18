@@ -1,0 +1,162 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block content %}
+<script src="https://cdn.agora.io/sdk/release/AgoraRTCSDK-3.3.1.js"></script>
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+crossorigin="anonymous"
+/>
+<link
+rel="stylesheet"
+type="text/css"
+href="{% static 'meeting/index.css' %}"
+/>     
+<script src="https://cdn.agora.io/sdk/release/AgoraRTCSDK-3.3.1.js"></script>
+<div>
+ <div class="flex" style="width: 100%;">
+  <main class="px-6 py-8 mx-auto space-y-6 xl:px-12">
+    <div class="bg-white rounded-md shadow-sm ">
+<div class="flex items-center justify-between px-4 py-4 border-b border-gray-200 lg:px-6">
+  <div>
+    <div class="flex space-x-4">
+      <img src='{{meeting.content.image.url}}' class="w-16 h-16 rounded-full" alt="">
+    <h2 class="text-base font-semibold text-gray-800">{{meeting.meeting_title}}</h2>
+    <span class="block mb-3 text-sm font-medium text-gray-400" >{{meeting.mentor.user.username}}</span>
+    
+    </div>
+    <br/>
+    <span class="block mb-3 text-m font-medium text-gray-400">ON {{meeting.date}}</span>
+   
+    <span class="block mb-3 text-m font-medium text-gray-400">{{meeting.start_time}} To {{meeting.end_time}}</span>
+   
+  </div>
+</div>
+
+</div>
+
+
+</div>
+
+
+<div id="app">
+
+
+  <div class="row my-5" v-if="incomingCall">
+    <div class="col-12">
+      <p>Incoming Call From <strong>${ incomingCaller }</strong></p>
+      <div class="btn-group" role="group">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          @click="declineCall"
+        >
+          Decline
+        </button>
+        <button
+          type="button"
+          class="btn btn-success ml-5"
+          @click="acceptCall"
+        >
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <section id="video-container" v-if="callPlaced">
+    <div id="local-video"></div>
+    <div id="remote-video"></div>
+
+    <div class="action-btns">
+      <button
+        type="button"
+        class="btn btn-info"
+        @click="handleAudioToggle"
+      >
+        ${ mutedAudio ? "Unmute" : "Mute" }
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary mx-4"
+        @click="handleVideoToggle"
+      >
+        ${ mutedVideo ? "ShowVideo" : "HideVideo" }
+      </button>
+      <button type="button" class="btn btn-danger" @click="endCall">
+        EndCall
+      </button>
+    </div>
+
+  </section>
+  
+</div>
+
+<br/>
+  <p id="demo" style="font-size: 5rem;margin-left: 1rem; width: 100%;"></p>
+  
+<!-- Display the countdown timer in an element -->
+
+</div>
+
+
+<script>
+// Set the date we're counting down to
+var date = "{{meeting.date}}"
+var time = "{{meeting_time}}"
+console.log(date)
+console.log(time)
+var countDownDate = new Date(date+' '+time).getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s ";
+
+  // If the count down is finished, write some text 
+  if (distance < -1) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = " ";
+  }
+}, 1000);
+</script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+      window.pusher = new Pusher("06d07740f1d6ef655ab5", {
+        cluster: 'us2',
+        authEndpoint: "{% url 'meeting:agora-pusher-auth' %}",
+        auth: {
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        },
+      });
+
+      const AUTH_USER = "{{user}}"
+      const AUTH_USER_ID =  "{{request.user.id}}"
+      const CSRF_TOKEN = "{{ csrf_token }}"
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js""
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="{% static 'meeting/index.js' %}"></script>
+
+  {% endblock %}

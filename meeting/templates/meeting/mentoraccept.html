@@ -1,0 +1,55 @@
+{% extends "mentor/base.html" %}
+{% load static %}
+{% block content %}
+<!--<div class="flex items-center justify-center w-100 h-100 p-1 text-gray-400 transition-colors" > -->
+
+  <div>
+
+    <div class="flex items-center justify-center px-8 py-2 bg-gray-100">
+      <div class="flex items-center justify-center flex-1 max-w-2xl">
+      
+        <div class="bg-white rounded-md shadow-sm" style="padding: 4rem; line-height: 4rem;">
+          <h2 class="text-base font-semibold text-gray-800" style="">{{mrequest.mentee.user.username}} &nbsp; Requested {{content.title}}
+
+       
+          </h2>
+          <h1>
+            On {{mentorrequesttime.date}} 
+          
+           
+           
+          </h1> <h1>
+               Select A Time Between {{mentor_availibility.from_hour}} To {{mentor_availibility.to_hour}}
+              
+            </h1>
+   <div class="flex items-center justify-between px-4 py-3 lg:px-6">
+ 
+
+    <form method="post" action="{% url 'meeting:schedulemeeting' mrequest.id %}">
+      {% csrf_token %}
+      <div style="margin-bottom: 1rem;">
+        Start Time: &nbsp;<input type="time" name="starttime" value="{{mentor_availibility.from_hour}}"/><br>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        End Time: &nbsp;<input type="time" name="endtime" value="{{mentor_availibility.to_hour}}"/><br/>
+      </div>
+      <button type="submit"  class="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded
+      " style="margin-top: 2rem;">Submit</h>
+  </form>
+  <br/>
+
+     
+   </div>
+  <div>
+    
+     </div>
+
+ </div>
+      </div>
+    </div>
+
+ </div>
+
+
+
+{% endblock  %}

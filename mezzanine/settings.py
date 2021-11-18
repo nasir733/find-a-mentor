@@ -1,10 +1,10 @@
 
 import dj_database_url
-
+import dotenv
 from pathlib import Path
 import django_heroku
 import os
-from decouple import config
+dotenv.load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,8 +23,6 @@ LOGIN_REDIRECT_URL = '/dashboard/login/'
 LOGIN_URL = '/dashboard/login/'
 
 
-NUMB_TURN_CREDENTIAL = config('NUMB_TURN_CREDENTIAL', default=None)
-NUMB_TURN_USERNAME = config('NUMB_TURN_USERNAME', default=None)
 
 # Application definition
 
@@ -47,8 +45,8 @@ INSTALLED_APPS = [
      'corsheaders',
      'rest_framework',
      'notifications',
-     'channels',
-     'chat.apps.ChatConfig',
+     'meeting.apps.MeetingConfig',
+     
 ]
 CORS_ALLOW_ORIGIN = '*'
 CORS_ALLOW_HEADERS = [
@@ -110,7 +108,7 @@ TEMPLATES = [
     },
 ]
 WSGI_APPLICATION = 'mezzanine.wsgi.application'
-ASGI_APPLICATION = 'mezzanine.asgi.application'
+#ASGI_APPLICATION = 'mezzanine.asgi.application'
 
 
 # Database
@@ -217,8 +215,11 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 django_heroku.settings(locals())
+
+"""
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+"""
