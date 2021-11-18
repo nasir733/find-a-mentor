@@ -21,7 +21,6 @@ cryptography==35.0.0
 daphne==3.0.2
 dj-database-url==0.5.0
 Django==3.2.9
-django-agora==0.4
 django-cors-headers==3.10.0
 django-crispy-forms==1.13.0
 django-debug-toolbar==3.2.2
