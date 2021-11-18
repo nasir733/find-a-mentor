@@ -71,6 +71,7 @@ def menteelogin(request):
     if request.method == 'GET':
         global nxt
         nxt = request.GET.get('next')
+        context['reviews'] =  Review.objects.filter(rating__gte=4).order_by('?')[:2]
     if request.method == 'POST':
         username=""
         print(request.POST)
@@ -90,13 +91,14 @@ def menteelogin(request):
                 return redirect('mentor:home')
         else:
             messages.error(request, "Invalid username or password.")
-    return render(request, 'dashboard/signin-sidebar.html')
+    return render(request, 'dashboard/signin-sidebar.html',context=context)
 
 
 def menteeregister(request):
     context = {}
     context['title'] = 'Create Account'
-
+    context['reviews'] =  Review.objects.filter(rating__gte=4).order_by('?')[:2]
+    context['mentee'] = False
     if request.user.is_authenticated:
         messages.info(
             request, 'You have been already registered', context=context)
@@ -122,7 +124,7 @@ def menteeregister(request):
         # auth_login(request, user)
         messages.success(request, 'Account succesfully created')
         return redirect('dashboard:menteelogin')
-    return render(request, 'dashboard/signup-sidebar.html', {'mentee': False})
+    return render(request, 'dashboard/signup-sidebar.html', context=context)
 
 
 @login_required(login_url='/dashboard/login/')
@@ -215,6 +217,14 @@ def browsecontent(request):
     if request.user.user_type == 'Mentor':
         return redirect('mentor:browse')
     else:
+        if request.method == 'POST':
+            search_text = request.POST.get('search_text').lower()
+            print(search_text)
+            contents = Content.objects.filter(Q(title__icontains=search_text) | Q(
+                description__icontains=search_text) | Q(content_tags__name__icontains=search_text) | Q(user__user__username=search_text), is_active=True)
+            
+            context['contents'] = contents
+            return render(request, 'dashboard/browsecontent.html', context=context)
         return render(request, 'dashboard/browsecontent.html', context=context)
 
 @login_required(login_url='/dashboard/login/')

@@ -53,6 +53,7 @@ def login(request):
     if request.method == 'GET':
         global nxt
         nxt = request.GET.get('next')
+        context['reviews'] =  Review.objects.filter(rating__gte=4).order_by('?')[:2]
     if request.method == 'POST':
         username=""
         print(request.POST)
@@ -74,13 +75,14 @@ def login(request):
         else:
             print('the user is not logged in')
             messages.error(request, 'Username or maybe Password is incorrect')
-    return render(request, 'dashboard/mentor-signin-sidebar.html')
+    return render(request, 'dashboard/mentor-signin-sidebar.html',context=context)
 
 
 
 def mentorregister(request):
     context = {}
     context['title'] = 'Create Account'
+    context['reviews'] =  Review.objects.filter(rating__gte=4).order_by('?')[:2]
     if request.user.is_authenticated:
         messages.info(
             request, 'You have been already registered')
@@ -106,7 +108,7 @@ def mentorregister(request):
         auth_login(request, user)
         messages.success(request, 'Account succesfully created')
         return redirect('mentor:login')
-    return render(request, 'dashboard/mentor-signup-sidebar.html')
+    return render(request, 'dashboard/mentor-signup-sidebar.html' ,context=context)
 
 
 @login_required(login_url='/mentor/login/')
@@ -140,8 +142,7 @@ def mymentees(request):
     if request.method == 'POST':
         search_text = request.POST.get('search_text')
         print(search_text)
-        my_mentees = MentorMenteeRelations.objects.filter(Q(mentee__first_name__icontains=search_text) | Q(
-            mentee__last_name__icontains=search_text) | Q(mentee__email__icontains=search_text) | Q(mentee__username__icontains=search_text), mentor=request.user)
+        my_mentees = MentorMenteeRelations.objects.filter(Q(mentee__user__username__icontains=search_text) | Q(mentee__user__email__icontains=search_text), mentor=request.user.mentorprofile)
         context['my_mentees'] = my_mentees
         return render(request, 'mentor/mymentees.html', context=context)
     return render(request, 'mentor/mymentees.html', context=context)
@@ -155,10 +156,10 @@ def mycontent(request):
     if request.method == 'POST':
         search_text = request.POST.get('search_text')
         print(search_text)
-        my_mentees = Content.objects.filter(
-            Q(title__icontains=search_text), user=request.user.mentorprofile)
-        print(my_mentees)
-        context['my_mentees'] = my_mentees
+        my_contents = Content.objects.filter(
+            Q(title__icontains=search_text) | Q(description__icontains=search_text) , user=request.user.mentorprofile)
+       
+        context['my_contents'] = my_contents
         return render(request, 'mentor/mycontent.html', context=context)
     return render(request, 'mentor/mycontent.html', context=context)
 
@@ -249,6 +250,13 @@ def browsecontent(request):
     catergory = Catergory.objects.all()
     context['catergory'] = catergory
     if request.user.user_type == 'Mentor':
+        if request.method == 'POST':
+            search_text = request.POST.get('search_text').lower()
+            print(search_text)
+            contents = Content.objects.filter(Q(title__icontains=search_text) | Q(
+                description__icontains=search_text) | Q(content_tags__name__icontains=search_text) | Q(user__user__username=search_text), is_active=True)
+            context['contents'] = contents
+            return render(request, 'mentor/browsecontent.html', context=context)
         return render(request, 'mentor/browsecontent.html', context=context)
     else:
         return redirect('dashboard:browse')
