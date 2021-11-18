@@ -23,7 +23,7 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
-
+import re
 User = get_user_model()
 
 
@@ -72,11 +72,15 @@ def menteelogin(request):
         global nxt
         nxt = request.GET.get('next')
     if request.method == 'POST':
+        username=""
         print(request.POST)
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
-        print(username, password)
-        user = authenticate(username=username, password=password)
+        print(email, password)
+        if User.objects.filter(email=email).exists():
+            username = User.objects.get(email=email.lower()).username
+        user = authenticate(request, username=username, password=password)
+        print(user)
         if user is not None:
             login(request, user)
             messages.info(request, f"You are now logged in as {username}.")
@@ -136,9 +140,20 @@ def profile(request):
     context['total_sessions'] = total_sessions
     context['profile'] = request.user
     context['total_mentees'] = total_mentees
+    context['skills'] = Skill.objects.all()
     
-    return render(request, 'dashboard/profile.html')
+    return render(request, 'dashboard/profile.html', context=context)
 
+def skills_json(request):
+    context = {}
+    tag = request.GET.get('tag')
+    payload = []
+    if tag:
+        skills = Skill.objects.filter(name__icontains=tag)
+        for skill in skills:
+            payload.append(skill.name)
+
+    return JsonResponse({'status': 200, 'data': payload})    
 
 @login_required(login_url='/dashboard/login/')
 def findamentor(request):
@@ -246,17 +261,25 @@ def settings(request):
     menteeform = MenteeProfileUpdateForm(instance=menteeprofile)
     context['userform'] = userform
     context['menteeform'] = menteeform
-    if request.method =="POST":
-        userform = CustomUpdateUserForm(request.POST, instance=request.user)
-        menteeform = MenteeProfileUpdateForm(request.POST, request.FILES, instance=request.user.menteeprofile)
-        if userform.is_valid() and menteeform.is_valid():
-            userform.save()
-            menteeform.save()
-            messages.success(request, 'Profile updated successfully')
-            return redirect('dashboard:settings')
+    if request.method =="POST" or request.method == "FILES":
+        user = User.objects.get(id=request.user.id)
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        birth_date = (request.POST.get('birth_date'))
+        print(birth_date)
+        image = request.FILES.get('image')
+        user.username = username
+        user.email = email
+        user.phone_number = phone_number
+        # menteeprofile.birth_date = birth_date
+        if image is None:
+                print(" 2")
         else:
-            messages.error(request, 'Profile update failed')
-            return redirect('dashboard:settings')
+            menteeprofile.image = image
+        menteeprofile.save()
+        user.save()
+        return redirect('dashboard:settings')
     return render(request, 'dashboard/settings.html', context=context)
 
 
@@ -283,7 +306,9 @@ def addreview(request, content_id):
     content = Content.objects.get(id=content_id)
     if request.method == "POST":
         message = request.POST.get('message')
-        review = Review(content=content, user=request.user, message=message)
+        rating_number = request.POST.get('rating_number')
+        print(int(rating_number))
+        review = Review(content=content, user=request.user, message=message,rating=int(rating_number))
         review.save()
         url = "/mentor/content/{}".format(review.content.id)
         notify.send(review.user, recipient=content.user.user, verb='Review Added', description=review.message,url=url)
@@ -387,36 +412,79 @@ def addfavouritetags(request):
     if request.method == "POST":
         if request.user.user_type == "Mentee":
             mentee_interests= MenteeInterest.objects.get(mentee=request.user.menteeprofile)
-            tag = request.POST.get('tag').lower()
-            catergoryid =int( request.POST.get('catergoryid'))
-            catergory = Catergory.objects.get(id=catergoryid)
-            if mentee_interests.interest.filter(Q(name=tag),Q(catergory=catergory)).exists():
+            tag = request.POST.get('tag_input').lower()
+            if ',' in tag:
+                tags = re.split('[,;|]', tag.lower())
+                print(tags)
+                for i in tags:
+                    print(i)
+                    if mentee_interests.interest.filter(name=i).exists():
+                        print("tag already exists")
+                    else:
+                        
+                        if Skill.objects.filter(name=i).exists():
+                            skill = Skill.objects.filter(name=i)
+                            for z in skill:
+                                mentee_interests.interest.add(z)
+                                mentee_interests.save()
+                        else:    
+                            print("tag not exists")       
                 return redirect('dashboard:profile')
             else:
-                if Skill.objects.filter(Q(name=tag)&Q(catergory=catergory)).exists():
-                    skill = Skill.objects.get(name=tag,catergory=catergory)
-                else:    
-                    skill = Skill(catergory=catergory,name=tag)
-                    skill.save()
-                mentee_interests.interest.add(skill)
-                mentee_interests.save()
-                return redirect('dashboard:profile')
+                print(tag)
+                if mentee_interests.interest.filter(name=tag).exists():
+                    print("tag already exists")
+                    return redirect('dashboard:profile')
+                else:
+                    
+                    if Skill.objects.filter(name=tag).exists():
+                        skill = Skill.objects.filter(name=tag)
+                        for i in skill:
+                            mentee_interests.interest.add(i)
+                            mentee_interests.save()
+                    else:    
+                        print("tag not exists")
+                        return redirect('dashboard:profile')
+                    
+                    return redirect('dashboard:profile')
         elif request.user.user_type == "Mentor":
+
             mentor_skills= MentorSkill.objects.get(mentor=request.user.mentorprofile)
-            tag = request.POST.get('tag').lower()
-            catergoryid =int( request.POST.get('catergoryid'))
-            catergory = Catergory.objects.get(id=catergoryid)
-            if mentor_skills.skill.filter(Q(name=tag),Q(catergory=catergory)).exists():
+            tag = request.POST.get('tag_input').lower()
+            if ',' in tag:
+                tags = re.split('[,;|]', tag.lower())
+                print(tags)
+                for i in tags:
+                    print(i)
+                    if mentor_skills.skill.filter(name=i).exists():
+                        print("tag already exists")
+                    else:
+                        
+                        if Skill.objects.filter(name=i).exists():
+                            skill = Skill.objects.filter(name=i)
+                            for z in skill:
+                                mentor_skills.skill.add(z)
+                                mentor_skills.save()
+                        else:    
+                            print("tag not exists")       
                 return redirect('mentor:profile')
             else:
-                if Skill.objects.filter(Q(name=tag)&Q(catergory=catergory)).exists():
-                    skill = Skill.objects.get(name=tag,catergory=catergory)
-                else:    
-                    skill = Skill(catergory=catergory,name=tag)
-                    skill.save()
-                mentor_skills.skill.add(skill)
-                mentor_skills.save()
-                return redirect('mentor:profile')
+                print(tag)
+                if mentor_skills.skill.filter(name=tag).exists():
+                    print("tag already exists")
+                    return redirect('mentor:profile')
+                else:
+                    
+                    if Skill.objects.filter(name=tag).exists():
+                        skills = Skill.objects.filter(name=tag)
+                        for i in skills:
+                            mentor_skills.skill.add(i)
+                            mentor_skills.save()
+                    else:    
+                        print("tag not exists")
+                        return redirect('mentor:profile')
+                    return redirect('mentor:profile')
+
 
 @login_required(login_url='/dashboard/login/')
 def completedsessions(request):

@@ -23,4 +23,7 @@ class Meeting(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     completed = models.BooleanField(default=False,null=True,blank=True)
 
+    class Meta:
+        ordering = ('-created_at',)
+
 

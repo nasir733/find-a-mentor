@@ -108,6 +108,10 @@ class Content(models.Model):
     price_per_hour = models.DecimalField(
         max_digits=6, decimal_places=2, blank=True, null=True,default=0)
     content_tags = models.ManyToManyField(Skill, blank=True,null=True)
+
+    class Meta:
+        ordering = ('-updated_at',)
+
     def __str__(self):
         return "{} - {}".format(self.title, self.user.user.username)
 
@@ -197,6 +201,9 @@ class MentorRequest(models.Model):
         MentorPaymentPlans, on_delete=models.CASCADE, blank=True, null=True)
     total_amount = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True,default=0)
 
+    class Meta:
+        ordering = ('-created_at',)
+    
     def __str__(self):
         return "{} requested {} content from {}".format(self.mentee.user.username, self.content.title, self.mentor.user.username)
 
@@ -208,6 +215,9 @@ class MentorRequestTime(models.Model):
     mentor_availibility = models.ForeignKey('MentorAvailability', on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('-created_at',)
 
     def __str__(self):
         return "{} requested {} content {}".format(self.request.mentee.user.username, self.request.content.title, self.date)

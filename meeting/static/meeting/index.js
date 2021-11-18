@@ -12,7 +12,6 @@ const app = new Vue({
       incomingCall: false,
       incomingCaller: "",
       agoraChannel: null,
-      screenStream: null,
     },
     mounted() {
       this.initUserOnlineChannel();
@@ -274,31 +273,6 @@ const app = new Vue({
           this.mutedVideo = true;
         }
       },
-      screenShare() {
-        // Check if the browser supports screen sharing without an extension.
-        
-        // Create the stream for screen sharing.
-            const streamSpec = {
-              audio: false,
-              video: false,
-              screen: true
-            }
-            // Set relevant properties according to the browser.
-            // Note that you need to implement isFirefox and isCompatibleChrome.
-            
-            streamSpec.extensionId = 'minllpmhdgpndnkomcoccfekfegnlikg';
-            
-            this.screenStream = AgoraRTC.createStream(streamSpec);
-            this.screenStream.init(function() {
-              // Play the stream.
-              this.screenStream.play('Screen');
-              // Publish the stream.
-              this.client.publish(screenStream);
-  
-          }, function(err) {
-              console.log(err);
-          });
-        
-      },
+     
     },
   });

@@ -16,6 +16,8 @@ class Room(models.Model):
 	menter_username = models.CharField(max_length=255,null=True,blank=True)
 	mentee_username = models.CharField(max_length=255,null=True,blank=True)
 
+	class Meta:
+		ordering = ('-updated_at',)
 	
 	def __str__(self):
 		return self.name

@@ -1,6 +1,12 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
 {% block content %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@trevoreyre/autocomplete-js/dist/style.css"
+/>
+<script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
+
 <div class="flex-1">
 
   <main class="px-6 py-8 mx-auto space-y-6 xl:px-12">
@@ -21,7 +27,7 @@
 
         <div class="flex-1">
           <div class="py-3 text-center">
-            <h2 class="text-lg font-semibold text-gray-800">{{user.first_name}} {{user.last_name}}</h2>
+            <h2 class="text-lg font-semibold text-gray-800">{{user.username}}</h2>
             <span
               class="block font-semibold tracking-wide text-gray-600 uppercase transition-colors duration-300 text-xxs">{{user.email}}</span>
 
@@ -98,7 +104,7 @@
 
                 </div>
               </div>
-              <div class="flex space-x-3">
+              <!-- <div class="flex space-x-3">
                 <div
                   class="flex items-center justify-center w-12 h-12 rounded-md bg-gradient-to-tr from-indigo-50 to-blue-200">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24"
@@ -113,7 +119,7 @@
                     Total Spent</span>
 
                 </div>
-              </div>
+              </div> -->
 
             </div>
             <div class="h-32 scale-110 -translate-x-4 translate-y-16 ">
@@ -210,7 +216,7 @@
                 <span class="text-sm font-semibold text-gray-800">Full Name</span>
               </div>
               <div class="col-span-2">
-                <span class="text-sm font-semibold text-gray-500">{{user.first_name}} {{user.last_name}}</span>
+                <span class="text-sm font-semibold text-gray-500">{{user.username}}</span>
               </div>
 
               <div class="col-span-1">
@@ -222,7 +228,7 @@
                 </div>
 
               </div>
-              <div class="col-span-1">
+              <!-- <div class="col-span-1">
                 <span class="text-sm font-semibold text-gray-800">Address</span>
               </div>
               <div class="col-span-2">
@@ -233,7 +239,7 @@
               </div>
               <div class="col-span-2">
                 <span class="text-sm font-semibold text-gray-500">{{user.country}}</span>
-              </div>
+              </div> -->
 
               <div class="col-span-1">
                 <span class="text-sm font-semibold text-gray-800">Phone Number</span>
@@ -275,20 +281,48 @@
             {% csrf_token %}
             
               
-              <select name="catergoryid" class="custom-select" id="inputGroupSelect01" required>
+              <!-- <select name="catergoryid" class="custom-select" id="inputGroupSelect01" required>
       
                 <option selected value="">Catergory</option>
                 {% for x in request.session.catergory %}
                 <option value="{{x.id}}">{{x.name}}</option>
               
                 {% endfor %}
-              </select>
-     
-          <input name="tag" type="text" class="w-full px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md" placeholder="Add Favourite Tags">
+              </select> -->
+       <div id="autocomplete" class="autocomplete">
+          <input name="tag_input"  id="tag_input" type="text" class="w-full px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md" placeholder="Select Favourite Tags (Separate Tags By Commas)">
+   <ul class="autocomplete-result-list"></ul>
+</div>
+  
+    
         </form>
         </div>
       </div>
     </div>
   </main>
 </div>
+<script>
+  new Autocomplete('#autocomplete', {
+    search : input =>{
+      console.log(input);
+      const url =`/dashboard/skills_json/?tag=${input}`;
+      return new Promise(resolve =>{
+        fetch(url)
+        .then(res => res.json())
+        .then(data =>{
+          console.log(data);
+          resolve(data.data);
+        })
+     })
+    },
+    onsubmit : result =>{
+      console.log(result); 
+    }
+
+  });
+
+</script>
+
+
+    
 {% endblock %}

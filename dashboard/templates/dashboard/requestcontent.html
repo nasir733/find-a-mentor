@@ -1,9 +1,101 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
 {% block content %}
-
 <style>
+  @import url('https://fonts.googleapis.com/css?family=Raleway');
+body {
+  background:white;;
+}
+#calenderMain {
+  position:absolute;
+  height:100%;
+  width:100%;
+  z-index:10000;
+  left:0;
+  top:0;
+  background:rgba(0, 0, 0, 0.5);
+}
+.main {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:400px;
+  color:white;
+  background:#007BFF;
+font-family: 'Raleway', sans-serif;
+  text-align:center;
+  border-radius: 0rem;
+  letter-spacing:1px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display:none;
+}
+.month {
+  text-align:center;
+  padding:10px;
+}
+.week {
+  display:inline-flex;
+  text-align:center;
+  padding:10px;
+}
+.week .wDay {
+  padding:10px;
+  margin:10px;
+  color:silver;
+}
+.date {
+  color:silver;
+}
+#fillDate {
+  width:100%;
+  color:silver;
+}
+#fillDate tr,td {
+  padding:10px;
+  color:silver;
+}
+.date:hover {
+  background:white;
+  color:#007BFF;
+  font-weight:bold;
+  cursor:pointer;
+  
+}
+.date td:hover {
+  background:white;
+  color:#007BFF;
+  font-weight:bold;
+}
+.year,.month {
+  padding:5px;
+  cursor:pointer;
+}
+.yearDiv {
+  position:relative;
+  font-size:25px;
+  padding:10px;
+}
+.monthDiv {
+  position:relative;
+  font-size:20px;
+  padding:10px;
+}
+.left {
+  position:absolute;
+  left:10px;
+  cursor:pointer;
+}
+.right {
+  position:absolute;
+  right:10px;
+  cursor:pointer;
+}
+.wDay {
+  cursor:default;
+}
 </style>
+
 <div class="px-8 py-4 bg-white rounded-md shadow-md lg:px-12 lg:pt-12 lg:pb-12 " style="width:100%">
     <div class="py-4 space-y-1 text-center lg:pb-10 ">
       <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Request {{content.title}} Content</h2>
@@ -20,7 +112,8 @@
         type="date"
         id ="date1"
         class="w-full border-gray-300 rounded-md"
-        
+        readonly
+        onclick="calender(this)"
       />
       <span x-show="errorPasswordRepeat" class="block font-semibold tracking-wide text-red-500 uppercase transition-colors duration-300 text-xxs" x-text="errorPasswordRepeat">&nbsp;</span>
     </div><div id="timemessage"></div>
@@ -66,24 +159,8 @@
 
 
   <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
-
-  <script>
-    const picker = document.getElementById('date1');
-    function checktime(time){
-      var date =new Date (new Date().toDateString() + ' ' + time);
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var ampm = hours >= 12 ? 'pm' : 'am';
-      hours = hours % 12;
-      hours = hours ? hours : 12; // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0'+minutes : minutes;
-      var strTime = hours + ':' + minutes + ' ' + ampm;
-      console.log(strTime);
-      return strTime;
-      
-     
-    }
-    $(function(){
+<script>
+  $(function(){
     var dtToday = new Date();
     
     var month = dtToday.getMonth() + 1;
@@ -101,16 +178,82 @@
 
     $('#date1').attr('min', maxDate);
 });
+  function calender(e) {
+  if($('.main').length!=0) {
+    $('#calenderMain').remove();
+    return false;
+  }
   
-picker.addEventListener('input', function(e){
+ date = new Date();
+ currMonth = date.getMonth();
+ currYear = date.getFullYear();
+ days = [];
+ monthArray = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+ week = ['w1','w2','w3','w4','w5','w6']
+  var cal = '<div class="main"> <div class="yearDiv"> <span onclick="setCalender(currMonth,currYear-=1)" class="left">&lt;</span> <span class="year"></span> <span onclick="setCalender(currMonth,currYear+=1)" class="right">&gt;</span> </div> <div class="monthDiv"> <span onclick="setCalender(currMonth<1?currMonth=11:currMonth-=1,currYear)" class="left">&lt;</span> <span class="month"></span> <span onclick="setCalender(currMonth>10?currMonth=0:currMonth+=1,currYear)" class="right">&gt;</span> </div> <div class="dateMain"> <table id="fillDate"> <tr class="weekT"> <td class="wDay" value="0">S</td> <td class="wDay" value="1">M</td> <td class="wDay" value="2">T</td> <td class="wDay" value="3">W</td> <td class="wDay" value="4">T</td> <td class="wDay" value="5">F</td> <td class="wDay" value="6">S</td> </tr> <tr class="w1"></tr> <tr class="w2"></tr> <tr class="w3"></tr> <tr class="w4"></tr> <tr class="w5"></tr> </table> </div> </div> </div>'
+  
+  
+  $('body').append('<div id="calenderMain"></div>');
+  
+  $('#calenderMain').append(cal);
+  $('.main').fadeIn();
+  
+  setCalender(date.getMonth(),date.getFullYear(),e);
+  
+}
+
+function setCalender(month,year,e) {
+  selectedDate = "";
+  clearCalender();
+  days = [];
+  var weekCount = 0;
+  console.log(month,year);
+  var d = new Date(year,month,1);
+  $('.main .month').html(monthArray[d.getMonth()]);
+  $('.main .year').html(d.getFullYear());
+  while(d.getMonth() === month) {
+    days.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+    }
+  for(i=0;i<days.length;i++) {
+    if(days[i].getDay()<=5) {
+      
+       $('.'+week[weekCount]).append('<td class="date" value="'+days[i].getDate()+'">'+days[i].getDate()+'</td>');
+      
+       }
+    else {
+      $('.'+week[weekCount]).append('<td class="date" value="'+days[i].getDate()+'">'+days[i].getDate()+'</td>');
+      weekCount +=1; 
+      
+    }
+    
+  }
+
+  var tot;
+  if($('.w1').children().length!=7) {
+    tot = (7-$('.w1').children().length);
+    for(j=0;j<tot;j++) {
+      console.log('test')
+      $('.w1').prepend('<td>&nbsp</td>')
+    }  
+  }
+  
+  
+  
+$('.date').each(function() {
+$(this).click(function() {
+  selectedDate = "";
+  selectedDate = currYear+'-'+(String(currMonth+1).length>1?(currMonth+1):"0"+(currMonth+1))+'-'+(String($(this).attr('value')).length>1?($(this).attr('value')):"0"+($(this).attr('value')));
+  console.log(selectedDate)
+  $('.main').slideUp();
+  $("#calenderMain").remove();
+  $(e).val(selectedDate.toString());
   var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
   var content_id = "{{content.id}}"
-
-  var date1 = document.getElementById("date1").value;
-  var day = new Date(this.value).getUTCDay();
+  var day = new Date(selectedDate).getUTCDay();
   if(mentor_availablity_weekday.includes(day)){
     console.log("day : ",day);
-    e.preventDefault();
+    
     
   }
   $.ajax({
@@ -128,6 +271,8 @@ picker.addEventListener('input', function(e){
             message = "Mentor Not available on "+response.week+""
 
             $("#availablehours").html(message);
+            $("#timefields").html("")
+            $("#timemessage").html("")
           }
           else {
               $("#availablehours").html("<select name='availablityid' class='custom-select' id='availablityid'><option value=''>Select Your Time from Available Hours</option></select>");
@@ -156,6 +301,36 @@ picker.addEventListener('input', function(e){
           }
       });
 });
+});  
+}
+
+function clearCalender() {
+  $('.w1,.w2,.w3,.w4,.w5').children().remove();
+}
+
+$('#calenderMain').click(function() {$("#calenderMain").remove();})
+</script>
+  <script>
+    const picker = document.getElementById('date1');
+    function checktime(time){
+      var date =new Date (new Date().toDateString() + ' ' + time);
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0'+minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      console.log(strTime);
+      return strTime;
+      
+     
+    }
+    
+  
+// picker.addEventListener('input', function(e){
+  
+// });
   </script>
   <script>
     function requestmentor(week) {

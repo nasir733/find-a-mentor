@@ -65,9 +65,9 @@ def completemeeting(request,meeting_id):
     meeting = Meeting.objects.get(id=meeting_id)
     meeting.completed = True
     meeting.save()
-    url = "/dashboard/completedsessions/".format(meeting.id)
+    url = "/dashboard/content/{}".format(meeting.content.id)
     message= "{} request session completed".format(meeting.mentor.user.username)
-    notify.send(meeting.mentor.user, recipient=meeting.mentee.user, verb='Session Completed', description=message,url=url)
+    notify.send(meeting.mentor.user, recipient=meeting.mentee.user, verb='Leave a Review for Content', description=message,url=url)
 			
     return redirect('mentor:menteerequests',view="all")
 

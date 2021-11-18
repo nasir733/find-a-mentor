@@ -54,10 +54,13 @@ def login(request):
         global nxt
         nxt = request.GET.get('next')
     if request.method == 'POST':
+        username=""
         print(request.POST)
-        username = request.POST.get('email')
+        email = request.POST.get('email')
         password = request.POST.get('password')
-        print(username, password)
+        print(email, password)
+        if User.objects.filter(email=email).exists():
+            username = User.objects.get(email=email.lower()).username
         user = authenticate(request, username=username, password=password)
         print(user)
         if user is not None:
@@ -110,7 +113,7 @@ def mentorregister(request):
 def profile(request):
     context = {}
     context['user'] = request.user
-    reviews = Review.objects.filter(content__user=request.user.mentorprofile)
+    reviews = Review.objects.filter(content__user=request.user.mentorprofile).order_by('?')[:4]
     context['reviews'] = reviews
     total_sessions = MentorRequest.objects.filter(
         mentor=request.user.mentorprofile, accepted=True).count()
@@ -208,17 +211,33 @@ def settings(request):
     menteeform = MentorProfileUpdateForm(instance=profile)
     context['userform'] = userform
     context['menteeform'] = menteeform
-    if request.method =="POST":
-        userform = CustomUpdateUserForm(request.POST, instance=request.user)
-        menteeform = MentorProfileUpdateForm(request.POST, request.FILES, instance=profile)
-        if userform.is_valid() and menteeform.is_valid():
-            userform.save()
-            menteeform.save()
-            messages.success(request, 'Profile updated successfully')
-            return redirect('mentor:settings')
+
+    if request.method =="POST" or request.method == "FILES":
+        user = User.objects.get(id=request.user.id)
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        birth_date = (request.POST.get('birth_date'))
+        twitter_url = request.POST.get('twitter_url')
+        facebook_url = request.POST.get('facebook_url')
+        instagram_url = request.POST.get('instagram_url')
+        print(birth_date)
+        image = request.FILES.get('image')
+        user.username = username
+        user.email = email
+        user.phone_number = phone_number
+        # profile.birth_date = birth_date
+        profile.twitter_url = twitter_url
+        profile.facebook_url = facebook_url
+        profile.instagram_url = instagram_url
+
+        if image is None:
+                print(" 2")
         else:
-            messages.error(request, 'Profile update failed')
-            return redirect('mentor:settings')
+            profile.image = image
+        profile.save()
+        user.save()
+        return redirect('mentor:settings')
     return render(request, 'mentor/settings.html', context=context)
 
 

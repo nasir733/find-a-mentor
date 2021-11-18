@@ -2,43 +2,71 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="flex items-center justify-center px-8 py-10 bg-gray-100">
-  <div class="flex-1 max-w-screen-lg" style="margin-right: 3rem; ">
-    <div class="bg-white rounded-md shadow-sm " style="">
-      <div class="px-4 py-4 lg:px-6">
-        <div class="flex items-center justify-between space-x-4">
-          <div class="flex items-center justify-center flex-1 max-w-2xl">
-            <div class="bg-white rounded-md shadow-sm">
-              <div class="flex items-center justify-between px-4 py-4 lg:px-6">
-                <h2 class="text-base font-semibold text-gray-800">Find A Mentor</h2>
-              </div>
 
-            </div>
-          </div>
-        </div>
-      </div>
+
+  <div class="flex items-center justify-center px-8 py-10 bg-gray-100">
+ 
+    <div class="flex-1 max-w-screen-lg">
+      <div class="bg-white rounded-md shadow-sm ">
+        <div class="px-4 py-4 lg:px-6">
+  <div class="mx-auto my-10 p-10 max-w-lg">
+    <form action="{% url 'dashboard:settings' %}" enctype="multipart/form-data" method="post"
+    class="relative flex-1 max-w-md">
+    {% csrf_token %}
+    <div class="mb-6">
+      <label for="email" class="text-gray-700 font-medium" >User Name</label>
+      <input id="email" name="username" type="text" value="{{request.user.username}}"  class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
     </div>
+    <div class="mb-6">
+      <label for="email" class="text-gray-700 font-medium">Email address</label>
+      <input id="email" name="email" type="text" value="{{request.user.email}}" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
+    </div>
+    <div class="mb-6">
+      <label for="email" class="text-gray-700 font-medium">Phone Number</label>
+      <input id="email" name="phone_number" value="{{request.user.phone_number}}" type="text" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
+    </div>
+    <!-- <div>
+    <label for="email" class="text-gray-700 font-medium">Address</label>
+    <input id="email" name="address" type="text" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
   </div>
-  <div class="flex-1 max-w-screen-lg">
-    <div class="bg-white rounded-md shadow-sm ">
-      <div class="px-4 py-4 lg:px-6">
-        <div class="flex items-center justify-between px-4 py-4 lg:px-6">
-          <h2 class="text-base font-semibold text-gray-800">Update Profile</h2>
-        </div>
-        <div class="flex items-center justify-between space-x-4">
+  <div>
+  <label for="email" class="text-gray-700 font-medium">Country</label>
+  <input id="email" name="country" type="text" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
+</div>
+<div>
+<label for="email" class="text-gray-700 font-medium">City</label>
+<input id="email" name="city" type="text" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
+</div>
+<div> -->
+  <div>
+<label for="email" class="text-gray-700 font-medium">Birth Date</label>
+ 
+<input id="email" name="birth_date" type="date" value="{{request.user.menteeprofile.birth_date}}" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
+</div>
+<br/>
+<div>
+  <label for="image" class="text-gray-700 font-medium">Profile Pic</label>
+   
+  <input id="email" name="image" type="file" accept="image/png, image/gif, image/jpeg" class="">
+  </div>
+  
 
-          <form action="{% url 'dashboard:settings' %}" enctype="multipart/form-data" method="post"
-            class="relative flex-1 max-w-md">
-            {% csrf_token %}
-            {{userform|crispy}}
-            {{menteeform|crispy}}
-            <br />
-            <button type="submit" class="px-3 py-2 bg-blue-100 rounded-md button">
-              Update
-            </button>
-          </form>
-        </div>
+    <!-- <div class="flex justify-between items-center mb-3">
+      <div class="mt-auto">
+        <input type="checkbox" id="remember-me" name="remember-me" value="remember-me" class="mr-1 checked:bg-blue-600 checked:border-transparent rounded-lg">
+        <label for="remember-me" class="text-gray-700 font-normal">Remember Me</label>
       </div>
-    </div>
+      <a href="#" class="text-blue-700">Forgot your password?</a>
+    </div> -->
+    <br/>
+    <button type="submit" class="px-3 py-2 bg-blue-100 rounded-md">Update Profile</button>
+    </form>
+
+  </div>
+  
+  </div>
+  </div>
+  </div>
+
   </div>
   {% endblock %}
