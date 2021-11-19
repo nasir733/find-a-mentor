@@ -242,12 +242,11 @@ function setCalender(month,year,e) {
   
 $('.date').each(function() {
 $(this).click(function() {
-  selectedDate = "";
   selectedDate = currYear+'-'+(String(currMonth+1).length>1?(currMonth+1):"0"+(currMonth+1))+'-'+(String($(this).attr('value')).length>1?($(this).attr('value')):"0"+($(this).attr('value')));
   console.log(selectedDate)
   $('.main').slideUp();
   $("#calenderMain").remove();
-  $(e).val(selectedDate.toString());
+  $("#date1").val(selectedDate.toString());
   var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
   var content_id = "{{content.id}}"
   var day = new Date(selectedDate).getUTCDay();

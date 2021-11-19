@@ -78,10 +78,9 @@
   <div class="flex justify-end h-16 px-6 py-3 bg-white border-b border-gray-200 lg:justify-between ">
     <div class="items-center flex-1 hidden mx-auto space-x-2 text-sm sm:flex">
       <a href="{% url 'dashboard:home' %}" class="px-3 py-2 bg-gray-100 rounded-md">Dashboard</a>
-      <a href="{% url 'dashboard:browse' %}"
-        class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">Browse</a>
-      <a href="#"
-        class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">Answers</a>
+      <a href="{% url 'dashboard:findamentor' %}"
+        class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">Mentors</a>
+     
       <div
         class="dropdown px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600 .text-sm">
 
@@ -90,24 +89,12 @@
             <nav>
               <ul>
                 <li><a href="#">Categories</a>
-                  <!-- First Tier Drop Down -->
                   <ul>
                     {% for x in request.session.catergory %}
                     <li><a href="{% url 'dashboard:catergorycontent' category=x.name %}">{{x.name}}</a>
-                      <!-- Second Tier Drop Down -->
-                      
+                     
                     </li>
                     {% endfor %}
-                    <!-- <li><a href="#">Product Design</a>
-                     
-                        <li><a href="#">HTML/CSS</a></li>
-                        <li><a href="#">jQuery</a></li>
-                        <li><a href="#">Other</a>
-                          
-
-                        </li>
-                      </ul>
-                    </li> -->
                    
                   </ul>
                 </li>
@@ -115,11 +102,20 @@
           </div>
         </div>
       </div>
+
+      <a href="{% url 'dashboard:findamentor' %}"
+      class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">  </a>
+   
+      <a href="{% url 'dashboard:findamentor' %}"
+      class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">  </a>
+   
+
+
       <div class="relative hidden w-1/2 md:block -top-1">
         <div class="flex items-center justify-between space-x-4">
           <form action="{% url 'dashboard:browse' %}" method="post" class="relative flex-1">
             {% csrf_token %}
-            <input name="search_text"  type="text" placeholder="Search term..." class="block w-full py-3 pl-12 placeholder-gray-400 transition-colors duration-300 border-0 border-transparen peer focus:border-transparent ring-transparent focus:ring-transparent focus:ring-opacity-80 ">
+            <input name="search_text"  type="text" placeholder="Search" class="block w-full py-3 pl-12 placeholder-gray-400 transition-colors duration-300 border-0 border-transparen peer focus:border-transparent ring-transparent focus:ring-transparent focus:ring-opacity-80 ">
             <button type="submit" class="absolute flex items-center justify-center w-8 h-8 p-1 text-gray-400 transition-all duration-300 bg-transparent rounded-full left-3 top-2 hover:bg-gray-100 peer-focus:text-blue-600">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

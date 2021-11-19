@@ -1,4 +1,4 @@
-main {
+/* main {
   
   }
   
@@ -14,17 +14,7 @@ main {
     background-color: #fff;
   }
   
-  #local-video {
-    width: 30%;
-    height: 30%;
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    border: 1px solid #fff;
-    border-radius: 6px;
-    z-index: 2;
-    cursor: pointer;
-  }
+  
   
   #remote-video {
     width: 100%;
@@ -53,4 +43,346 @@ main {
   a{
     text-decoration: none;
     
-  }
+  } */
+
+  :root {
+    --white: #fff;
+    --black: #000;
+    --chat-bg: #edf0f5;
+    --chat-you: #d0d3e3;
+    --icon-primary: #9da5b0;
+    --icon-primary-hover: #7f858e;
+    --text: #2c3550;
+    --text-secondary: #777d8e;
+    --borders: #e9eaec;
+    --active-tab: #00a389;
+    --active-tab-secondary: #e0f4f1;
+    --active-chat-tab-bg: #d1e7e8;
+    --active-chat-tab-text: #007a67;
+    --secondary-brand: #fc5d5b;
+    --end-call: #fc5d5b;
+ }
+ 
+
+  button {
+    cursor: pointer;
+ }
+  .app {
+    width: 1000px;
+    height: 70vh;
+ }
+  .c-main {
+    display: grid;
+    grid-template-columns: 80px 2fr minmax(440px, 1fr);
+    width: 100%;
+    height: 100%;
+ }
+   .trashbar{
+    border-right: 1px solid var(--borders);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 1rem 0;
+ }
+  .c-logo {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    margin-top: 1rem;
+ }
+  .c-logo:before, .c-logo:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 20px;
+    position: absolute;
+ }
+  .c-logo:after {
+    transform: rotate(35deg);
+    border-color: transparent transparent transparent var(--active-tab);
+    top: 0;
+    left: 0;
+ }
+  .c-logo:before {
+    border-color: transparent transparent transparent var(--secondary-brand);
+    transform: rotate(-145deg);
+    left: 5px;
+    top: 10px;
+ }
+  .c-profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 100rem;
+    border: 0;
+    background-color: var(--chat-bg);
+ }
+  .c-navigation li {
+    list-style: none;
+    margin: 1rem 0;
+ }
+  .c-navigation__button {
+    background: transparent;
+    width: 50px;
+    height: 50px;
+    border: 0;
+    border-radius: 9px;
+    color: var(--icon-primary);
+    font-size: 17px;
+ }
+  .c-navigation__button:hover, .c-navigation__button:focus {
+    background: var(--chat-bg);
+    color: var(--icon-primary-hover);
+ }
+  .c-navigation__button--active {
+    background-color: var(--active-tab-secondary);
+    color: var(--active-tab);
+ }
+  
+  .c-video header {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+ }
+  .c-video header h1 {
+    font-size: 25px;
+    font-weight: 500;
+ }
+  .c-video header span {
+    margin-left: 1rem;
+    background: #d0d3e3;
+    color: #435091;
+    padding: 0.5rem 1rem;
+    border-radius: 14px;
+    font-weight: 500;
+ }
+  .c-video header span svg {
+    margin-right: 10px;
+ }
+  .c-video-back {
+    width: 40px;
+    height: 40px;
+    background: var(--borders);
+    color: var(--icon-primary-hover);
+    border-radius: 12px;
+    margin-right: 1rem;
+    border: 0;
+ }
+  .c-video-information {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+ }
+  .c-video-information button {
+    background: transparent;
+    border: 0;
+    position: relative;
+    color: var(--active-tab);
+    font-size: 16px;
+ }
+  .c-video-information button:before {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--active-tab);
+    content: '+';
+    font-size: 17px;
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+ }
+  .c-video-invited {
+    display: flex;
+    font-weight: 500;
+ }
+  .c-video-invited span {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-left: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+ }
+  .c-video-invited__attendees span {
+    background: var(--active-tab-secondary);
+    color: var(--active-tab);
+ }
+  .c-video-invited__absentees {
+    margin-left: 1rem;
+ }
+  .c-video-invited__absentees span {
+    background: #fcf2f2;
+    color: #fc5d5b;
+ }
+  .c-webcam {
+    width: 100%;
+    height: 100%;
+    max-height: 600px;
+    padding: 1rem;
+ }
+  .c-webcam-container {
+    width: 100%;
+    height: 100%;
+    background: var(--chat-you);
+    border-radius: 12px;
+    position: relative;
+ }
+  .c-webcam-organisor {
+    z-index: 2;
+    position: relative;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+ }
+  .c-webcam-organisor div {
+    margin-left: 0.5rem;
+    color: var(--white);
+ }
+  .c-webcam-organisor div span {
+    font-size: 12px;
+ }
+  .c-webcam-organisor div p {
+    font-weight: 500;
+ }
+  .c-webcam-organisor img {
+    border-radius: 12px;
+ }
+  .c-webcam-inchat {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    width: 100px;
+    height: 100px;
+ }
+ #local-video {
+  width: 30%;
+  height: 30%;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  z-index: 2;
+  cursor: pointer;
+}
+  .c-webcam-inchat .local-video {
+    margin: 5px 0;
+    width: 100%;
+    border-radius: 23px;
+    border: 3px solid var(--white);
+ }
+  .c-webcam__video-controls {
+    z-index: 2;
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+ }
+  .c-webcam__video-controls ul {
+    display: flex;
+    align-items: center;
+ }
+  .c-webcam__video-controls li {
+    margin: 0 1rem;
+    list-style: none;
+ }
+  .c-control {
+    z-index: 2;
+    width: 50px;
+    height: 50px;
+    border-radius: 100rem;
+    border: 0;
+    color: var(--white);
+    font-size: 18px;
+    position: relative;
+    background: transparent;
+    overflow: hidden;
+ }
+
+  .c-control:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    box-shadow: inset 0 0 2000px rgba(255, 255, 255, .5);
+    filter: blur(10px);
+ }
+  .c-control--end-call {
+    width: 70px;
+    height: 70px;
+    background-color: var(--end-call);
+    border-radius: 30px;
+    border: 0;
+    color: var(--white);
+    font-size: 18px;
+    box-shadow: rgba(252, 93, 91, 0.7) 0px 7px 29px 0px;
+ }
+
+  #remote-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+ }
+  .c-join {
+    background-color: var(--active-tab);
+    box-shadow: #23b750 0px 7px 29px 0px;
+ }
+  @media only screen and (max-width: 1150px) {
+    .c-chat {
+      display: none;
+   }
+    .c-main {
+      grid-template-columns: 80px 1fr;
+   }
+ }
+  @media only screen and (max-width: 720px) {
+    .c-webcam-inchat img {
+      max-width: 50px;
+      border-width: 2px;
+      border-radius: 100rem;
+   }
+    .c-video header {
+      flex-wrap: wrap;
+   }
+    .c-video header span {
+      margin: 1rem 0;
+   }
+    .c-video-invited {
+      display: none;
+   }
+ }
+  @media only screen and (max-width: 600px) {
+    .c-main {
+      grid-template-columns: 1fr;
+   }
+   .trashbar {
+      display: none;
+   }
+    .c-webcam__video-controls {
+      left: 1.5rem;
+      transform: translateX(0);
+      top: 50%;
+      transform: translateY(-50%);
+   }
+    .c-webcam__video-controls ul {
+      flex-direction: column;
+   }
+    .c-webcam__video-controls ul li {
+      margin: 10px 0;
+   }
+ }
+  
