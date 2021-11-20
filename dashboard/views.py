@@ -464,7 +464,7 @@ def addfavouritetags(request):
                             other_category = Catergory.objects.get(name='Other')    
                             skill = Skill(name=i,catergory=other_category)
                             skill.save()
-                            mentee_interests.skill.add(skill)
+                            mentee_interests.interest.add(skill)
                             mentee_interests.save()        
                 return redirect('dashboard:profile')
             else:
@@ -483,7 +483,7 @@ def addfavouritetags(request):
                         other_category = Catergory.objects.get(name='Other')    
                         skill = Skill(name=tag,catergory=other_category)
                         skill.save()
-                        mentee_interests.skill.add(skill)
+                        mentee_interests.interest.add(skill)
                         mentee_interests.save()
                         return redirect('dashboard:profile')
                     
