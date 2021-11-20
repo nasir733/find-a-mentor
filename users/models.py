@@ -237,4 +237,25 @@ class MentorAvailability(models.Model):
         return "{} is available on {}".format(self.mentor.user.username, self.weekday)
 
 
+class MentorRequestTimeSlot(models.Model):
+    mentor = models.ForeignKey(
+        MentorProfile, on_delete=models.CASCADE, related_name='mentor_time_slot')
+    mentor_availability = models.ForeignKey(MentorAvailability, on_delete=models.CASCADE)
+    weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
+    from_time = models.TimeField(null=True, blank=True)
+    to_time = models.TimeField(null=True, blank=True)
+    is_available = models.BooleanField(default=True)
 
+    def __str__(self):
+        return "{} is available on {} {} - {} ".format(self.mentor.user.username, self.weekday,self.from_time,self.to_time)
+
+class MentorBookedEvent(models.Model):
+    mentor = models.ForeignKey(
+        MentorProfile, on_delete=models.CASCADE, related_name='mentor_books')
+    mentor_time_slot = models.ForeignKey(MentorRequestTimeSlot, on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
+    weekday = models.CharField(choices=WEEKDAYS, max_length=20, blank=True, null=True)
+    is_available_status = models.BooleanField(default=True)
+    mentee_request = models.ForeignKey(MentorRequest, on_delete=models.CASCADE, null=True, blank=True)
+    def __str__(self):
+        return "{} has {} booked".format(self.mentor.user.username, self.date)

@@ -159,7 +159,7 @@
       <div class="flex items-center justify-center px-8 py-2 bg-gray-100">
         <div class="flex items-center justify-center flex-1 max-w-2xl">
         
-          <div class="bg-white rounded-md shadow-sm">
+          <div class="bg-white rounded-md shadow-lg">
             
      <div class="flex items-center justify-between px-4 py-3 lg:px-6">
   
@@ -179,13 +179,23 @@
 
            
           </select></div>
-<div style="margin-bottom: 1rem;">
-        Start Hours: &nbsp;<input type="time" name="from_hour" value="16:00" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full"/>
+          Start Hours: &nbsp; <div style="margin-bottom: 1rem; display: flex;">       
+            <input type="number" name="from_hour" value="1" min="1" max="12" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full"/>
+             <select name="from_hour_time" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
+               
+               <option value="AM">AM</option>
+               <option value="PM">PM</option>
+             </select>
+           </div>
+      End Hours: &nbsp; <div style="margin-bottom: 1rem; display: flex;">       
+         <input type="number" name="to_hour" value="12" min="1" max="12" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full"/>
+          <select name="to_hour_time" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full">
+            
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+          </select>
         </div>
-        <div style="margin-bottom: 1rem;">       
-          End Hours: &nbsp;<input type="time" name="to_hour" value="21:00" class="block rounded-md border border-gray-300 py-2 px-4 my-2 shadow-sm w-full"/>
-        </div>
-        <button type="submit"  class="px-3 py-2 bg-blue-100 rounded-md" style="margin-bottom: 2rem;">Submit</>
+        <button type="submit"  class="px-3 py-2 bg-blue-100 rounded-md" style="margin-bottom: 2rem;">Submit</s>
     </form>
     <br/>
  

@@ -15,7 +15,7 @@ from users.forms import  CreateContentForm, CustomUpdateUserForm, MentorProfileU
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 
-
+from datetime import *
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
 from users.models import *
@@ -247,7 +247,7 @@ def browsecontent(request):
     context = {}
     contents = Content.objects.filter(is_active=True)
     context['contents'] = contents
-    catergory = Catergory.objects.all()
+    catergory = Catergory.objects.all().order_by('?')[:6]
     context['catergory'] = catergory
     if request.user.user_type == 'Mentor':
         if request.method == 'POST':
@@ -269,7 +269,7 @@ def catergorycontent(request,category):
     contents = Content.objects.filter(content_tags__catergory__name__icontains=category).distinct()
     print(contents)
     context['contents'] = contents
-    tags = Skill.objects.filter(catergory__name=category)[0:4]
+    tags = Skill.objects.filter(catergory__name=category).order_by('?')[:6]
     context['tags'] = tags
     print(context['tags'])
     if request.user.user_type == 'Mentee':
@@ -283,7 +283,7 @@ def tagcontent(request,category,tag):
     print(tag)
     contents = Content.objects.filter(content_tags__name=tag).distinct()
     print(contents)
-    tags = Skill.objects.filter(catergory__name=category)[0:4]
+    tags = Skill.objects.filter(catergory__name=category).order_by('?')[:6]
     context['tags'] = tags
     context['contents'] = contents
     if request.user.user_type == 'Mentee':
@@ -436,10 +436,34 @@ def addworkinghours(request):
     
     if request.method == 'POST':
         weekday = request.POST.get('weekday')
-        from_hour = request.POST.get('from_hour')
-        to_hour = request.POST.get('to_hour')
+        start_hour = int(request.POST.get('from_hour'))
+        end_hour = int(request.POST.get('to_hour'))
+        from_hour =datetime.strftime(datetime.strptime(request.POST.get('from_hour') +":00 "+ request.POST.get('from_hour_time'), '%I:%M %p'),"%H:%M")
+        to_hour = datetime.strftime(datetime.strptime(request.POST.get('to_hour')  +":00 "+ request.POST.get('to_hour_time'), '%I:%M %p'),"%H:%M")
+        seq1 = []
+        print(from_hour)
+        print(to_hour)
         mentorworkinghours = MentorAvailability(weekday=weekday,from_hour=from_hour,to_hour=to_hour,mentor=request.user.mentorprofile)
         mentorworkinghours.save()
+
+        diff_hour = datetime.strptime(to_hour,"%H:%M")- datetime.strptime(from_hour,"%H:%M")
+        breaks = int(diff_hour.total_seconds()/1200)
+        
+        print(breaks)
+        print(type(from_hour))
+        xtime = datetime.strptime(from_hour,"%H:%M")
+        seq1.append(from_hour)
+        print(type(xtime))
+        for x in range(breaks):
+            single_from_time = xtime
+            xtime = xtime+ timedelta(minutes = 20)
+            single_to_time = xtime
+            time_slot = MentorRequestTimeSlot(mentor_availability=mentorworkinghours,from_time=single_from_time,to_time=single_to_time,weekday=weekday,mentor=request.user.mentorprofile)
+            time_slot.save()
+            seq1.append(xtime.strftime("%H:%M"))
+        print(seq1)
+        
+        
         return redirect('mentor:mentorpage')
     elif request.method == 'DELETE':
         id = request.GET.get('id')
@@ -508,7 +532,7 @@ def tagmentee(request,category,tag):
 @login_required(login_url='/mentor/login/')
 def browsementeetags(request):
     context = {}
-    tags = Skill.objects.all()
+    tags = Skill.objects.all().order_by('?')[:6]
     context['tags'] = tags
     return render(request, 'mentor/browsementeetags.html', context=context)
 

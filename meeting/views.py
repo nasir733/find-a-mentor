@@ -49,14 +49,14 @@ def connectcallmentee(request,meeting_id):
     context['meeting'] = meeting
     context['mentor'] = meeting.mentor
     context ['content'] = meeting.content
-    context['meeting_time'] =( meeting.start_time).strftime('%H:%M:%S')
-    print(time_in_range((meeting.start_time).strftime('%H:%M:%S'), (meeting.end_time).strftime('%H:%M:%S'), datetime.datetime.now().strftime('%H:%M:%S')))
+    context['meeting_time'] =( meeting.mentor_time_slot.from_time).strftime('%H:%M:%S')
+    print(time_in_range((meeting.mentor_time_slot.from_time).strftime('%H:%M:%S'), (meeting.mentor_time_slot.to_time).strftime('%H:%M:%S'), datetime.datetime.now().strftime('%H:%M:%S')))
     # if datetime.date.today().strftime('%Y-%m-%d')<= (meeting.date).strftime('%Y-%m-%d'):
     #     if ((meeting.start_time).strftime('%H:%M:%S') >= datetime.datetime.now().strftime('%H:%M:%S')):
     #         context['timepassed'] = True
     # else:
     #     context['timepassed'] = False
-    context['timepassed']=time_in_range((meeting.start_time).strftime('%H:%M:%S'), (meeting.end_time).strftime('%H:%M:%S'), datetime.datetime.now().strftime('%H:%M:%S'))
+    context['timepassed']=time_in_range((meeting.mentor_time_slot.from_time).strftime('%H:%M:%S'), (meeting.mentor_time_slot.to_time).strftime('%H:%M:%S'), datetime.datetime.now().strftime('%H:%M:%S'))
     print(meeting.mentee.user.username)
     return render(request, 'meeting/mentee-singlemeeting.html',context=context)
 
@@ -65,6 +65,9 @@ def completemeeting(request,meeting_id):
     meeting = Meeting.objects.get(id=meeting_id)
     meeting.completed = True
     meeting.save()
+    mentor_booked_event = MentorBookedEvent.objects.get(mentor_time_slot=meeting.mentor_time_slot)
+    mentor_booked_event.is_available_status = True
+    mentor_booked_event.save()
     url = "/dashboard/content/{}".format(meeting.content.id)
     message= "{} request session completed".format(meeting.mentor.user.username)
     notify.send(meeting.mentor.user, recipient=meeting.mentee.user, verb='Leave a Review for Content', description=message,url=url)

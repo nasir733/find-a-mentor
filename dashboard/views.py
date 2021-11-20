@@ -23,6 +23,9 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
+
+from .serializers import *
+
 import re
 User = get_user_model()
 
@@ -211,7 +214,7 @@ def search(request):
 def browsecontent(request):
     context = {}
     contents = Content.objects.filter(is_active=True)
-    catergory = Catergory.objects.all()
+    catergory = Catergory.objects.all().order_by('?')[:6]
     context['catergory'] = catergory
     context['contents'] = contents
     if request.user.user_type == 'Mentor':
@@ -234,7 +237,7 @@ def catergorycontent(request,category):
     contents = Content.objects.filter(content_tags__catergory__name__icontains=category).distinct()
     print(contents)
     context['contents'] = contents
-    tags = Skill.objects.filter(catergory__name=category)[0:4]
+    tags = Skill.objects.filter(catergory__name=category).order_by('?')[:6]
     context['tags'] = tags
     print(context['tags'])
     if request.user.user_type == 'Mentor':
@@ -248,7 +251,7 @@ def tagcontent(request,category,tag):
     print(tag)
     contents = Content.objects.filter(content_tags__name=tag).distinct()
     print(contents)
-    tags = Skill.objects.filter(catergory__name=category)[0:4]
+    tags = Skill.objects.filter(catergory__name=category).order_by('?')[:6]
     context['tags'] = tags
     context['contents'] = contents
     if request.user.user_type == 'Mentor':
@@ -334,29 +337,27 @@ def  requestcontent(request, content_id):
     content = Content.objects.get(id=content_id)
     #price_per_hour = content.price_per_hour
     mentor = content.user
-    date=[]
-    mentor_request_time = MentorRequestTime.objects.filter(Q(request__mentor=mentor)&Q(request__accepted=True))
-    for i in mentor_request_time:
-        date.append(i.date)
+   
     mentor_availablity = MentorAvailability.objects.filter(mentor=mentor)
     mentor_availablity_weekday = []
 
     for i in mentor_availablity:
-        if not(i.weekday == 'Monday'):
+        if i.weekday == 'Monday':
             week_id=1
-        elif not(i.weekday == 'Tuesday'):
+        elif i.weekday == 'Tuesday':
             week_id=2
-        elif not(i.weekday == 'Wednesday'):
+        elif i.weekday == 'Wednesday':
             week_id=3
-        elif not(i.weekday == 'Thursday'):
+        elif i.weekday == 'Thursday':
             week_id=4
-        elif not(i.weekday == 'Friday'):
+        elif i.weekday == 'Friday':
             week_id=5
-        elif not(i.weekday == 'Saturday'):
+        elif i.weekday == 'Saturday':
             week_id=6
-        elif not(i.weekday == 'Sunday'):
+        elif i.weekday == 'Sunday':
             week_id=0
         mentor_availablity_weekday.append(week_id)
+    print(mentor_availablity_weekday)
     context['mentor_availablity'] = mentor_availablity
     context['mentor_availablity_weekday'] = mentor_availablity_weekday
     
@@ -365,17 +366,22 @@ def  requestcontent(request, content_id):
             date = request.POST.get('date')
             availablityid = request.POST.get('availablityid')
             
-            mentor_selected_availablity = MentorAvailability.objects.get(id=int(availablityid))
+            mentor_selected_time_slot = MentorRequestTimeSlot.objects.get(id=int(availablityid))
             
             temp = pd.Timestamp(date)
             week = temp.day_name()
-            mentee_request = MentorRequest(mentee=request.user.menteeprofile,mentor=mentor,content=content)
+            mentee_request = MentorRequest(mentee=request.user.menteeprofile,mentor=mentor,content=content,accepted=True)
             mentee_request.save()
-            mentor_request_time = MentorRequestTime(request=mentee_request,date=date,weekday=week,mentor_availibility=mentor_selected_availablity)
+            mentor_request_time = MentorRequestTime(request=mentee_request,date=date,weekday=week,mentor_availibility=mentor_selected_time_slot.mentor_availability)
             mentor_request_time.save()
-            url = "/mentor/acceptrequest/{}".format(mentee_request.id)
+            mentor_event_book = MentorBookedEvent(mentor=mentor,mentor_time_slot=mentor_selected_time_slot,date=date,weekday=week,is_available_status=False,mentee_request=mentee_request)
+            mentor_event_book.save()
+            meeting_title = mentee_request.content.title + " Booked by " + mentee_request.mentee.user.username
+            meeting = Meeting(mentor=mentee_request.mentor,mentee=mentee_request.mentee,meeting_title=meeting_title,meeting_subject=meeting_title,date=mentee_request.mentorrequesttime.date,meeting_request=mentee_request,content=mentee_request.content)
+            meeting.save()
+            url = "/mentor/startmeeting/".format(mentee_request.id)
             message= "{} requested {} on {}".format(request.user.username,content.title,date)
-            notify.send(request.user, recipient=mentor.user, verb='Content Requested', description=message,url=url)
+            notify.send(request.user, recipient=mentor.user, verb='Content Booked', description=message,url=url)
 			
             return JsonResponse({'status':'success'})
     elif request.method == "GET":
@@ -393,6 +399,7 @@ def checkworkhours(request, content_id):
    mentor = content.user
    if request.method == "POST":
         weekday = request.POST.get('weekday')
+        date = request.POST.get('date')
         print(request.POST.get('weekday'))
         weekday = int(weekday)
         if weekday == 1:
@@ -409,10 +416,26 @@ def checkworkhours(request, content_id):
             week="Saturday"
         elif weekday == 0:
             week="Sunday"
+        # mentor_availablity = MentorAvailability.objects.filter(mentor=mentor, weekday=week)
+        print(week)
+        print(date)
         mentor_availablity = MentorAvailability.objects.filter(mentor=mentor, weekday=week)
-        availablity_mentor = list(mentor_availablity.values())
+        mentor_booked_status= MentorBookedEvent.objects.filter(date=date,mentor=mentor, mentor_time_slot__weekday=week,is_available_status=True).exists()
         
-        return JsonResponse({"mentor_availablity":availablity_mentor,"week":week})
+        availablity_mentor = list(mentor_availablity.values())
+        print(availablity_mentor)
+        slots  = MentorRequestTimeSlot.objects.filter(mentor=mentor,weekday=week,is_available=True)
+        time_slots =[]
+        for x in slots:
+            print("===")
+            if MentorBookedEvent.objects.filter(mentor=mentor,is_available_status=False,weekday=week,date=date,mentor_time_slot=x).exists():
+                print(x)
+            else:
+                print("pushed")
+                serializer = MentorRequestTimeSlotSerializer(x, many=False)
+                time_slots.append(serializer.data)
+        mentor_time_slot = time_slots
+        return JsonResponse({"mentor_availablity":availablity_mentor,"mentor_time_slot":mentor_time_slot,"mentor_booked_status":mentor_booked_status,"week":week,"mentor":mentor.user.username})
         
 
 
@@ -437,8 +460,12 @@ def addfavouritetags(request):
                             for z in skill:
                                 mentee_interests.interest.add(z)
                                 mentee_interests.save()
-                        else:    
-                            print("tag not exists")       
+                        else:
+                            other_category = Catergory.objects.get(name='Other')    
+                            skill = Skill(name=i,catergory=other_category)
+                            skill.save()
+                            mentee_interests.skill.add(skill)
+                            mentee_interests.save()        
                 return redirect('dashboard:profile')
             else:
                 print(tag)
@@ -453,7 +480,11 @@ def addfavouritetags(request):
                             mentee_interests.interest.add(i)
                             mentee_interests.save()
                     else:    
-                        print("tag not exists")
+                        other_category = Catergory.objects.get(name='Other')    
+                        skill = Skill(name=tag,catergory=other_category)
+                        skill.save()
+                        mentee_interests.skill.add(skill)
+                        mentee_interests.save()
                         return redirect('dashboard:profile')
                     
                     return redirect('dashboard:profile')
@@ -476,7 +507,11 @@ def addfavouritetags(request):
                                 mentor_skills.skill.add(z)
                                 mentor_skills.save()
                         else:    
-                            print("tag not exists")       
+                            other_category = Catergory.objects.get(name='Other')    
+                            skill = Skill(name=i,catergory=other_category)
+                            skill.save()
+                            mentor_skills.skill.add(skill)
+                            mentor_skills.save()        
                 return redirect('mentor:profile')
             else:
                 print(tag)
@@ -491,7 +526,11 @@ def addfavouritetags(request):
                             mentor_skills.skill.add(i)
                             mentor_skills.save()
                     else:    
-                        print("tag not exists")
+                        other_category = Catergory.objects.get(name='Other')    
+                        skill = Skill(name=tag,catergory=other_category)
+                        skill.save()
+                        mentor_skills.skill.add(skill)
+                        mentor_skills.save()
                         return redirect('mentor:profile')
                     return redirect('mentor:profile')
 

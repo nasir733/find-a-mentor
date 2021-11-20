@@ -178,6 +178,7 @@ font-family: 'Raleway', sans-serif;
 
     $('#date1').attr('min', maxDate);
 });
+
   function calender(e) {
   if($('.main').length!=0) {
     $('#calenderMain').remove();
@@ -250,6 +251,7 @@ $(this).click(function() {
   var mentor_availablity_weekday ="{{mentor_availablity_weekday}}"
   var content_id = "{{content.id}}"
   var day = new Date(selectedDate).getUTCDay();
+  console.log(day)
   if(mentor_availablity_weekday.includes(day)){
     console.log("day : ",day);
     
@@ -259,14 +261,16 @@ $(this).click(function() {
         type:"POST",
         url: `/dashboard/checkworkhours/${content_id}/`,
         data: {
-          'weekday': day
+          'weekday': day,
+          'date':selectedDate,
         },
         dataType: 'json',
         success: function (response) {
           let final = ""
           let final1 = ""
           let final2 = ""
-          if (response.mentor_availablity.length == 0) {
+          console.log(response);
+          if (response.mentor_availablity.length == 0 || response.mentor_booked_status == true) {
             message = "Mentor Not available on "+response.week+""
 
             $("#availablehours").html(message);
@@ -275,13 +279,13 @@ $(this).click(function() {
           }
           else {
               $("#availablehours").html("<select name='availablityid' class='custom-select' id='availablityid'><option value=''>Select Your Time from Available Hours</option></select>");
-              for (var key in response.mentor_availablity)
+              for (var key in response.mentor_time_slot)
               {
                 console.log("day : ",date1);
-
-                console.log(response.mentor_availablity[key])
+                
+                console.log(response.mentor_time_slot[key])
                   //final="<button type='button'  class='flex items-center justify-center w-50 px-4 py-4 space-x-1 text-sm font-semibold leading-4 text-center transition-colors duration-300 bg-gray-600 rounded-md disabled:cursor-not-allowed disabled:opacity-60 hover:bg-blue-700 text-blue-50'><span>"+checktime(response.mentor_availablity[key].from_hour)+" To "+checktime(response.mentor_availablity[key].to_hour)+" </span></button>" 
-                  final ="<option value="+response.mentor_availablity[key].id+">"+checktime(response.mentor_availablity[key].from_hour)+" To "+checktime(response.mentor_availablity[key].to_hour)+" </option>"
+                  final ="<option value="+response.mentor_time_slot[key].id+">"+checktime(response.mentor_time_slot[key].from_time)+" To "+checktime(response.mentor_time_slot[key].to_time)+" </option>"
                   $("#availablityid").append(final)
                   
               }
@@ -325,7 +329,36 @@ $('#calenderMain').click(function() {$("#calenderMain").remove();})
       
      
     }
-    
+    var makeTimeIntervals = function (startTime, endTime, increment) {
+    startTime = startTime.toString().split(':');
+    endTime = endTime.toString().split(':');
+    increment = parseInt(increment, 10);
+
+    var pad = function (n) { return (n < 10) ? '0' + n.toString() : n; },
+        startHr = parseInt(startTime[0], 10),
+        startMin = parseInt(startTime[1], 10),
+        endHr = parseInt(endTime[0], 10),
+        endMin = parseInt(endTime[1], 10),
+        currentHr = startHr,
+        currentMin = startMin,
+        previous = currentHr + ':' + pad(currentMin),
+        current = '',
+        r = [];
+
+    do {
+        currentMin += increment;
+        if ((currentMin % 60) === 0 || currentMin > 60) {
+            currentMin = (currentMin === 60) ? 0 : currentMin - 60;
+            currentHr += 1;
+        }
+        current = currentHr + ':' + pad(currentMin);
+        r.push(previous + ' - ' + current);
+        previous = current;
+  } while (currentHr !== endHr);
+
+    return r;
+};
+
   
 // picker.addEventListener('input', function(e){
   
@@ -350,7 +383,7 @@ $('#calenderMain').click(function() {$("#calenderMain").remove();})
         success: function (response) {
           console.log(response)
           if (response.status == "success") {
-            window.location = `/dashboard/content/${content_id}`;
+            window.location = `/dashboard/joinmeeting/`;
           }
           else {
             alert("Request not sent")

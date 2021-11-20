@@ -22,8 +22,10 @@ class Meeting(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     completed = models.BooleanField(default=False,null=True,blank=True)
-
+    mentor_time_slot = models.ForeignKey(MentorRequestTimeSlot, on_delete=models.CASCADE,null=True,blank=True)
+    
     class Meta:
         ordering = ('-created_at',)
 
-
+    def __str__(self):
+        return self.meeting_title
