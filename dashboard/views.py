@@ -377,7 +377,7 @@ def  requestcontent(request, content_id):
             mentor_event_book = MentorBookedEvent(mentor=mentor,mentor_time_slot=mentor_selected_time_slot,date=date,weekday=week,is_available_status=False,mentee_request=mentee_request)
             mentor_event_book.save()
             meeting_title = mentee_request.content.title + " Booked by " + mentee_request.mentee.user.username
-            meeting = Meeting(mentor=mentee_request.mentor,mentee=mentee_request.mentee,meeting_title=meeting_title,meeting_subject=meeting_title,date=mentee_request.mentorrequesttime.date,meeting_request=mentee_request,content=mentee_request.content)
+            meeting = Meeting(mentor=mentee_request.mentor,mentee=mentee_request.mentee,meeting_title=meeting_title,meeting_subject=meeting_title,date=mentee_request.mentorrequesttime.date,meeting_request=mentee_request,content=mentee_request.content,mentor_time_slot=mentor_selected_time_slot)
             meeting.save()
             url = "/mentor/startmeeting/".format(mentee_request.id)
             message= "{} requested {} on {}".format(request.user.username,content.title,date)
