@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(Meeting)
 # Register your models here.
+admin.site.register(MeetingRecording)

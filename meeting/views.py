@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from meeting.models import Meeting
+from meeting.models import Meeting, MeetingRecording
 import os
 import time
 import json
@@ -152,3 +152,36 @@ def call_user(request):
         }
     )
     return JsonResponse({'message': 'call has been placed'})
+
+@login_required(login_url="/mentor/login/")
+def create_recording(request):
+    body = json.loads(request.body.decode('utf-8'))
+    sid = body['sid']
+    resourceId = body['resourceId']
+    meetingid = int(body['meetingid'])
+    mentor = request.user.mentorprofile
+    meeting = Meeting.objects.get(id=meetingid)
+    meeting_recording=MeetingRecording(sid=sid,resourceId=resourceId,meeting=meeting,mentor=mentor,content=meeting.content)
+    meeting_recording.save()
+    return JsonResponse({'message': 'recording has been created', 'success': True})
+
+@login_required(login_url="/mentor/login/")
+def stop_recording_request(request):
+    body = json.loads(request.body.decode('utf-8'))
+    meetingid = int(body['meetingid'])
+    resourceId = body['resourceId']
+    meeting = Meeting.objects.get(id=meetingid)
+    meeting_recording = MeetingRecording.objects.filter(meeting=meeting).last()
+    meeting_recording.resourceId = resourceId
+    meeting_recording.save()
+    return JsonResponse({'message': 'recording has been stopped', 'success': True,'sid':meeting_recording.sid,'resourceId':meeting_recording.resourceId})
+
+@login_required(login_url="/mentor/login/")
+def recording_completed(request):
+    body = json.loads(request.body.decode('utf-8'))
+    meetingid = int(body['meetingid'])
+    meeting = Meeting.objects.get(id=meetingid)
+    meeting_recording = MeetingRecording.objects.filter(meeting=meeting).last()
+    meeting_recording.stopresponse = body['record_completion']
+    meeting_recording.save()
+    return JsonResponse({'message': 'recording has been completed', 'success': True})

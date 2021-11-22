@@ -48,7 +48,7 @@ def menteedashboard(request):
         context['total_sessions'] = total_sessions
         data = Catergory.objects.all()
         request.session['catergory'] = list(data.values())
-        
+         
         print(data)
         random_catergory = Catergory.objects.order_by('?')[0]
         print(random_catergory.name)

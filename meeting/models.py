@@ -29,3 +29,17 @@ class Meeting(models.Model):
 
     def __str__(self):
         return self.meeting_title
+
+class MeetingRecording(models.Model):
+    mentor = models.ForeignKey(MentorProfile, on_delete=models.CASCADE, related_name='mentor_meeting_recording')
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='meeting_recording')
+    recording_url = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='content_meeting_recording',null=True,blank=True)
+    sid = models.TextField(null=True,blank=True)
+    resourceId = models.TextField(null=True,blank=True)
+    stopresponse = models.JSONField(null=True,blank=True)
+
+    def __str__(self):
+        return self.mentor.user.username

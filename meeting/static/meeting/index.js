@@ -12,6 +12,7 @@ const app = new Vue({
       incomingCall: false,
       incomingCaller: "",
       agoraChannel: null,
+      recordingStarted: false,
     },
     mounted() {
       this.initUserOnlineChannel();
@@ -271,6 +272,208 @@ const app = new Vue({
         } else {
           this.localStream.muteVideo();
           this.mutedVideo = true;
+        }
+      },
+      async generateResourceId(AppId,uid,cname,tokenRes,mode,meetingid) {
+        const customerKey = "461006031933455789b478ddcba69df6"
+        // Customer secret
+        const customerSecret = "b600378f495c46148c60dbb16e7bd05e"
+        // Concatenate customer key and customer secret and use base64 to encode the concatenated string
+        const plainCredential = customerKey + ":" + customerSecret
+        
+        fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/acquire`,{
+          method: 'POST',
+          headers: {
+            
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(plainCredential),
+
+          },
+          body:JSON.stringify({
+            "cname": cname,
+            "uid": uid,
+            "clientRequest":{
+              "region":"AP",
+              // "resourceExpiredHour":  24
+          }
+        })
+   
+          }
+        )
+        .then(response => response.json())
+        .then(data => {
+          this.resourceId = data.resourceId;
+          console.log(this.resourceId);
+          fetch(`https://api.agora.io/v1/apps/${tokenRes.data.appID}/cloud_recording/resourceid/${data.resourceId}/mode/${mode}/start`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json;charset=utf-8",
+                'Authorization': 'Basic ' + btoa(plainCredential),
+              },
+              body: JSON.stringify(
+              {
+                "uid": uid,
+                "cname": cname,
+                "clientRequest": {
+                    "token": tokenRes.data.token,
+                    "recordingConfig": {
+                      "maxIdleTime": 30,
+                      "streamTypes": 2,
+                      "channelType": 0,
+                      "videoStreamType": 0,
+                      
+                      "subscribeUidGroup": 0
+                  },
+                    "storageConfig": {
+                        "accessKey": "AKIAQVPXYDDKO66DFQWP",
+                        "region": 0,
+                        "bucket": "findamentorapp",
+                        "secretKey": "rDnON5pI/KxLllrI5mx79lA1XWtGdGiRl2Td6rgx",
+                        "vendor": 1,
+                        "fileNamePrefix": ["directory1","directory2"]
+                    }
+            }
+          }
+          
+          ),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("recording data",data);
+          fetch('/meeting/create_recording/',{
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+                "X-CSRFToken": CSRF_TOKEN,
+            },
+            body: JSON.stringify({
+              "meetingid": meetingid,
+              "resourceId": data.resourceId,
+              "mode": mode,
+              "uid": uid,
+              "sid": data.sid,
+              "cname": cname,
+            })
+
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("recording data saved",data);
+            if(data.success == true){
+              this.recordingStarted = true;
+            }
+          });
+        }
+        );
+        });
+       
+      },
+      async stopRecording(AppId,uid,cname,tokenRes,mode,meetingid){
+        const customerKey = "461006031933455789b478ddcba69df6"
+        // Customer secret
+        const customerSecret = "b600378f495c46148c60dbb16e7bd05e"
+        // Concatenate customer key and customer secret and use base64 to encode the concatenated string
+        const plainCredential = customerKey + ":" + customerSecret
+        fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/acquire`,{
+          method: 'POST',
+          headers: {
+            
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(plainCredential),
+
+          },
+          body:JSON.stringify({
+            "cname": cname,
+            "uid": uid,
+            "clientRequest":{
+              "region":"AP",
+              // "resourceExpiredHour":  24
+          }
+        })
+   
+          }
+        )
+        .then(response => response.json())
+        .then(x => {
+          console.log(x);
+          fetch('/meeting/stop_recording_request/',{
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+                "X-CSRFToken": CSRF_TOKEN,
+            },
+            body: JSON.stringify({
+              "meetingid": meetingid,
+              "mode":mode,
+              "uid": uid,
+              "cname": cname,
+              "resourceId": x.resourceId,
+            }),
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("recording stop resource data generated",data);
+            if(data.success == true){
+              
+              fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${data.resourceId}/sid/${data.sid}/mode/${mode}/stop`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                  'Authorization': 'Basic ' + btoa(plainCredential),
+                  },
+                  body: JSON.stringify(
+                  {
+                    "cname": cname,
+                    "uid": uid,  
+                    "clientRequest":{
+                        "async_stop": false   
+                    },
+                  }
+                  ),
+              })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log("recording stop api data",data);
+                fetch('/meeting/recording_completed/',{
+                  method: 'POST',
+                  headers: {
+                    "Content-Type": "application/json",
+  
+                      "X-CSRFToken": CSRF_TOKEN,
+                  },
+                  body: JSON.stringify({
+                    "meetingid": meetingid,
+                    'record_completion':data,
+                  }),
+                }).then((res) => res.json())
+                .then((data) => {
+                  this.recordingStarted = false;
+                });
+              });
+            }
+          });
+
+        });
+        
+      },
+      async startRecording(calleeName,meetingid) {
+        const channelName = `${AUTH_USER}_${calleeName}`;
+        const tokenRes = await this.generateToken(channelName);
+        
+        
+        const mode ="individual";
+        console.log("your token",tokenRes)
+        
+        const customerKey = "461006031933455789b478ddcba69df6"
+        // Customer secret
+        const customerSecret = "b600378f495c46148c60dbb16e7bd05e"
+        // Concatenate customer key and customer secret and use base64 to encode the concatenated string
+        const plainCredential = customerKey + ":" + customerSecret
+        const resid = this.resourceId;
+        if (this.recordingStarted){
+        this.stopRecording(tokenRes.data.appID,AUTH_USER_ID,channelName,tokenRes,mode,meetingid)
+        }else{
+          this.generateResourceId(tokenRes.data.appID,AUTH_USER_ID,channelName,tokenRes,mode,meetingid);
         }
       },
      

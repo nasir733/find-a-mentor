@@ -12,4 +12,7 @@ urlpatterns = [
     path('callmentee/<int:meeting_id>/',views.callyourmentee,name='callyourmentee'),
     
     path('call-user/', views.call_user, name='agora-call-user'),
+    path('create_recording/',views.create_recording,name='create_recording'),
+    path('stop_recording_request/',views.stop_recording_request,name='stop_recording_request'),
+    path('recording_completed/',views.recording_completed,name='recording_completed'),
 ]
