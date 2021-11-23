@@ -1,3 +1,4 @@
+import json
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate
@@ -542,3 +543,43 @@ def completedsessions(request):
     print(booked)
     context['booked'] = booked
     return render(request, 'dashboard/completedsessions.html',context=context)
+
+
+@login_required(login_url='/dashboard/login/')
+@csrf_exempt
+def mentor_availabledates(request,content_id):
+    if request.method == "POST":
+        body = json.loads(request.body.decode('utf-8'))
+        content = Content.objects.get(id=content_id)
+        mentor = content.user
+        post_date = body['post_date']
+        weekday = int(body['week'])
+        print(post_date)
+        print(weekday)
+        if weekday == 1:
+            week="Monday"
+        elif weekday == 2:
+            week="Tuesday"
+        elif weekday == 3:
+            week="Wednesday"
+        elif weekday == 4:
+            week="Thursday"
+        elif weekday == 5:
+            week="Friday"
+        elif weekday == 6:
+            week="Saturday"
+        elif weekday == 0:
+            week="Sunday"
+        if MentorAvailability.objects.filter(mentor=mentor,weekday=week).exists():
+            if MentorBookedEvent.objects.filter(mentor=mentor,date=post_date).exists():
+                # bookedevent  = MentorBookedEvent.objects.filter(mentor=mentor,date=post_date)
+                # if bookedevent.is_available_status :
+                #     available = False
+                # else:
+                available = True
+
+            else:
+                available = True
+        else:
+            available = False
+        return JsonResponse({"date":post_date,"available":available})

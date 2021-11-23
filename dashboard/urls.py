@@ -30,4 +30,9 @@ urlpatterns = [
     path('completedsessions/',views.completedsessions, name='completedsessions'),
 
     path('skills_json/',views.skills_json, name='skills_json'),
+
+    path('mentor_availabledates/<int:content_id>/',views.mentor_availabledates,name="mentor_availabledates"),
+
+
+
 ]
