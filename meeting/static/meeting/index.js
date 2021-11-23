@@ -321,13 +321,12 @@ const app = new Vue({
                       "streamTypes": 2,
                       "channelType": 0,
                       "videoStreamType": 0,
-                      
                       "subscribeUidGroup": 0
                   },
                     "storageConfig": {
                         "accessKey": "AKIAQVPXYDDKO66DFQWP",
-                        "region": 0,
-                        "bucket": "findamentorapp",
+                        "region": 2,
+                        "bucket": "findamentorrecordings",
                         "secretKey": "rDnON5pI/KxLllrI5mx79lA1XWtGdGiRl2Td6rgx",
                         "vendor": 1,
                         "fileNamePrefix": ["directory1","directory2"]
@@ -415,7 +414,7 @@ const app = new Vue({
             console.log("recording stop resource data generated",data);
             if(data.success == true){
               
-              fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${data.resourceId}/sid/${data.sid}/mode/${mode}/stop`, {
+              fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${data.resourceId}/sid/${String(data.sid)}/mode/${mode}/stop`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json;charset=utf-8",
@@ -424,7 +423,7 @@ const app = new Vue({
                   body: JSON.stringify(
                   {
                     "cname": cname,
-                    "uid": uid,  
+                    "uid": uid, 
                     "clientRequest":{
                         "async_stop": false   
                     },

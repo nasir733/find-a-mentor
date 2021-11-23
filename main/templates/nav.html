@@ -20,8 +20,8 @@
 					
           <li>	<a href="{% url 'dashboard:logout' %}" class="getstarted scrollto">Logout</a> </li>
           {% else %}
-          <li><a href="{% url 'dashboard:menteelogin' %}" class="" style="border: 3px; border-color: rgb(10, 40, 207); border-style: solid; border-radius: 4rem; padding-left: 1rem; padding-right: 1rem; margin-left: 1rem;">Find A Mentor</a></li>
-          <li><a href="{% url 'mentor:login' %}" class="getstarted scrollto">Become A Mentor</a></li>
+          <li><a href="{% url 'dashboard:menteeregister' %}" class="" style="border: 3px; border-color: rgb(10, 40, 207); border-style: solid; border-radius: 4rem; padding-left: 1rem; padding-right: 1rem; margin-left: 1rem;">Find A Mentor</a></li>
+          <li><a href="{% url 'mentor:register' %}" class="getstarted scrollto">Become A Mentor</a></li>
           {% endif %}
           
         </ul>

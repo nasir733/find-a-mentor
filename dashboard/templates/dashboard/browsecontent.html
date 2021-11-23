@@ -70,7 +70,7 @@
                 <img src="{{content.user.image.url}}" class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
                 </a> </div>
             </td>
-            <td class="px-4 py-4 text-sm"><a href="{% url 'dashboard:requestcontent' content.id %}" class="px-3 py-2 transition-colors duration-300 bg-white rounded-md hover:bg-gray-100 hover:text-blue-600">Request</a></td>
+            <td class="px-4 py-4 text-sm"><a href="{% url 'dashboard:requestcontent' content.id %}" class="px-3 py-2 bg-red-100 rounded-md" style="font-size: large;">Request</a></td>
           </tr>
          {% endfor %}
         </tbody>
