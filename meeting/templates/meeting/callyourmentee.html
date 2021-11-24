@@ -64,7 +64,7 @@ href="{% static 'meeting/index.css' %}"
               <li><button class=' c-control--end-call' @click="endCall" ><i class="fas fa-phone">
                 </i></button></li>
               <li><button class='c-control'  @click="handleVideoToggle"><i class="fas fa-video"></i></button></li>
-              <li><button class='c-control' @click="startRecording('{{mentee.user}}','{{meeting.id}}')"><i class="fas fa-cog">${recordingStarted ? "Stop" : "Record" }</i></button></li>
+              <li><button class='c-control' @click="startRecording('{{mentee.user}}','{{meeting.id}}')">${recordingStarted ? "Stop" : "Record" }</button></li>
             </ul>
           </div>
           
