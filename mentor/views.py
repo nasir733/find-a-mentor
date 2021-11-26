@@ -375,8 +375,8 @@ def addtagcontent(request, id):
                         else:    
                             skill = Skill(catergory=catergory,name=i)
                             skill.save()
-                            content.content_tags.add(skill)
-                            content.save()
+                        content.content_tags.add(skill)
+                        content.save()
                 return redirect('mentor:content',id=id)
         
         else:
