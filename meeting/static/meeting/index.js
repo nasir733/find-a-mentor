@@ -274,13 +274,13 @@ const app = new Vue({
         this.mutedVideo = true;
       }
     },
-    async generateResourceId(AppId,uid,cname,tokenRes,mode,meetingid) {
+    async generateResourceId(AppId,uid,cname,tokenRes,mode,meetingid,token) {
       const customerKey = "461006031933455789b478ddcba69df6"
       // Customer secret
       const customerSecret = "b600378f495c46148c60dbb16e7bd05e"
       // Concatenate customer key and customer secret and use base64 to encode the concatenated string
       const plainCredential = customerKey + ":" + customerSecret
-      
+      console.log('Basic ' + btoa(plainCredential))
       fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/acquire`,{
         method: 'POST',
         headers: {
@@ -302,9 +302,13 @@ const app = new Vue({
       )
       .then(response => response.json())
       .then(data => {
+        console.log("cname is ",cname)
+        console.log("uid is",uid)
         this.resourceId = data.resourceId;
         console.log(this.resourceId);
-        fetch(`https://api.agora.io/v1/apps/${tokenRes.data.appID}/cloud_recording/resourceid/${data.resourceId}/mode/${mode}/start`, {
+        const starttoken = token;
+        console.log("starttoken is ",starttoken)
+        fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${data.resourceId}/mode/${mode}/start`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json;charset=utf-8",
@@ -315,7 +319,7 @@ const app = new Vue({
               uid: uid,
               cname: cname,
               clientRequest: {
-                token: tokenRes.data.token,
+                token: starttoken,
                 recordingConfig: {
                   maxIdleTime: 21600,
                   streamTypes: 2,
@@ -405,6 +409,7 @@ const app = new Vue({
       .then(response => response.json())
       .then(x => {
         console.log(x);
+        console.log(x.resourceid);
         fetch('/meeting/stop_recording_request/',{
           method: 'POST',
           headers: {
@@ -423,8 +428,9 @@ const app = new Vue({
         .then((data) => {
           console.log("recording stop resource data generated",data);
           if(data.success == true){
-            
-            fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${data.resourceId}/sid/${String(data.sid)}/mode/${mode}/stop`, {
+            console.log(data.resourceId);
+            console.log(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${data.resourceId}/sid/${String(data.sid).trim()}/mode/${mode}/stop`);
+            fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${data.resourceId}/sid/${String(data.sid).trim()}/mode/${mode}/stop`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json;charset=utf-8",
@@ -467,6 +473,7 @@ const app = new Vue({
     },
     async startRecording(calleeName,meetingid) {
       const channelName = `${AUTH_USER}_${calleeName}`;
+      console.log(channelName)
       const tokenRes = await this.generateToken(channelName);
       
       
@@ -482,7 +489,7 @@ const app = new Vue({
       if (this.recordingStarted){
       this.stopRecording(tokenRes.data.appID,AUTH_USER_ID,channelName,tokenRes,mode,meetingid)
       }else{
-        this.generateResourceId(tokenRes.data.appID,AUTH_USER_ID,channelName,tokenRes,mode,meetingid);
+        this.generateResourceId(tokenRes.data.appID,AUTH_USER_ID,channelName,tokenRes,mode,meetingid,tokenRes.data.token);
       }
     },
    

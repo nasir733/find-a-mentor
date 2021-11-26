@@ -36,4 +36,6 @@ urlpatterns = [
     path('browsementeetags/',views.browsementeetags,name='browsementeetags'),
     path('completedsessions/',views.completedsessions, name='completedsessions'),
 
+    path('updatemeetingurl/<int:meeting_id>/',views.updatemeetingurl, name='updatemeetingurl'),
+
 ]

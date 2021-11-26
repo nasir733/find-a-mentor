@@ -546,6 +546,15 @@ def startmeeting(request):
     
     return render(request, 'mentor/startmeeting.html', context=context)
 
+@login_required(login_url='/mentor/login/')
+def updatemeetingurl(request,meeting_id):
+    context = {}
+    if request.method == 'POST':
+        meeting_url = request.POST.get('meeting_url')
+        meeting = Meeting.objects.get(id=meeting_id)
+        meeting.meeting_url = meeting_url
+        meeting.save()
+        return redirect('mentor:startmeeting')
 
 @login_required(login_url='/mentor/login/')
 def completedsessions(request):

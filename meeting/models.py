@@ -23,6 +23,7 @@ class Meeting(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     completed = models.BooleanField(default=False,null=True,blank=True)
     mentor_time_slot = models.ForeignKey(MentorRequestTimeSlot, on_delete=models.CASCADE,null=True,blank=True)
+    meeting_url = models.URLField(default="#",null=True,blank=True)
     
     class Meta:
         ordering = ('-created_at',)

@@ -95,7 +95,28 @@
   </a>
 {% endfor %}
 </div> -->
-
+<div class="px-4 py-4 bg-white rounded-md shadow-sm lg:px-6">
+  <div class="flex flex-col items-start justify-between lg:flex-row">
+    <div class="flex space-x-6 lg:space-x-8">
+     
+      <div class="flex-1">
+        <div class="py-3">
+          <h2 class="text-lg font-semibold text-gray-800">Hey {{request.user.username}}! , Welcome To Findamentor</h2>
+          <span class="block font-semibold tracking-wide text-gray-400 uppercase transition-colors duration-300 text-xxs">First Create Account in Our Meeting Platfrom for Conducting Meetings</span>
+        </div>
+       
+      </div>
+    </div>
+    <div class="flex pt-6 pb-3 space-x-3 lg:py-3">
+    
+      <a href="https://findamentormeeting.com/" target="_blank_" class="flex px-4 py-3 text-sm font-semibold leading-4 transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
+        <span>
+         &rArr; Create Meeting Account
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
     </main>
   </div>
 {% endblock content %}
