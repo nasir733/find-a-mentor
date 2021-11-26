@@ -363,11 +363,12 @@ def addtagcontent(request, id):
         if ',' in tag:
                 tags = re.split('[,;|]', tag.lower())
                 print(tags)
+                catergory = Catergory.objects.get(id=x)
+                content = Content.objects.get(id=id)
                 for i in tags:
-                    catergory = Catergory.objects.get(id=x)
-                    content = Content.objects.get(id=id)
                     if content.content_tags.filter(Q(name=i),Q(catergory=catergory)).exists():
-                                return redirect('mentor:content',id=id)
+
+                                print("exits")
                     else:
                         if Skill.objects.filter(Q(name=i)&Q(catergory=catergory)).exists():
                             skill = Skill.objects.get(name=i,catergory=catergory)
@@ -376,7 +377,7 @@ def addtagcontent(request, id):
                             skill.save()
                             content.content_tags.add(skill)
                             content.save()
-                            return redirect('mentor:content',id=id)
+                return redirect('mentor:content',id=id)
         
         else:
             catergory = Catergory.objects.get(id=x)
