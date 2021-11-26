@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate
 from django.contrib.auth import login as auth_login
@@ -359,21 +360,38 @@ def addtagcontent(request, id):
     if request.method == 'POST':
         tag = (request.POST.get('tag')).lower()
         x =int( request.POST.get('catergoryid'))
-        print(x)
-        print(tag)
-        catergory = Catergory.objects.get(id=x)
-        content = Content.objects.get(id=id)
-        if content.content_tags.filter(Q(name=tag),Q(catergory=catergory)).exists():
-            return redirect('mentor:content',id=id)
+        if ',' in tag:
+                tags = re.split('[,;|]', tag.lower())
+                print(tags)
+                for i in tags:
+                    catergory = Catergory.objects.get(id=x)
+                    content = Content.objects.get(id=id)
+                    if content.content_tags.filter(Q(name=i),Q(catergory=catergory)).exists():
+                                return redirect('mentor:content',id=id)
+                    else:
+                        if Skill.objects.filter(Q(name=i)&Q(catergory=catergory)).exists():
+                            skill = Skill.objects.get(name=i,catergory=catergory)
+                        else:    
+                            skill = Skill(catergory=catergory,name=i)
+                            skill.save()
+                            content.content_tags.add(skill)
+                            content.save()
+                            return redirect('mentor:content',id=id)
+        
         else:
-            if Skill.objects.filter(Q(name=tag)&Q(catergory=catergory)).exists():
-                skill = Skill.objects.get(name=tag,catergory=catergory)
-            else:    
-                skill = Skill(catergory=catergory,name=tag)
-                skill.save()
-            content.content_tags.add(skill)
-            content.save()
-            return redirect('mentor:content',id=id)
+            catergory = Catergory.objects.get(id=x)
+            content = Content.objects.get(id=id)
+            if content.content_tags.filter(Q(name=tag),Q(catergory=catergory)).exists():
+                return redirect('mentor:content',id=id)
+            else:
+                if Skill.objects.filter(Q(name=tag)&Q(catergory=catergory)).exists():
+                    skill = Skill.objects.get(name=tag,catergory=catergory)
+                else:    
+                    skill = Skill(catergory=catergory,name=tag)
+                    skill.save()
+                content.content_tags.add(skill)
+                content.save()
+                return redirect('mentor:content',id=id)
 
 def publicprofile(request,username):
     context = {}
