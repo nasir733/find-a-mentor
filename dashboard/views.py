@@ -31,7 +31,8 @@ import re
 User = get_user_model()
 
 
-
+def passwordlogin(request):
+    return redirect('/')
 
 
 @login_required(login_url='/dashboard/login/')

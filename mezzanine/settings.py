@@ -18,6 +18,7 @@ SECRET_KEY = 'django-insecure-s85)mgqbzhu_0^jml%q*dkxpyp$4n)ptji3zw)o(ve@*9tm*eh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+    # During development only
 ALLOWED_HOSTS = []
 LOGIN_REDIRECT_URL = '/dashboard/login/'
 LOGIN_URL = '/dashboard/login/'
@@ -196,11 +197,18 @@ STRIPE_SECRET_KEY = "sk_test_51GadadExWTjX75uFGi8HJDnVtz1xsoPqSlVu5C1HQNK5DjdN9A
 STRIPE_PUBLISHABLE_KEY = "pk_test_51GadadExWTjX75uFcS3TQPfUUSt3dkT1Bh92FLcpB3gBUlTI40JU2xp1VPCzktdISjy0dtM14E6WxZP7IoSxlZK100KQEFLvyV"
 STRIPE_ENDPOINT_SECRET = "whsec_dFr4164bMwyi6hTS5KCmWzvanOGGlIVi"
 
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = 'info@kleui.com'
 AWS_ACCESS_KEY_ID = 'AKIAQVPXYDDKO66DFQWP'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'findamentorapp'
+AWS_SES_REGION_NAME = 'us-east-1' #(ex: us-east-2)
+AWS_SES_REGION_ENDPOINT ='email.us-east-1.amazonaws.com'
 
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_DEFAULT_ACL = None
 
     # s3 static settings
 
