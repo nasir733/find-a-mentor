@@ -20,6 +20,8 @@ from datetime import *
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
 from users.models import *
+from django.core.mail import send_mail
+from mezzanine.settings import DEFAULT_FROM_EMAIL
 User = get_user_model()
 
 
@@ -573,6 +575,15 @@ def updatemeetingurl(request,meeting_id):
         meeting = Meeting.objects.get(id=meeting_id)
         meeting.meeting_url = meeting_url
         meeting.save()
+        message = "{} Session Updated with New Meeting by {}".format(meeting.content.title,meeting.mentor.user.username)
+        content = meeting.meeting_url
+        send_mail(
+                    message,
+                    content,
+                    DEFAULT_FROM_EMAIL,
+                    [meeting.mentee.user.email],
+                    fail_silently=False,
+                )
         return redirect('mentor:startmeeting')
 
 @login_required(login_url='/mentor/login/')

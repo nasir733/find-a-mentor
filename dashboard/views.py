@@ -24,9 +24,9 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
-
+from django.core.mail import send_mail
 from .serializers import *
-
+from mezzanine.settings import DEFAULT_FROM_EMAIL
 import re
 User = get_user_model()
 
@@ -383,6 +383,14 @@ def  requestcontent(request, content_id):
             meeting.save()
             url = "/mentor/startmeeting/".format(mentee_request.id)
             message= "{} requested {} on {}".format(request.user.username,content.title,date)
+            content = "{} requested {} on {} from {} - {}".format(request.user.username,content.title,date,mentor_selected_time_slot.from_time,mentor_selected_time_slot.to_time)
+            send_mail(
+                    message,
+                    content,
+                    DEFAULT_FROM_EMAIL,
+                    [mentor.user.email],
+                    fail_silently=False,
+                )
             notify.send(request.user, recipient=mentor.user, verb='Content Booked', description=message,url=url)
 			
             return JsonResponse({'status':'success'})
