@@ -1,4 +1,4 @@
-agora-python-sdk==3.1.2.10
+
 aiodns==3.0.0
 aiofile==3.7.2
 aiohttp==3.8.0
