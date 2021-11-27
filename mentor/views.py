@@ -12,6 +12,7 @@ from django.db.models import Q
 
 from django.contrib import messages
 from meeting.models import Meeting
+from mentor.models import DashboardVideo
 from users.forms import  CreateContentForm, CustomUpdateUserForm, MentorProfileUpdateForm
 # Create your views here.
 from django.contrib.auth.decorators import login_required
@@ -43,7 +44,7 @@ def home(request):
     request.session['catergory'] = list(data.values())
     mentor_requests = MentorRequest.objects.filter(mentor=request.user.mentorprofile)
     context['mentor_requests'] = mentor_requests
-
+    context['video'] = DashboardVideo.objects.all().first()
     return render(request, 'mentor/index.html', context=context)
 
 
