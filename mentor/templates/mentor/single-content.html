@@ -81,14 +81,14 @@
           {% csrf_token %}
           
             
-            <select name="catergoryid" class="custom-select" id="inputGroupSelect01" required>
-    
-              <option selected value="">Select A Category</option>
-              {% for x in catergories %}
-              <option value="{{x.id}}">{{x.name}}</option>
-            
-              {% endfor %}
-            </select>
+<!--            <select name="catergoryid" class="custom-select" id="inputGroupSelect01" required>-->
+<!--    -->
+<!--              <option selected value="">Select A Category</option>-->
+<!--              {% for x in catergories %}-->
+<!--              <option value="{{x.id}}">{{x.name}}</option>-->
+<!--            -->
+<!--              {% endfor %}-->
+<!--            </select>-->
    
         <input name="tag" type="text" class="w-full px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md" placeholder="Add Tags">
       </form>
