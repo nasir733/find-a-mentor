@@ -399,8 +399,8 @@ def addtagcontent(request, id):
 
 def publicprofile(request,username):
     context = {}
-    user = User.objects.get(username=username)
-    mentorprofile = MentorProfile.objects.get(user=user)
+    user = User.objects.filter(username=username).first()
+    mentorprofile = MentorProfile.objects.filter(user=user).first()
     context['user'] = user
     context['mentorprofile'] = mentorprofile
     content = Content.objects.filter(user=mentorprofile,is_active=True)
