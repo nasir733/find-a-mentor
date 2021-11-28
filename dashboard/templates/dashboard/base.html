@@ -13,13 +13,13 @@
 
 
   <link rel="stylesheet"
-    href={% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %}>
+    href="{% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %}">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 
-  <script src={% static 'dashboard/styles/js/app.js' %} defer></script>
+  <script src="{% static 'dashboard/styles/js/app.js' %}" defer></script>
 
 </head>
 
@@ -60,7 +60,7 @@
                 x-cloak>
                 <div class="flex justify-between px-4 py-3 bg-gray-900 bg-opacity-90">
                   <a href="#" class="flex items-center justify-center lg:justify-start">
-                    <img src={% static 'dashboard/styles/images/aircontrol-logo.svg' %} alt="logo"
+                    <img src="{% static 'dashboard/styles/images/aircontrol-logo.svg' %}" alt="logo"
                       class="inline-block h-4">
                   </a>
                   <button @click="smallMenu = false"
@@ -138,7 +138,7 @@
                             </button>
                             <ul x-show="isOpen" x-transition:enter.duration.500ms x-transition:leave.duration.100ms>
                               <li>
-                                <a href={% static 'dashboard/styles/pages/projects/overview/' %}
+                                <a href="{% static 'dashboard/styles/pages/projects/overview/' %}"
                                   :class="isInUrl('/pages/projects/overview/') ? 'bg-gray-900 before:bg-blue-500' : 'bg-transparent before:bg-gray-500'"
                                   class="flex items-center flex-1 px-4 py-1 pl-8 space-x-2 text-sm leading-7 hover:before:bg-blue-500 before:top-2 hover:bg-gray-900 group before:block before:rounded-full before:h-1 before:w-1 before:mr-4">
                                   <span :class="isInUrl('/pages/projects/overview/') ? 'text-white' : ''"
@@ -146,7 +146,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a href={% static 'dashboard/styles/pages/projects/cards/' %}
+                                <a href="{% static 'dashboard/styles/pages/projects/cards/' %}"
                                   :class="isInUrl('/pages/projects/cards/') ? 'bg-gray-900 before:bg-blue-500' : 'bg-transparent before:bg-gray-500'"
                                   class="flex items-center flex-1 px-4 py-1 pl-8 space-x-2 text-sm leading-7 hover:before:bg-blue-500 before:top-2 hover:bg-gray-900 group before:block before:rounded-full before:h-1 before:w-1 before:mr-4">
                                   <span :class="isInUrl('/pages/projects/cards/') ? 'text-white' : ''"
@@ -154,7 +154,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a href={% static 'dashboard/styles/pages/projects/cards2/' %}
+                                <a href="{% static 'dashboard/styles/pages/projects/cards2/' %}"
                                   :class="isInUrl('/pages/projects/cards2/') ? 'bg-gray-900 before:bg-blue-500' : 'bg-transparent before:bg-gray-500'"
                                   class="flex items-center flex-1 px-4 py-1 pl-8 space-x-2 text-sm leading-7 hover:before:bg-blue-500 before:top-2 hover:bg-gray-900 group before:block before:rounded-full before:h-1 before:w-1 before:mr-4">
                                   <span :class="isInUrl('/pages/projects/cards2/') ? 'text-white' : ''"
@@ -162,7 +162,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a href={% static 'dashboard/styles/pages/projects/files/' %}
+                                <a href="{% static 'dashboard/styles/pages/projects/files/' %}"
                                   :class="isInUrl('/pages/projects/files/') ? 'bg-gray-900 before:bg-blue-500' : 'bg-transparent before:bg-gray-500'"
                                   class="flex items-center flex-1 px-4 py-1 pl-8 space-x-2 text-sm leading-7 hover:before:bg-blue-500 before:top-2 hover:bg-gray-900 group before:block before:rounded-full before:h-1 before:w-1 before:mr-4">
                                   <span :class="isInUrl('/pages/projects/files/') ? 'text-white' : ''"
@@ -186,7 +186,7 @@
                             </button>
                             <ul x-show="isOpen" x-transition:enter.duration.500ms x-transition:leave.duration.100ms>
                               <li>
-                                <a href={% static 'dashboard/styles/pages/profile/overview/' %}
+                                <a href="{% static 'dashboard/styles/pages/profile/overview/' %}"
                                   :class="isInUrl('/pages/profile/overview/') ? 'bg-gray-900 before:bg-blue-500' : 'bg-transparent before:bg-gray-500'"
                                   class="flex items-center flex-1 px-4 py-1 pl-8 space-x-2 text-sm leading-7 hover:before:bg-blue-500 before:top-2 hover:bg-gray-900 group before:block before:rounded-full before:h-1 before:w-1 before:mr-4">
                                   <span :class="isInUrl('/pages/profile/overview/') ? 'text-white' : ''"
@@ -194,7 +194,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a href={% static 'dashboard/styles/pages/profile/myprofile/' %}
+                                <a href="{% static 'dashboard/styles/pages/profile/myprofile/' %}"
                                   :class="isInUrl('/pages/profile/myprofile/') ? 'bg-gray-900 before:bg-blue-500' : 'bg-transparent before:bg-gray-500'"
                                   class="flex items-center flex-1 px-4 py-1 pl-8 space-x-2 text-sm leading-7 hover:before:bg-blue-500 before:top-2 hover:bg-gray-900 group before:block before:rounded-full before:h-1 before:w-1 before:mr-4">
                                   <span :class="isInUrl('/pages/profile/myprofile/') ? 'text-white' : ''"

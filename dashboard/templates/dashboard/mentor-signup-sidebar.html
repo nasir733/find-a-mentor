@@ -10,9 +10,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <link rel="stylesheet"
-    href={% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %}>
+    href="{% static 'dashboard/styles/css/main.bundle.f7e41da01989ad32cb56db7783359d526581f5ccc2119670e36186deedaf78e2.css' %}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src={% static 'dashboard/styles/js/app.js' %} defer></script>
+  <script src="{% static 'dashboard/styles/js/app.js' %}" defer></script>
 </head>
 
 <body class="font-sans ">
@@ -25,7 +25,7 @@
           <div class="relative z-10 ">
             <div class="mb-8 ">
               <a href="/">
-                <img src={% static 'dashboard/styles/images/titlelogo.png' %} style="transform: scale(7); margin-left: 4rem;" alt="logo"
+                <img src="{% static 'dashboard/styles/images/titlelogo.png' %}" style="transform: scale(7); margin-left: 4rem;" alt="logo"
                   class="z-20 inline-block h-5 md:h-7"></a>
             </div>
             <p class="text-sm text-left text-blue-100 md:text-base">Free Mentorship From The Top Experts In The World
@@ -187,7 +187,7 @@
                 <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Register As A
                   <br />Mentor</h2>
                 <p class="text-base font-medium text-gray-500">Already have an account? <a
-                    href={% url 'mentor:login' %} class="text-blue-600 hover:underline">Login here</a></p>
+                    href="{% url 'mentor:login' %}" class="text-blue-600 hover:underline">Login here</a></p>
               </div>
 
               <form action="{% url 'mentor:register' %}" method="POST" class="block space-y-2">
