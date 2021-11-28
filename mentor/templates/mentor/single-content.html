@@ -11,7 +11,9 @@
   
           
   <div class="h-24 overflow-hidden rounded-md shadow-sm md:h-48" style="height: fit-content; max-height: 50vh;">
-  <img src="{{content.image.url}}" fill="#2563eb">  
+    {% if content.image %}
+  <img src="{{content.image.url}}" fill="#2563eb">
+    {% endif %}
   </div>
   <button class="absolute z-30 flex items-center justify-center w-100 h-8 p-10 text-blue-400 transition-all duration-300 scale-100 bg-white rounded-full hover:scale-105 top-4 right-4 hover:bg-gray-50">
     <a href="{% url 'mentor:contentupdate' content.id %}" class="px-4 py-3 text-lg font-semibold leading-4 transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700 text-blue-50">
@@ -22,7 +24,9 @@
   </button>
   <div class="relative z-20 flex flex-col items-center justify-between -mb-12 -translate-y-12 md:-mb-24 md:-translate-y-24">
     <div class="relative w-24 md:w-32">
+      {% if content.user.image %}
       <img src="{{content.user.image.url}}" alt="" class="w-24 h-24 border-4 rounded-full border-whtie md:w-32 md:h-32">
+      {% endif %}
       <div class="absolute w-4 h-4 bg-green-500 border-2 border-white rounded-full right-2 top-16 md:top-24">&nbsp;</div>
     </div>
     <div class="grid grid-cols-1 gap-2 pt-6 pb-6 md:pt-6 md:pb-8 md:gap-6 lg:pt-8 lg:pb-10 md:grid-cols-4 lg:px-6">
@@ -104,7 +108,9 @@
             <!-- comment -->
             {% for x in reviews %}
             <div class="flex items-start col-span-1 pt-3 space-x-3">
+              {% if x.user.menteeprofile.image %}
               <img src="{{x.user.menteeprofile.image.url}}" class="w-12 h-12 rounded-full" alt="">
+              {% endif %}
               <div class="flex-1">
                 <div class="px-4 py-4 bg-gray-100 rounded-md lg:px-6 lg:pb-6">
                   <div class="flex items-end justify-between pb-3">
