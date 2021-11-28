@@ -56,7 +56,9 @@
             
             <td class="px-4 py-4"><a href="{% url 'dashboard:content' content.id %}">
               <div class="flex space-x-4 w-max">
+                {% if content.image %}
                 <img src="{{content.image.url}}" class="w-10 h-10 rounded-md" alt="">
+                {% endif %}
                 <div class="flex-1">
                   <span class="text-base font-semibold text-gray-800 ">{{content.title}}</span>
                   <span class="block mb-1 font-semibold tracking-wide text-gray-500 uppercase text-xxs">Updated {{content.updated_at}}</span>
@@ -67,7 +69,9 @@
             <td class="px-4 py-4">
               <div class="flex items-center -space-x-3 w-max">
                 <a href="{% url 'mentor:public' content.user.user.username %}">
+                  {% if content.user.image %}
                 <img src="{{content.user.image.url}}" class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
+                  {% endif %}
                 </a> </div>
             </td>
             <td class="px-4 py-4 text-sm"><a href="{% url 'dashboard:requestcontent' content.id %}" class="px-3 py-2 bg-red-100 rounded-md" style="font-size: large;">Request</a></td>
