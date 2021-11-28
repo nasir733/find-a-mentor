@@ -1,6 +1,7 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
 {% block content %}
+
 <div class="flex-1">
     <main class="px-6 py-5 mx-auto space-y-4 md:py-8 md:space-y-6 xl:px-12">
       <div class="bg-white rounded-md shadow-sm">
@@ -39,18 +40,20 @@
 
   </div>
 </div>
-<!-- <h1 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">Browse Contents <a href="{% url 'dashboard:browse' %}">....</a></h1>
+<h1 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">Browse Contents <a href="{% url 'dashboard:browse' %}">....</a></h1>
 <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
- 
+
   {% for x in interested_contents %}
   <a href="{% url 'dashboard:content' x.id %}" class="transition-all duration-300 bg-white rounded-md shadow-sm hover:shadow-md hover:-translate-y-1">
     <div class="px-4 pt-6 pb-8 lg:px-6">
       <div class="flex justify-between mb-4">
+        {% if x.image %}
         <img src="{{x.image.url}}" class="w-12 h-12 rounded-md" alt="">
+        {% endif %}
         <div>
           <span class="flex items-center px-2 py-2 space-x-1 font-semibold bg-gray-100 rounded-lg text">
             <span class="block font-semibold tracking-wide text-gray-400 uppercase text-xxs"> </span>
-           
+
             <span class="text-sm text-green-600">
               {{x.user.user.username}}
             </span>
@@ -60,16 +63,18 @@
       <h2 class="text-lg font-semibold text-gray-800">{{x.title}}</h2>
       <span class="block font-semibold tracking-wide text-gray-400 uppercase transition-colors duration-300 text-xxs">Last Update : {{x.updated_at}}</span>
       <br/>
-    
-      
+
+
       <div class="flex items-center mt-6 -space-x-6">
+        {% if x.user.image.url %}
         <img src='{{x.user.image.url}}' class="w-10 h-10 border-2 border-white rounded-full shadow-sm" alt="">
+        {% endif %}
         <span class="lex items-center px-2 py-2 space-x-1 font-semibold rounded-lg text">{{x.user.user.username}}</span>
       </div>
     </div>
   </a>
 {% endfor %}
-</div> -->
+</div>
 
 
     </main>
