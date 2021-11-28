@@ -362,21 +362,21 @@ def singlecontentupdate(request, id):
 def addtagcontent(request, id):
     if request.method == 'POST':
         tag = (request.POST.get('tag')).lower()
-        x =int( request.POST.get('catergoryid'))
+        # x =int( request.POST.get('catergoryid'))
         if ',' in tag:
                 tags = re.split('[,;|]', tag.lower())
                 print(tags)
-                catergory = Catergory.objects.get(id=x)
+                # catergory = Catergory.objects.get(id=x)
                 content = Content.objects.get(id=id)
                 for i in tags:
-                    if content.content_tags.filter(Q(name=i),Q(catergory=catergory)).exists():
+                    if content.content_tags.filter(Q(name=i)).exists():
 
                                 print("exits")
                     else:
-                        if Skill.objects.filter(Q(name=i)&Q(catergory=catergory)).exists():
-                            skill = Skill.objects.get(name=i,catergory=catergory)
+                        if Skill.objects.filter(Q(name=i)).exists():
+                            skill = Skill.objects.get(name=i)
                         else:    
-                            skill = Skill(catergory=catergory,name=i)
+                            skill = Skill(name=i)
                             skill.save()
                         content.content_tags.add(skill)
                         content.save()
@@ -399,8 +399,8 @@ def addtagcontent(request, id):
 
 def publicprofile(request,username):
     context = {}
-    user = User.objects.filter(username=username).first()
-    mentorprofile = MentorProfile.objects.filter(user=user).first()
+    user = User.objects.get(username=username)
+    mentorprofile = MentorProfile.objects.get(user=user)
     context['user'] = user
     context['mentorprofile'] = mentorprofile
     content = Content.objects.filter(user=mentorprofile,is_active=True)
