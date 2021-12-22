@@ -95,7 +95,7 @@ class Skill(models.Model):
     description = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-        return "{} - {}".format(self.catergory.name, self.name)
+        return "{} - {}".format(self.catergory.name)
 class Content(models.Model):
     user = models.ForeignKey(MentorProfile, on_delete=models.CASCADE,null=True,blank=True)
     title = models.CharField(max_length=120, blank=True, null=True)
