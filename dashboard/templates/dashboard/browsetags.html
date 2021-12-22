@@ -33,7 +33,8 @@
         </div>
         <br/>
         {% for x in tags %}
-        <a href="{% url 'dashboard:tagcontent'  category=x.catergory.name  tag=x.name  %}" class="px-4 py-4 text-sm text-blue-500">#{{x.name}}</a>
+        
+        <a href="/dashboard/browse/{{x.catergory.name}}/{{x.name}}" class="px-4 py-4 text-sm text-blue-500">#{{x.name}}</a>
         {% endfor %}
         </div>
 
