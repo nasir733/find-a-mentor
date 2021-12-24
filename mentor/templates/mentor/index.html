@@ -4,8 +4,8 @@
 <div class="flex-1">
     <main class="px-6 py-5 mx-auto space-y-4 md:py-8 md:space-y-6 xl:px-12">
       <div class="bg-white rounded-md shadow-sm">
-  <div class="grid grid-cols-2 gap-6 pt-6 pb-6 md:pt-6 md:pb-8 md:gap-6 lg:pt-8 lg:pb-10 md:grid-cols-3 lg:px-6">
-    <div class="pr-4 text-center border-gray-200 md:border-r-2">
+        <div class="grid grid-cols-2 gap-6 pt-6 pb-6 md:pt-6 md:pb-8 md:gap-6 lg:pt-8 lg:pb-10 md:grid-cols-3 lg:px-6">
+          <div class="pr-3 text-center border-gray-200 md:border-r-2">
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Mentees</span>
       <div class="flex items-center justify-center mx-auto mt-2 space-x-2">
         <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">{{total_mentees}}</h2>
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="pr-4 text-center border-gray-200 md:border-r-2">
+    <div class="pr-3 text-center border-gray-200 md:border-r-2">
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Hours Teaching</span>
       <div class="flex items-center justify-center mt-2 space-x-2 ">
         <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">{{request.user.mentorprofile.total_hours_teached}}</h2>
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <div class="pr-4 text-center border-gray-200 md:border-r-2">
+    <div class="pr-3 text-center border-gray-200 md:border-r-2">
       <span class="block font-bold tracking-wide text-gray-600 uppercase text-xxs">Total Sessions</span>
       <div class="flex items-center justify-center mt-2 space-x-2 ">
         <h2 class="text-lg font-semibold text-gray-800 lg:text-2xl xl:text-3xl">{{total_sessions}}</h2>
@@ -134,7 +134,7 @@
     </div>
   
   </div>
-  <iframe width="560" height="315" src="{{video.video}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <iframe width="100%" height="100%" src="{{video.video}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 </div></center>
 

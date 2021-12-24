@@ -383,7 +383,7 @@ def addtagcontent(request, id):
                 return redirect('mentor:content',id=id)
         
         else:
-            catergory = Catergory.objects.get(id=x)
+            catergory = Catergory.objects.get_or_create(name="Other")[0]
             content = Content.objects.get(id=id)
             if content.content_tags.filter(Q(name=tag),Q(catergory=catergory)).exists():
                 return redirect('mentor:content',id=id)

@@ -1,9 +1,10 @@
-
+from django.core.management.utils import get_random_secret_key
 import dj_database_url
 import dotenv
 from pathlib import Path
 import django_heroku
 import os
+import sys
 dotenv.load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,20 +14,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s85)mgqbzhu_0^jml%q*dkxpyp$4n)ptji3zw)o(ve@*9tm*eh'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-    # During development only
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS",
+                          "127.0.0.1,localhost").split(",")
+
 LOGIN_REDIRECT_URL = '/dashboard/login/'
 LOGIN_URL = '/dashboard/login/'
 
 
-
 # Application definition
-
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,11 +45,11 @@ INSTALLED_APPS = [
     'timezone_field',
     'direct',
     'storages',
-     'corsheaders',
-     'rest_framework',
-     'notifications',
-     'meeting.apps.MeetingConfig',
-     
+    'corsheaders',
+    'rest_framework',
+    'notifications',
+    'meeting.apps.MeetingConfig',
+
 ]
 CORS_ALLOW_ORIGIN = '*'
 CORS_ALLOW_HEADERS = [
@@ -73,7 +75,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MIDDLEWARE = [
 
-     'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -115,14 +117,44 @@ WSGI_APPLICATION = 'mezzanine.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+
+
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
-DATABASES['default'] = dj_database_url.config(
-    conn_max_age=600, ssl_require=True)
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
+
+
+# if DEBUG:
+
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.postgresql",
+#             "NAME": 'defaultdb',
+#             "USER": 'doadmin',
+#             "PASSWORD": 'uVS7qDiOdgqCo8Sw',
+#             "HOST": 'db-postgresql-sfo2-80924-do-user-10501756-0.b.db.ondigitalocean.com',
+#             "PORT": "25060",
+#         }
+#     }
+# DATABASES['default'] = dj_database_url.config(
+#     conn_max_age=600, ssl_require=True)
 
 
 # Password validation
@@ -162,7 +194,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -183,7 +214,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "images/")
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_NOTIFICATIONS_CONFIG = {
-      'USE_JSONFIELD': True,
+    'USE_JSONFIELD': True,
 }
 # live
 
@@ -203,14 +234,14 @@ DEFAULT_FROM_EMAIL = 'info@kleui.com'
 AWS_ACCESS_KEY_ID = 'AKIAQVPXYDDKO66DFQWP'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'findamentorapp'
-AWS_SES_REGION_NAME = 'us-east-1' #(ex: us-east-2)
-AWS_SES_REGION_ENDPOINT ='email.us-east-1.amazonaws.com'
+AWS_SES_REGION_NAME = 'us-east-1'  # (ex: us-east-2)
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
 
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_DEFAULT_ACL = None
 
-    # s3 static settings
+# s3 static settings
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
@@ -221,13 +252,4 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-
 django_heroku.settings(locals())
-
-"""
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
-"""
