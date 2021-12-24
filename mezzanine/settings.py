@@ -18,11 +18,10 @@ SECRET_KEY = 'django-insecure-s85)mgqbzhu_0^jml%q*dkxpyp$4n)ptji3zw)o(ve@*9tm*eh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-    # During development only
+# During development only
 ALLOWED_HOSTS = []
 LOGIN_REDIRECT_URL = '/dashboard/login/'
 LOGIN_URL = '/dashboard/login/'
-
 
 
 # Application definition
@@ -43,11 +42,11 @@ INSTALLED_APPS = [
     'timezone_field',
     'direct',
     'storages',
-     'corsheaders',
-     'rest_framework',
-     'notifications',
-     'meeting.apps.MeetingConfig',
-     
+    'corsheaders',
+    'rest_framework',
+    'notifications',
+    'meeting.apps.MeetingConfig',
+
 ]
 CORS_ALLOW_ORIGIN = '*'
 CORS_ALLOW_HEADERS = [
@@ -73,7 +72,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MIDDLEWARE = [
 
-     'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -115,12 +114,26 @@ WSGI_APPLICATION = 'mezzanine.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+
+if DEBUG:
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": f'{ os.environ.get("NAME")}',
+            "USER": f'{ os.environ.get("USER")}',
+            "PASSWORD": f'{os.environ.get("PASSWORD")}',
+            "HOST": f'{os.environ.get("HOST")}',
+            "PORT": "5432",
+        }
     }
-}
 # DATABASES['default'] = dj_database_url.config(
 #     conn_max_age=600, ssl_require=True)
 
@@ -162,7 +175,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -183,7 +195,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "images/")
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_NOTIFICATIONS_CONFIG = {
-      'USE_JSONFIELD': True,
+    'USE_JSONFIELD': True,
 }
 # live
 
@@ -203,14 +215,14 @@ DEFAULT_FROM_EMAIL = 'info@kleui.com'
 AWS_ACCESS_KEY_ID = 'AKIAQVPXYDDKO66DFQWP'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'findamentorapp'
-AWS_SES_REGION_NAME = 'us-east-1' #(ex: us-east-2)
-AWS_SES_REGION_ENDPOINT ='email.us-east-1.amazonaws.com'
+AWS_SES_REGION_NAME = 'us-east-1'  # (ex: us-east-2)
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
 
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_DEFAULT_ACL = None
 
-    # s3 static settings
+# s3 static settings
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
@@ -219,7 +231,6 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
 
 
 django_heroku.settings(locals())
