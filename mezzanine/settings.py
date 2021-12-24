@@ -127,10 +127,10 @@ if DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": f'{ os.environ.get("NAME")}',
-            "USER": f'{ os.environ.get("USER")}',
-            "PASSWORD": f'{os.environ.get("PASSWORD")}',
-            "HOST": f'{os.environ.get("HOST")}',
+            "NAME": 'findamentor',
+            "USER": 'nasir',
+            "PASSWORD": '24242424',
+            "HOST": 'findamentor.caxvrbwoypl0.us-east-1.rds.amazonaws.com',
             "PORT": "5432",
         }
     }
