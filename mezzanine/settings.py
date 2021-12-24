@@ -127,11 +127,11 @@ if DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": 'findamentor',
-            "USER": 'nasir',
-            "PASSWORD": '24242424',
-            "HOST": 'findamentor.caxvrbwoypl0.us-east-1.rds.amazonaws.com',
-            "PORT": "5432",
+            "NAME": 'defaultdb',
+            "USER": 'doadmin',
+            "PASSWORD": 'uVS7qDiOdgqCo8Sw',
+            "HOST": 'db-postgresql-sfo2-80924-do-user-10501756-0.b.db.ondigitalocean.com',
+            "PORT": "25060",
         }
     }
 # DATABASES['default'] = dj_database_url.config(
