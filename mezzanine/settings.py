@@ -1,4 +1,5 @@
 
+from django.core.management.utils import get_random_secret_key
 import dj_database_url
 import dotenv
 from pathlib import Path
@@ -13,19 +14,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s85)mgqbzhu_0^jml%q*dkxpyp$4n)ptji3zw)o(ve@*9tm*eh'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# During development only
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS",
+                          "127.0.0.1,localhost").split(",")
+
 LOGIN_REDIRECT_URL = '/dashboard/login/'
 LOGIN_URL = '/dashboard/login/'
 
 
 # Application definition
-
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -122,18 +125,34 @@ WSGI_APPLICATION = 'mezzanine.wsgi.application'
 #         }
 #     }
 
-if DEBUG:
 
+if DEVELOPMENT_MODE is True:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": 'defaultdb',
-            "USER": 'doadmin',
-            "PASSWORD": 'uVS7qDiOdgqCo8Sw',
-            "HOST": 'db-postgresql-sfo2-80924-do-user-10501756-0.b.db.ondigitalocean.com',
-            "PORT": "25060",
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
         }
     }
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
+
+
+# if DEBUG:
+
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.postgresql",
+#             "NAME": 'defaultdb',
+#             "USER": 'doadmin',
+#             "PASSWORD": 'uVS7qDiOdgqCo8Sw',
+#             "HOST": 'db-postgresql-sfo2-80924-do-user-10501756-0.b.db.ondigitalocean.com',
+#             "PORT": "25060",
+#         }
+#     }
 # DATABASES['default'] = dj_database_url.config(
 #     conn_max_age=600, ssl_require=True)
 
