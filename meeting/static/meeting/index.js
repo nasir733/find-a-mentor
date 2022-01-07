@@ -395,6 +395,7 @@ const app = new Vue({
       const customerSecret = "b600378f495c46148c60dbb16e7bd05e";
       // Concatenate customer key and customer secret and use base64 to encode the concatenated string
       const plainCredential = customerKey + ":" + customerSecret;
+      this.recordingStarted = false;
       this.mediaRecorder.stop();
       const blob = new Blob(this.chunks, {
         type: "video/mp4",
@@ -402,7 +403,7 @@ const app = new Vue({
       const url = URL.createObjectURL(blob);
       console.log(url, "url---------------");
       console.log("Recording has Stopped --------------");
-      this.recordingStarted = false;
+
       const a = document.createElement("a");
       a.href = url;
       a.download = "recording.mp4";
