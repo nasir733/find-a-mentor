@@ -409,98 +409,98 @@ const app = new Vue({
       a.download = "recording.mp4";
       a.click();
 
-      fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/acquire`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Basic " + btoa(plainCredential),
-        },
-        body: JSON.stringify({
-          cname: cname,
-          uid: uid,
-          clientRequest: {
-            region: "AP",
-            // "resourceExpiredHour":  24
-          },
-        }),
-      })
-        .then((response) => response.json())
-        .then((x) => {
-          console.log(x);
-          console.log(x.resourceid);
-          this.resourceId = x.resourceId;
-          fetch("/meeting/stop_recording_request/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": CSRF_TOKEN,
-            },
-            body: JSON.stringify({
-              meetingid: meetingid,
-              mode: mode,
-              uid: uid,
-              cname: cname,
-              resourceId: x.resourceId,
-            }),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log("recording stop resource data generated", data);
-              if (data.success == true) {
-                console.log(data.resourceId);
-                // fetch(
-                //   `https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${this.resourceId}/sid/${this.sid}/mode/${mode}/query`,
-                //   {
-                //     method: "GET",
-                //     headers: {
-                //       "Content-Type": "application/json;charset=utf-8",
-                //       Authorization: "Basic " + btoa(plainCredential),
-                //     },
-                //   }
-                // )
-                //   .then((res) => res.json())
-                //   .then((data) => console.table(data));
+      // fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/acquire`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: "Basic " + btoa(plainCredential),
+      //   },
+      //   body: JSON.stringify({
+      //     cname: cname,
+      //     uid: uid,
+      //     clientRequest: {
+      //       region: "AP",
+      //       // "resourceExpiredHour":  24
+      //     },
+      //   }),
+      // })
+      //   .then((response) => response.json())
+      //   .then((x) => {
+      //     console.log(x);
+      //     console.log(x.resourceid);
+      //     this.resourceId = x.resourceId;
+      //     fetch("/meeting/stop_recording_request/", {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         "X-CSRFToken": CSRF_TOKEN,
+      //       },
+      //       body: JSON.stringify({
+      //         meetingid: meetingid,
+      //         mode: mode,
+      //         uid: uid,
+      //         cname: cname,
+      //         resourceId: x.resourceId,
+      //       }),
+      //     })
+      //       .then((res) => res.json())
+      //       .then((data) => {
+      //         console.log("recording stop resource data generated", data);
+      //         if (data.success == true) {
+      //           console.log(data.resourceId);
+      //           fetch(
+      //             `https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${this.resourceId}/sid/${this.sid}/mode/${mode}/query`,
+      //             {
+      //               method: "GET",
+      //               headers: {
+      //                 "Content-Type": "application/json;charset=utf-8",
+      //                 Authorization: "Basic " + btoa(plainCredential),
+      //               },
+      //             }
+      //           )
+      //             .then((res) => res.json())
+      //             .then((data) => console.table(data));
 
-                // fetch(
-                //   `https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${this.resourceId}/sid/${this.sid}/mode/${mode}/stop`,
-                //   {
-                //     method: "POST",
-                //     headers: {
-                //       "Content-Type": "application/json;charset=utf-8",
-                //       Authorization: "Basic " + btoa(plainCredential),
-                //     },
-                //     body: JSON.stringify({
-                //       cname: cname,
-                //       uid: uid,
-                //       clientRequest: {
-                //         async_stop: false,
-                //       },
-                //     }),
-                //   }
-                // )
-                //   .then((res) => res.json())
-                //   .then((data) => {
-                //     console.log("recording stop api data", data);
-                //     fetch("/meeting/recording_completed/", {
-                //       method: "POST",
-                //       headers: {
-                //         "Content-Type": "application/json",
+      //           fetch(
+      //             `https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${this.resourceId}/sid/${this.sid}/mode/${mode}/stop`,
+      //             {
+      //               method: "POST",
+      //               headers: {
+      //                 "Content-Type": "application/json;charset=utf-8",
+      //                 Authorization: "Basic " + btoa(plainCredential),
+      //               },
+      //               body: JSON.stringify({
+      //                 cname: cname,
+      //                 uid: uid,
+      //                 clientRequest: {
+      //                   async_stop: false,
+      //                 },
+      //               }),
+      //             }
+      //           )
+      //             .then((res) => res.json())
+      //             .then((data) => {
+      //               console.log("recording stop api data", data);
+      //               fetch("/meeting/recording_completed/", {
+      //                 method: "POST",
+      //                 headers: {
+      //                   "Content-Type": "application/json",
 
-                //         "X-CSRFToken": CSRF_TOKEN,
-                //       },
-                //       body: JSON.stringify({
-                //         meetingid: meetingid,
-                //         record_completion: data,
-                //       }),
-                //     })
-                //       .then((res) => res.json())
-                //       .then((data) => {
-                //         this.recordingStarted = false;
-                //       });
-                //   });
-              }
-            });
-        });
+      //                   "X-CSRFToken": CSRF_TOKEN,
+      //                 },
+      //                 body: JSON.stringify({
+      //                   meetingid: meetingid,
+      //                   record_completion: data,
+      //                 }),
+      //               })
+      //                 .then((res) => res.json())
+      //                 .then((data) => {
+      //                   this.recordingStarted = false;
+      //                 });
+      //             });
+      //         }
+      //       });
+      //   });
     },
     async startRecording(calleeName, meetingid) {
       const channelName = `${AUTH_USER}_${calleeName}`;
@@ -536,6 +536,7 @@ const app = new Vue({
       //   );
       // }
       // record a video and audio stream
+      else{
       var displayMediaOptions = {
         video: {
           cursor: "always",
@@ -554,6 +555,7 @@ const app = new Vue({
           };
         });
       this.recordingStarted = true;
+      }
     },
   },
 });
