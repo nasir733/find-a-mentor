@@ -34,6 +34,12 @@
     <div class="py-4 space-y-1 text-center lg:pb-10 ">
       <h2 class="text-lg font-semibold tracking-wide text-gray-800 md:text-2xl lg:text-3xl ">Sign In As A Mentor</h2>
       <p class="text-base font-medium text-gray-500">Register As A Mentee? <a href={% url 'mentor:register' %} class="text-blue-600 hover:underline">Register here</a></p>
+      {% if messages %} {% for message in messages %}
+                <p>
+                  <a href="#">&times;</a>
+                  {{ message }}
+                </p>
+                {% endfor %} {% endif %}
     </div>
 
     <form action="{% url 'mentor:login' %}" method="POST" class="block space-y-6">

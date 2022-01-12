@@ -389,7 +389,15 @@ const app = new Vue({
             });
         });
     },
-    async stopRecording(AppId, uid, cname, tokenRes, mode, meetingid) {
+    async stopRecording(
+      AppId,
+      uid,
+      cname,
+      tokenRes,
+      mode,
+      meetingid,
+      calleeName
+    ) {
       const customerKey = "461006031933455789b478ddcba69df6";
       // Customer secret
       const customerSecret = "b600378f495c46148c60dbb16e7bd05e";
@@ -398,110 +406,53 @@ const app = new Vue({
       this.recordingStarted = false;
       this.mediaRecorder.stop();
       const blob = new Blob(this.chunks, {
-        type: "video/mp4",
+        type: "video/webm",
       });
-      const url = URL.createObjectURL(blob);
-      console.log(url, "url---------------");
-      console.log("Recording has Stopped --------------");
+      // var url = URL.createObjectURL(blob);
+      // var a = document.createElement("a");
+      // document.body.appendChild(a);
+      // a.style = "display: none";
+      // a.href = url;
+      // a.download = "test.webm";
+      // a.click();
+      // window.URL.revokeObjectURL(url);
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "recording.mp4";
-      a.click();
+      const myFile = new File([blob], `${AUTH_USER}_${calleeName}.webm`, {
+        type: blob.type,
+      });
+      console.log(myFile, "-------this is my file");
 
-      // fetch(`https://api.agora.io/v1/apps/${AppId}/cloud_recording/acquire`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: "Basic " + btoa(plainCredential),
-      //   },
-      //   body: JSON.stringify({
-      //     cname: cname,
-      //     uid: uid,
-      //     clientRequest: {
-      //       region: "AP",
-      //       // "resourceExpiredHour":  24
-      //     },
-      //   }),
-      // })
-      //   .then((response) => response.json())
-      //   .then((x) => {
-      //     console.log(x);
-      //     console.log(x.resourceid);
-      //     this.resourceId = x.resourceId;
-      //     fetch("/meeting/stop_recording_request/", {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         "X-CSRFToken": CSRF_TOKEN,
-      //       },
-      //       body: JSON.stringify({
-      //         meetingid: meetingid,
-      //         mode: mode,
-      //         uid: uid,
-      //         cname: cname,
-      //         resourceId: x.resourceId,
-      //       }),
-      //     })
-      //       .then((res) => res.json())
-      //       .then((data) => {
-      //         console.log("recording stop resource data generated", data);
-      //         if (data.success == true) {
-      //           console.log(data.resourceId);
-      //           fetch(
-      //             `https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${this.resourceId}/sid/${this.sid}/mode/${mode}/query`,
-      //             {
-      //               method: "GET",
-      //               headers: {
-      //                 "Content-Type": "application/json;charset=utf-8",
-      //                 Authorization: "Basic " + btoa(plainCredential),
-      //               },
-      //             }
-      //           )
-      //             .then((res) => res.json())
-      //             .then((data) => console.table(data));
+      const formData = new FormData();
+      formData.append("recording", myFile);
 
-      //           fetch(
-      //             `https://api.agora.io/v1/apps/${AppId}/cloud_recording/resourceid/${this.resourceId}/sid/${this.sid}/mode/${mode}/stop`,
-      //             {
-      //               method: "POST",
-      //               headers: {
-      //                 "Content-Type": "application/json;charset=utf-8",
-      //                 Authorization: "Basic " + btoa(plainCredential),
-      //               },
-      //               body: JSON.stringify({
-      //                 cname: cname,
-      //                 uid: uid,
-      //                 clientRequest: {
-      //                   async_stop: false,
-      //                 },
-      //               }),
-      //             }
-      //           )
-      //             .then((res) => res.json())
-      //             .then((data) => {
-      //               console.log("recording stop api data", data);
-      //               fetch("/meeting/recording_completed/", {
-      //                 method: "POST",
-      //                 headers: {
-      //                   "Content-Type": "application/json",
+      formData.append("resourceId", " ");
+      formData.append("sid", "");
+      formData.append("mentor", AUTH_USER_ID);
+      formData.append("meeting", meetingid);
 
-      //                   "X-CSRFToken": CSRF_TOKEN,
-      //                 },
-      //                 body: JSON.stringify({
-      //                   meetingid: meetingid,
-      //                   record_completion: data,
-      //                 }),
-      //               })
-      //                 .then((res) => res.json())
-      //                 .then((data) => {
-      //                   this.recordingStarted = false;
-      //                 });
-      //             });
-      //         }
-      //       });
-      //   });
+      // {
+      //     "recording_url": "",
+      //     "sid": "",
+      //     "resourceId": "",
+      //     "stopresponse": null,
+      //     "recording": null,
+      //     "mentor": null,
+      //     "meeting": null,
+      //     "content": null
+      // }
+      fetch("/meeting/recording/", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
+    async uploadRecording() {},
     async startRecording(calleeName, meetingid) {
       const channelName = `${AUTH_USER}_${calleeName}`;
       console.log(channelName);
@@ -521,40 +472,34 @@ const app = new Vue({
           channelName,
           tokenRes,
           mode,
-          meetingid
+          meetingid,
+          calleeName
         );
-      }
-      // } else {
-      //   this.generateResourceId(
-      //     tokenRes.data.appID,
-      //     AUTH_USER_ID,
-      //     channelName,
-      //     tokenRes,
-      //     mode,
-      //     meetingid,
-      //     tokenRes.data.token
-      //   );
-      // }
-      // record a video and audio stream
-      else{
-      var displayMediaOptions = {
-        video: {
-          cursor: "always",
-        },
-        audio: true,
-      };
+      } else {
+        var displayMediaOptions = {
+          video: {
+            cursor: "always",
+          },
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            sampleRate: 44100,
+          },
+        };
 
-      navigator.mediaDevices
-        .getDisplayMedia(displayMediaOptions)
-        .then((stream) => {
-          this.mediaRecorder = new MediaRecorder(stream);
-          this.mediaRecorder.start(1000);
-          this.mediaRecorder.ondataavailable = (e) => {
-            this.chunks.push(e.data);
-            console.log(e.data, "data");
-          };
-        });
-      this.recordingStarted = true;
+        navigator.mediaDevices
+          .getDisplayMedia(displayMediaOptions)
+          .then((stream) => {
+            var options = { mimeType: "video/webm;codecs:vp8" };
+            console.log(stream);
+            this.mediaRecorder = new MediaRecorder(stream);
+            this.mediaRecorder.start(1000);
+            this.mediaRecorder.ondataavailable = (e) => {
+              this.chunks.push(e.data);
+              console.log(e.data, "data");
+            };
+          });
+        this.recordingStarted = true;
       }
     },
   },
