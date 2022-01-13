@@ -590,8 +590,11 @@ def tagmentee(request, category, tag):
 @login_required(login_url='/mentor/login/')
 def browsementeetags(request):
     context = {}
-    tags = Skill.objects.all().order_by('?')[:6]
-    context['tags'] = tags
+    try:
+        tags = Skill.objects.all().order_by('?')[:6]
+        context['tags'] = tags
+    except:
+        pass
     return render(request, 'mentor/browsementeetags.html', context=context)
 
 

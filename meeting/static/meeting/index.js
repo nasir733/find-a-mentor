@@ -405,54 +405,113 @@ const app = new Vue({
       const plainCredential = customerKey + ":" + customerSecret;
       this.recordingStarted = false;
       this.mediaRecorder.stop();
-      const blob = new Blob(this.chunks, {
-        type: "video/webm",
-      });
-      // var url = URL.createObjectURL(blob);
-      // var a = document.createElement("a");
-      // document.body.appendChild(a);
-      // a.style = "display: none";
-      // a.href = url;
-      // a.download = "test.webm";
-      // a.click();
-      // window.URL.revokeObjectURL(url);
 
-      const myFile = new File([blob], `${AUTH_USER}_${calleeName}.webm`, {
-        type: blob.type,
-      });
-      console.log(myFile, "-------this is my file");
-
-      const formData = new FormData();
-      formData.append("recording", myFile);
-
-      formData.append("resourceId", " ");
-      formData.append("sid", "");
-      formData.append("mentor", AUTH_USER_ID);
-      formData.append("meeting", meetingid);
-
-      // {
-      //     "recording_url": "",
-      //     "sid": "",
-      //     "resourceId": "",
-      //     "stopresponse": null,
-      //     "recording": null,
-      //     "mentor": null,
-      //     "meeting": null,
-      //     "content": null
-      // }
-      fetch("/meeting/recording/", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      // // {
+      // //     "recording_url": "",
+      // //     "sid": "",
+      // //     "resourceId": "",
+      // //     "stopresponse": null,
+      // //     "recording": null,
+      // //     "mentor": null,
+      // //     "meeting": null,
+      // //     "content": null
+      // // }
     },
-    async uploadRecording() {},
+    handleRecord(
+      { stream, mimeType },
+      AUTH_USER_ID,
+      channelName,
+      tokenRes,
+      mode,
+      meetingid,
+      calleeName
+    ) {
+      // to collect stream chunks
+      let recordedChunks = [];
+      this.mediaRecorder = new MediaRecorder(stream);
+
+      this.mediaRecorder.ondataavailable = function (e) {
+        if (e.data.size > 0) {
+          recordedChunks.push(e.data);
+        }
+        // shouldStop => forceStop by user
+        if (this.recordingStarted === false) {
+          this.mediaRecorder.stop();
+        }
+      };
+      this.mediaRecorder.onstop = function () {
+        const blob = new Blob(recordedChunks, {
+          type: mimeType,
+        });
+        recordedChunks = [];
+        // const filename = window.prompt("Enter file name"); // input filename from user for download
+        const downloadLink = document.createElement("a");
+        downloadLink.href = URL.createObjectURL(blob); // create download link for the file
+        downloadLink.download = `${AUTH_USER}_${calleeName}.webm`; // naming the file with user provided name
+        downloadLink.click(); // click on the link to download the file
+        const myFile = new File([blob], `${AUTH_USER}_${calleeName}.webm`, {
+          type: blob.type,
+        });
+        const formData = new FormData();
+        formData.append("recording", myFile);
+
+        formData.append("resourceId", " ");
+        formData.append("sid", "");
+        formData.append("mentor", AUTH_USER_ID);
+        formData.append("meeting", meetingid);
+
+        fetch("/meeting/recording/", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        this.recordingStarted = false;
+      };
+
+      this.mediaRecorder.start(200); // here 200ms is interval of chunk collection
+    },
+    async recordScreen(
+      AUTH_USER_ID,
+      channelName,
+      tokenRes,
+      mode,
+      meetingid,
+      calleeName
+    ) {
+      const mimeType = "video/webm";
+      const constraints = {
+        video: true,
+      };
+      const displayStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true,
+      });
+      // voiceStream for recording voice with screen recording
+      const voiceStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false,
+      });
+      let tracks = [
+        ...displayStream.getTracks(),
+        ...voiceStream.getAudioTracks(),
+      ];
+      const stream = new MediaStream(tracks);
+      this.handleRecord(
+        { stream, mimeType },
+        AUTH_USER_ID,
+        channelName,
+        tokenRes,
+        mode,
+        meetingid,
+        calleeName
+      );
+    },
     async startRecording(calleeName, meetingid) {
       const channelName = `${AUTH_USER}_${calleeName}`;
       console.log(channelName);
@@ -476,29 +535,15 @@ const app = new Vue({
           calleeName
         );
       } else {
-        var displayMediaOptions = {
-          video: {
-            cursor: "always",
-          },
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            sampleRate: 44100,
-          },
-        };
+        this.recordScreen(
+          AUTH_USER_ID,
+          channelName,
+          tokenRes,
+          mode,
+          meetingid,
+          calleeName
+        );
 
-        navigator.mediaDevices
-          .getDisplayMedia(displayMediaOptions)
-          .then((stream) => {
-            var options = { mimeType: "video/webm;codecs:vp8" };
-            console.log(stream);
-            this.mediaRecorder = new MediaRecorder(stream);
-            this.mediaRecorder.start(1000);
-            this.mediaRecorder.ondataavailable = (e) => {
-              this.chunks.push(e.data);
-              console.log(e.data, "data");
-            };
-          });
         this.recordingStarted = true;
       }
     },
