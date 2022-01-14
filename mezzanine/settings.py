@@ -18,8 +18,8 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
-# DEBUG = True
+# DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = True
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS",
                           "127.0.0.1,localhost").split(",")
 
@@ -126,7 +126,7 @@ WSGI_APPLICATION = 'mezzanine.wsgi.application'
 #     }
 
 
-if DEVELOPMENT_MODE is False:
+if DEVELOPMENT_MODE is not False:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",

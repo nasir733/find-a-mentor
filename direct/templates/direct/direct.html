@@ -1,118 +1,117 @@
-{% extends "dashboard/chat-portal.html" %}
-{% load static %}
-{% block direct %}
-
+{% extends "dashboard/chat-portal.html" %} {% load static %} {% block direct %}
 
 <style>
   /* message inout box */
   #bottom_fixed_chat_style {
     position: fixed;
-    bottom: 1;    
+    bottom: 1;
     width: 70%;
-    padding-top:0px;
+    padding-top: 0px;
     overflow: hidden;
     margin-left: 3%;
     margin-top: 0;
     ng-bottom: 1rem;
- 
-  
-}
+  }
 
-  .chatcontent{ 
-    height: 100vh;
-    width:100%;
+  .chatcontent {
+    height: 90vh;
+    width: 100%;
     margin: 0;
     padding: 0;
     overflow: scroll;
     overflow-x: hidden;
     display: flex;
     flex-direction: column-reverse;
-
   }
-@media screen and (max-width: 600px) {
-  #bottom_fixed_chat_style {
-    width: 100%;
+  @media screen and (max-width: 600px) {
+    #bottom_fixed_chat_style {
+      width: 100%;
+    }
+    .chatcontent {
+      width: fit-content;
+    }
   }
-  .chatcontent{
-    width: fit-content;
-   }
-}
-/* pre loader */
-.donut {
-	 width: 2rem;
-	 height: 2rem;
-	 margin: 2rem;
-	 border-radius: 50%;
-	 border: 0.3rem solid rgba(151, 159, 208, 0.3);
-	 border-top-color: #979fd0;
-	 animation: 1.5s spin infinite linear;
-}
- .donut.multi {
-	 border-bottom-color: #979fd0;
-}
- @keyframes spin {
-	 to {
-		 transform: rotate(360deg);
-	}
-}
+  /* pre loader */
+  .donut {
+    width: 2rem;
+    height: 2rem;
+    margin: 2rem;
+    border-radius: 50%;
+    border: 0.3rem solid rgba(151, 159, 208, 0.3);
+    border-top-color: #979fd0;
+    animation: 1.5s spin infinite linear;
+  }
+  .donut.multi {
+    border-bottom-color: #979fd0;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
-/* preloader*/
-
-  
+  /* preloader*/
 </style>
-<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
-<div class="w-64 border-r border-gray-200 xl:w-72" >
-  <div class="w-full  bg-white" >
-<div class="flex items-center h-16 px-4 text-base font-semibold text-gray-800 border-b border-gray-200">
-{{request.user.username}} Chat Portal
-</div>
-<div class="pt-6 space-y-8 bg-white ">
-<div>
-  <div id="singleroomdisplay">
-    {% for x in rooms %}
-  <div class="pt-2 divide-gray-200" >
-    {% if request.user.user_type == "Mentor" %}
-    <a href="{% url 'directs:room' x.mentee.username%}" class="flex justify-between px-4 py-2 text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600 hover:bg-gray-100 lg:px-6">
-      <span>
-       {{x.mentee.username}}
-      </span>
-      <span class="text-gray-400">89</span>
-    </a>
-    {% elif request.user.user_type == "Mentee" %}
-    
-    <a href="{% url 'directs:room' x.mentor.username%}" class="flex justify-between px-3 py-2 text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600 hover:bg-gray-100 lg:px-6">
-      
-      <span class="flex">
-        <img src="{{x.mentor.mentorprofile.image.url}}" class="w-7 h-7 rounded-full" alt="" style="margin-right: 1rem;">
-        {{x.mentor.username}}
-      </span>
-      <span class="text-gray-400">89</span>
-    </a>
-    {% endif %}
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"
+></script>
+<div class="w-64 border-r border-gray-200 xl:w-72">
+  <div class="w-full bg-white">
+    <div
+      class="flex items-center h-16 px-4 text-base font-semibold text-gray-800 border-b border-gray-200"
+    >
+      {{request.user.username}} Chat Portal
+    </div>
+    <div class="pt-6 space-y-8 bg-white">
+      <div>
+        <div id="singleroomdisplay">
+          {% for x in rooms %}
+          <div class="pt-2 divide-gray-200">
+            {% if request.user.user_type == "Mentor" %}
+            <a
+              href="{% url 'directs:room' x.mentee.username%}"
+              class="flex justify-between px-4 py-2 text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600 hover:bg-gray-100 lg:px-6"
+            >
+              <span> {{x.mentee.username}} </span>
+              <span class="text-gray-400">89</span>
+            </a>
+            {% elif request.user.user_type == "Mentee" %}
 
-  </div> 
-  {% endfor %}
+            <a
+              href="{% url 'directs:room' x.mentor.username%}"
+              class="flex justify-between px-3 py-2 text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600 hover:bg-gray-100 lg:px-6"
+            >
+              <span class="flex">
+                <img
+                  src="{{x.mentor.mentorprofile.image.url}}"
+                  class="w-7 h-7 rounded-full"
+                  alt=""
+                  style="margin-right: 1rem"
+                />
+                {{x.mentor.username}}
+              </span>
+              <span class="text-gray-400">89</span>
+            </a>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div></div>
+    </div>
+  </div>
 </div>
-</div>
-<div>
+<div class="chatcontent">
+  <div class="items-center justify-center px-8 py-10">
+    <div class="items-center justify-center flex-1 max-w-2xl">
+      <div class="donut" id="preloader" style="display: none"></div>
 
-</div>
-</div>
-</div>
-
-</div>
-<div class="chatcontent" >    
-
-   <div class=" items-center justify-center px-8 py-10 bg-gray-100">
-  <div class="   items-center justify-center flex-1 max-w-2xl">
-    
-    <div class="donut" id="preloader" style="display:none;"></div>
-       
-  <div class="px-4 pb-8 space-y-4 lg:px-6" >
-    <div class="space-y-4" id="messagedisplay">
-
-      {% for message in messages %}
-      <!-- <div class="flex items-start col-span-1 pt-3 space-x-3">
+      <div class="px-4 pb-8 space-y-4 lg:px-6 bg-gray-100">
+        <div class="space-y-4 bg-gray-100" id="messagedisplay">
+          {% for message in messages %}
+          <!-- <div class="flex items-start col-span-1 pt-3 space-x-3">
         {% if message.user.user_type == "Mentee"  %}
         <img src="{{message.user.menteeprofile.image.url}}" class="w-12 h-12 rounded-full" alt="">
         {% elif message.user.user_type == "Mentor" %}
@@ -137,64 +136,104 @@
         </div>
 
       </div> -->
-      {% endfor %}
+          {% endfor %}
+        </div>
 
+        <script>
+          $(document).ready(function () {
+            setInterval(function () {
+              $.ajax({
+                type: "GET",
+                url: "/direct/messages/{{room.id}}/",
+                // beforeSend : ()=>{
+                //   $("#preloader").show();
+                // },
+                // complete : ()=>{
+                //   $("#preloader").hide();
+                // },
+                success: function (response) {
+                  let final = "";
+                  for (var key in response.messages) {
+                    var temp =
+                      "<div class='flex items-start col-span-1 bg-gray-100 pt-3 space-x-3' style='width:400px;'> <div class='flex-1' > <div class='px-4 py-4 bg-white rounded-md lg:px-6 lg:pb-6'><div class='flex items-end justify-between pb-3'><span class='text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600'> " +
+                      response.messages[key].user_name +
+                      "</span><div class='flex items-center space-x-1'><svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4 text-gray-500' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg><span class='block font-semibold tracking-wide text-gray-500 uppercase text-xxs'>" +
+                      response.messages[key].created_at.slice(0, 10) +
+                      " </span><span class='block font-semibold tracking-wide text-gray-500 uppercase text-xxs'> /" +
+                      response.messages[key].created_at.slice(11, 19) +
+                      " </span></div></div><p class='block text-sm text-gray-500'>" +
+                      response.messages[key].text +
+                      "</p></div></div></div>";
+                    final += temp;
+                  }
+                  $("#messagedisplay").html(final);
+                },
+                error: function (response) {
+                  console(response);
+                },
+              });
+            }, 2000);
+          });
+        </script>
+        <!-- leave comment -->
+
+        <!--/ leave comment -->
+      </div>
+      <br />
     </div>
- 
-<script>
-
-  $(document).ready(function(){
-  
-  setInterval(function(){
-      $.ajax({
-          type: 'GET',
-          url : "/direct/messages/{{room.id}}/",
-          // beforeSend : ()=>{
-          //   $("#preloader").show();
-          // },
-          // complete : ()=>{
-          //   $("#preloader").hide();
-          // },
-          success: function(response){
-
-              let final = ""
-              for (var key in response.messages)
-              {
-                  var temp="<div class='flex items-start col-span-1 pt-3 space-x-3' style='width:400px;'> <div class='flex-1' > <div class='px-4 py-4 bg-white rounded-md lg:px-6 lg:pb-6'><div class='flex items-end justify-between pb-3'><span class='text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600'> "+response.messages[key].user_name+"</span><div class='flex items-center space-x-1'><svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4 text-gray-500' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg><span class='block font-semibold tracking-wide text-gray-500 uppercase text-xxs'>"+response.messages[key].created_at.slice(0,10)+" </span><span class='block font-semibold tracking-wide text-gray-500 uppercase text-xxs'> /"+response.messages[key].created_at.slice(11,19)+" </span></div></div><p class='block text-sm text-gray-500'>"+response.messages[key].text+"</p></div></div></div>";
-                  final += temp;
-              }
-              $("#messagedisplay").html(final)
-          },
-          error: function(response){
-              console(response);
-          }
-      });
-  },2000);
-  })
-  </script>   
-    <!-- leave comment -->
-   
-    <!--/ leave comment -->
-
   </div>
-  <br/>
-  
-     </div>
-</div>
-  
-   <div class="flex items-center col-span-1 pt-3 space-x-3 " id="bottom_fixed_chat_style">
-   {% if request.user.user_type == "Mentee"  %}
-   <img src="{{request.user.menteeprofile.image.url}}" class="w-12 h-12 rounded-full" alt="">
-    {% elif request.user.user_type == "Mentor"  %}
-    <img src="{{request.user.mentorprofile.image.url}}" class="w-12 h-12 rounded-full" alt="">
+
+  <div
+    class="flex items-center col-span-1 pt-3 space-x-3"
+    id="bottom_fixed_chat_style"
+  >
+    {% if request.user.user_type == "Mentee" %}
+    <img
+      src="{{request.user.menteeprofile.image.url}}"
+      class="w-12 h-12 rounded-full"
+      alt=""
+    />
+    {% elif request.user.user_type == "Mentor" %}
+    <img
+      src="{{request.user.mentorprofile.image.url}}"
+      class="w-12 h-12 rounded-full"
+      alt=""
+    />
     {% endif %}
     <div class="flex-1">
-    <form method="post" action="{% url 'directs:send_direct' room.id %}">
-      {% csrf_token %}
-      <input style="width: 100%;" type="text" class="w-lg px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md" name="text" placeholder="Leave a message">
-    </form>
+      <form method="post" onsubmit="SendMessage('{{room.id}}')">
+        {% csrf_token %}
+        <input
+          style="width: 100%"
+          type="text"
+          id="messagetext"
+          class="w-lg px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md"
+          name="text"
+          placeholder="Leave a message"
+        />
+      </form>
     </div>
   </div>
 </div>
-    
+
+<script>
+  function SendMessage(room_id) {
+    var text = document.getElementById("messagetext");
+    fetch(`/direct/messages/${room_id}/`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ text: text }),
+    })
+      .then(function (res) {
+        console.log(res);
+      })
+      .catch(function (res) {
+        console.log(res);
+      });
+  }
+</script>
+
 {% endblock %}

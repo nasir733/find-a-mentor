@@ -321,6 +321,8 @@ def browsetags(request):
 
 @login_required(login_url='/mentor/login/')
 def singlecontent(request, id):
+    if request.user.user_type == "Mentee":
+        return redirect('dashboard:content', id=id)
     context = {}
     catergories = Catergory.objects.all()
     context['catergories'] = catergories

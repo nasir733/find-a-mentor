@@ -17,6 +17,7 @@ const app = new Vue({
     sid: null,
     mediaRecorder: null,
     chunks: [],
+    callStatus: null,
   },
   mounted() {
     this.initUserOnlineChannel();
@@ -111,6 +112,7 @@ const app = new Vue({
 
         this.initializeAgora(tokenRes.data.appID);
         this.joinRoom(tokenRes.data.token, channelName);
+        this.callStatus = null;
       } catch (error) {
         console.log(error);
       }
@@ -215,7 +217,8 @@ const app = new Vue({
       this.client.on("peer-leave", (evt) => {
         var uid = evt.uid;
         var reason = evt.reason;
-        console.log("remote user left ", uid, "reason: ", reason);
+        this.callStatus = uid + " Left The meeting";
+        console.log(this.callStatus);
       });
 
       this.client.on("stream-unpublished", (evt) => {
@@ -251,6 +254,7 @@ const app = new Vue({
         () => {
           console.log("Leave channel successfully");
           this.callPlaced = false;
+          console.log("meeting ended");
         },
         (err) => {
           console.log("Leave channel failed");
@@ -493,13 +497,13 @@ const app = new Vue({
         audio: true,
       });
       // voiceStream for recording voice with screen recording
-      const voiceStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: false,
-      });
+      // const voiceStream = await navigator.mediaDevices.getUserMedia({
+      //   audio: true,
+      //   video: false,
+      // });
       let tracks = [
         ...displayStream.getTracks(),
-        ...voiceStream.getAudioTracks(),
+        // ...voiceStream.getAudioTracks(),
       ];
       const stream = new MediaStream(tracks);
       this.handleRecord(

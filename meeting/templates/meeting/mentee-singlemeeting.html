@@ -46,17 +46,22 @@ href="{% static 'meeting/index.css' %}"
     
     
     <div class='c-video'>
+      
       <header style="min-width:900px; ">
               
               <h1>{{meeting.meeting_title}}</h1>
-              
+
      
       </header>
-      <span  style="font-size:1rem;margin-left: 1rem;"><i aria-hidden="true" class="fas fa-user-friends"></i>{{meeting.mentor.user.username}}</span>
+      <div><span  style="font-size:1rem;margin-left: 1rem;"><i aria-hidden="true" class="fas fa-user-friends"></i>{{meeting.mentor.user.username}} </span>        <span>${ getUserOnlineStatus({{mentor.user.id}})}</span></div>
+
         <p id="demo" style="font-size: 3rem;margin-left: 1rem; width: 100%;"></p>
+
+        <p>  ${ callStatus }</p>
       <div class="row my-5" v-if="incomingCall">
         <div class="col-12">
           <p>Incoming Call From <strong>${ incomingCaller }</strong></p>
+
           <div class="btn-group" role="group">
             <button
               type="button"
@@ -95,6 +100,7 @@ href="{% static 'meeting/index.css' %}"
             <div>
               <span>Mentor</span>
               <p>{{request.user.username}}</p>
+              
             </div>
           </div>
           <div id="local-video" class="local-video"></div>
