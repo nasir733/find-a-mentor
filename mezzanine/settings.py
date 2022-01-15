@@ -126,7 +126,7 @@ WSGI_APPLICATION = 'mezzanine.wsgi.application'
 #     }
 
 
-if DEVELOPMENT_MODE is False:
+if DEVELOPMENT_MODE is  False:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
