@@ -93,8 +93,10 @@ def SendDirect(request, room_id):
     from_user = request.user
     room = Room.objects.get(id=room_id)
     if request.method == 'POST':
-		print(request.POST)
+        print("POST REQUEST")
+        print("POST :", request.POST)
         body = request.POST.get('text')
+        print("body", body)
         if from_user.user_type == "Mentor":
             url = "/direct/room/{}".format(room.mentor.username)
             message = Message(user=from_user, text=body,

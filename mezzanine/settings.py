@@ -18,8 +18,8 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.getenv("DEBUG", "False") == "True"
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG = True
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS",
                           "127.0.0.1,localhost").split(",")
 
@@ -126,7 +126,7 @@ WSGI_APPLICATION = 'mezzanine.wsgi.application'
 #     }
 
 
-if DEVELOPMENT_MODE is not False:
+if DEVELOPMENT_MODE is False:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -230,7 +230,7 @@ STRIPE_ENDPOINT_SECRET = "whsec_dFr4164bMwyi6hTS5KCmWzvanOGGlIVi"
 
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
-DEFAULT_FROM_EMAIL = 'info@kleui.com'
+DEFAULT_FROM_EMAIL = 'info@nerulending.com'
 AWS_ACCESS_KEY_ID = 'AKIAQVPXYDDKO66DFQWP'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'findamentorapp'

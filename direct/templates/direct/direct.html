@@ -53,7 +53,7 @@
   /* preloader*/
 </style>
 <script
-  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  src="https:code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"
 ></script>
@@ -122,7 +122,7 @@
             <div class="flex items-end justify-between pb-3">
               <span class="text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600">{{message.user.username}}</span>
               <div class="flex items-center space-x-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http:www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <span class="block font-semibold tracking-wide text-gray-500 uppercase text-xxs">
@@ -145,19 +145,14 @@
               $.ajax({
                 type: "GET",
                 url: "/direct/messages/{{room.id}}/",
-                // beforeSend : ()=>{
-                //   $("#preloader").show();
-                // },
-                // complete : ()=>{
-                //   $("#preloader").hide();
-                // },
+
                 success: function (response) {
                   let final = "";
                   for (var key in response.messages) {
                     var temp =
                       "<div class='flex items-start col-span-1 bg-gray-100 pt-3 space-x-3' style='width:400px;'> <div class='flex-1' > <div class='px-4 py-4 bg-white rounded-md lg:px-6 lg:pb-6'><div class='flex items-end justify-between pb-3'><span class='text-sm font-semibold text-gray-800 transition-colors duration-300 hover:text-blue-600'> " +
                       response.messages[key].user_name +
-                      "</span><div class='flex items-center space-x-1'><svg xmlns='http://www.w3.org/2000/svg' class='w-4 h-4 text-gray-500' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg><span class='block font-semibold tracking-wide text-gray-500 uppercase text-xxs'>" +
+                      "</span><div class='flex items-center space-x-1'><svg xmlns='http:www.w3.org2000/svg' class='w-4 h-4 text-gray-500' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'></path></svg><span class='block font-semibold tracking-wide text-gray-500 uppercase text-xxs'>" +
                       response.messages[key].created_at.slice(0, 10) +
                       " </span><span class='block font-semibold tracking-wide text-gray-500 uppercase text-xxs'> /" +
                       response.messages[key].created_at.slice(11, 19) +
@@ -169,6 +164,7 @@
                   $("#messagedisplay").html(final);
                 },
                 error: function (response) {
+                  alert("something went wrong try refreshing the page");
                   console(response);
                 },
               });
@@ -201,31 +197,45 @@
     />
     {% endif %}
     <div class="flex-1">
-      <form method="post" onsubmit="SendMessage('{{room.id}}')">
+      <form method="post" onsubmit="SendMessage(event,'{{room.id}}')">
         {% csrf_token %}
-        <input
-          style="width: 100%"
-          type="text"
-          id="messagetext"
-          class="w-lg px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md"
-          name="text"
-          placeholder="Leave a message"
-        />
+        <div class="flex flex-wrap">
+          <input
+            style="width: 100%"
+            type="text"
+            id="messagetext"
+            class="w-lg px-4 py-4 placeholder-gray-400 border border-gray-200 rounded-md"
+            name="text"
+            placeholder="Leave a message"
+          />
+          <button
+            type="submit"
+            class="p-24 bg-blue-400 text-white rounded-md hover:bg-blue-500"
+            style="width: 81px"
+          >
+            Send
+          </button>
+        </div>
       </form>
     </div>
   </div>
 </div>
 
 <script>
-  function SendMessage(room_id) {
-    var text = document.getElementById("messagetext");
+  function SendMessage(event, room_id) {
+    event.preventDefault();
+    var text = document.getElementById("messagetext").value;
+    if (text == "") {
+      alert("Please enter a message");
+      return;
+    } else {
+      document.getElementById("messagetext").value = "";
+    }
+    const formData = new FormData();
+    formData.append("text", text);
     fetch(`/direct/messages/${room_id}/`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
       method: "POST",
-      body: JSON.stringify({ text: text }),
+      body: formData,
     })
       .then(function (res) {
         console.log(res);
